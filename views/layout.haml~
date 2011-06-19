@@ -11,7 +11,7 @@
   %meta{:name => "description", :content => ""}
   %meta{:name => "author", :content => ""}
 
-  %meta{:name => "viewport", :content => "width=device-width, initial-=scale=1.0"}
+  %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
   %link{:rel => "shortcut icon" , :href => "/favicon.ico"}
   %link{:rel => "app-touch-icon", :href =>"/apple-touch-icon.png"}
 
@@ -27,10 +27,10 @@
       = yield
     %footer
 
-%script{ :src => "//agax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"}
+%script{ :src => "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"}
 
 :javascript
-  window.jQuery || document.write("<script src='js/libs/jquery-1.5.1.min.js'>\x3C/script>")
+  window.jQuery || document.write("<script src='/js/libs/jquery-1.5.1.min.js'>\x3C/script>")
 
-%script{:src => "js/plugins.js"}
-%script{:src => "js/script.js"}
+%script{:src => "/js/plugins.js"}
+%script{:src => "/js/script.js"}
