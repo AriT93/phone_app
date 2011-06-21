@@ -1,6 +1,0 @@
-%h1 Calls
-%ul
-- @coll.find().each do |row|
-  %li
-    = "#{row['name']} :: #{row['tn']}"
-#chat

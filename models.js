@@ -14,7 +14,7 @@ Call = new Schema({
     'tn': String
 });
 
- mongoose.model('Call',Call);;
+ mongoose.model('Call',Call);
 
     fn();
 };
