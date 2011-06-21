@@ -4,6 +4,8 @@
   %label{:for => "tn"} Telephone Number:
   %input{:id => "tn", :name => "tn", :type => "text"}
   %input{:type => "submit", :value => "Call Me!", :class => "comment_submit"}
+#messages
+  %h1 Messages:
 %h1 Calls
 %ul
 - @coll.find().each do |row|

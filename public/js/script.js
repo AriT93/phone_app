@@ -10,7 +10,7 @@ function message(obj){
 //        el.innerHTML = "<b>" + obj.message[0] + "</b>";
 
     }else if('announcement' in obj){
-        alert(obj.announcement);
+        $('<p>').html(obj.announcement).appendTo($("#messages"));
     }
     else if('result' in obj){
         for (var i in obj.result){
@@ -45,13 +45,14 @@ $(document).ready(function(){
     });
 
     $("#call").submit(function(e){
+        if($("#name").val()){
         var Call = {};
         Call.name = $("#name").val();
         Call.tn = $("#tn").val();
-        socket.connect();
         socket.send(JSON.stringify(Call));
         $("#name").val("");
         $("#tn").val("");
+        }
         return false;
     });
 
