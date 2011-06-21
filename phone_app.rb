@@ -17,3 +17,8 @@ get '/' do
 
   haml :index
 end
+post '/' do
+  call = { "name" => params['name'], "tn" => params['tn']}
+  @coll.insert(call)
+  redirect '/'
+end

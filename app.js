@@ -43,15 +43,14 @@ wSocket.on('connection', function(client){
     socketEvent.emit("new_call",JSON.stringify(c1));
 
     client.on('message', function(data){
-      if(buffer.length > 5)buffer.shift();
+        if(buffer.length > 5)buffer.shift();
         var p = JSON.parse(data);
-        p.forEach(function(p){
           var c = new Call();
             c.name = p.name;
             c.tn = p.tn;
             c.save();
-            client.send({result: "message saved"});
+            client.send({announcement: "message saved"});
             socketEvent.emit("new_call",JSON.stringify(c));
-        });
+
     });
 });

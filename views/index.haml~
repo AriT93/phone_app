@@ -3,3 +3,4 @@
 - @coll.find().each do |row|
   %li
     = "#{row['name']} :: #{row['tn']}"
+#chat
