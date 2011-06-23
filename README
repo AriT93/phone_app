@@ -1,3 +1,14 @@
 phone_app
 
 sinatra + node.js + mongodb  concept app for HackDay 2011
+
+getting started
+
+1. install the dependencies
+
+$ sudo apt-get install ruby rubygems mongodb mongodb-dev mongodb-server nodejs
+$ sudo gem install sinatra bson_ext mongo thin SystemTimer haml 
+
+2. start the server
+
+$ ruby -rubygems phone_app.rb 
