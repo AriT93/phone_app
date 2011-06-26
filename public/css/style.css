@@ -265,3 +265,14 @@ a:hover { color: #036; }
         padding: 3px;
         width: 60%;
 }
+
+.contact ul{
+           margin: 0;
+           padding: 0;
+           list-style: none;
+}
+.contact li{
+           margin-bottom: 10px;
+           overflow: hidden;
+}
+.contact label {display:block; margin-bottom:2px;}

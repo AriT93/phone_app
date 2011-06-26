@@ -36,10 +36,10 @@ var wSocket = io.listen(httpServer), buffer = [];
 wSocket.on('connection', function(client){
     console.log("connected!");
     this.broadcast({announcement: client.sessionId +" from " + client.connection.remoteAddress + " connected to call routing"});
-    var c1 = new Call();
-    c1.name = "robert";
-    c1.tn = "3128675309";
-    socketEvent.emit("new_call",JSON.stringify(c1));
+    // var c1 = new Call();
+    // c1.name = "robert";
+    // c1.tn = "3128675309";
+    // socketEvent.emit("new_call",JSON.stringify(c1));
 
     client.on('message', function(data){
         if(buffer.length > 5)buffer.shift();

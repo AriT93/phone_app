@@ -1,14 +1,13 @@
-%form{:id => "call", :name => "call", :method => "POST", :action => ""}
-  %label{:for => "name"} Name:
-  %input{:id => "name", :name => "name", :type => "text"}
-  %label{:for => "tn"} Telephone Number:
-  %input{:id => "tn", :name => "tn", :type => "text"}
-  %input{:type => "submit", :value => "Call Me!", :class => "comment_submit"}
-#messages
-  %h1 Messages:
-%h1 Calls
-%ul
-- @coll.find().each do |row|
-  %li
-    = "#{row['name']} :: #{row['tn']}"
-#chat
+.prefix_2.grid_8.suffix_2#form
+  %form{:id => "call", :name => "call", :method => "POST", :action => "",:class => "contact"}
+    %ul
+      %li
+        .prefix_1.grid_2
+          %label{:for => "name"} Name:
+          %input{:id => "name", :name => "name", :type => "text"}
+        .prefix_1.grid_2
+          %label{:for => "tn"} Telephone Number:
+          %input{:id => "tn", :name => "tn", :type => "text"}
+      %li
+        .push_1.grid_4.suffix_8
+          %input{:type => "submit", :value => "Call Me!", :class => "comment_submit"}
