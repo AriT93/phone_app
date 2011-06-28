@@ -1,0 +1,31 @@
+* PHONE_APP
+** Model
+*** fields
+    - Name
+    - Zip
+    - Age
+    - Telephone
+    - ID
+    - Status
+    - Sold
+    - Timestamp
+    - All Flag
+    - Completed
+** Tasks
+*** App.js
+    - update contacts if never been called and distribute out
+    - mark contacts as abandoned
+*** Model.js
+    - update to match new schema
+*** phone_app.rb
+
+**** agent
+     - Make contact callable
+       - twillio / GV / etc
+     - Tell node app when a call is made
+     - Determing which calls to show on client
+**** Customer
+     - Update with all needed fields
+     - make it Pretty
+** Extra Credit
+*** Reporting Page
