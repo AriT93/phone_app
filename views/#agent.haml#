@@ -6,6 +6,6 @@
     - @coll.find().each do |row|
       %li.call{:id => "#{row['tn']}"}
         = "#{row['name']} :: #{row['tn']}"
-        %a{:onclick => 'callCust()'}
+        %a{:onclick => 'callCust()' rel="#call"}
           %img{:src => '/img/phone.png'}
 #chat

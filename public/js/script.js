@@ -3,6 +3,10 @@
 
 */
 
+
+function callCust(){
+
+}
 function message(obj){
     var list="";
 
@@ -47,8 +51,9 @@ $(document).ready(function(){
     $("#call").submit(function(e){
         if($("#name").val()){
         var Call = {};
-        Call.name = $("#name").val();
-        Call.tn = $("#tn").val();
+        Call.name  = $("#name").val();
+        Call.tn    = $("#tn").val();
+        Call.age   = $("#age").val();
         socket.send(JSON.stringify(Call));
         $("#name").val("");
         $("#tn").val("");

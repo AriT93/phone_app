@@ -276,3 +276,12 @@ a:hover { color: #036; }
            overflow: hidden;
 }
 .contact label {display:block; margin-bottom:2px;}
+
+#calls ul{
+         list-style: none;
+         margin: 2px;
+}
+#calls li{
+        margin: 1px;
+        overflow: hidden;
+}
