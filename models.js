@@ -13,7 +13,12 @@ Call = new Schema({
     'name': String,
     'zip': String,
     'age': Number,
-    'tn': String
+    'tn': String,
+    'status': String,
+    'sold': Boolean,
+    'Timestamp': Date,
+    'allFlag': Boolean,
+    'Completed': Boolean
 });
 
  mongoose.model('Call',Call);
