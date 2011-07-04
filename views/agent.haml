@@ -1,11 +1,17 @@
-#messages
-  %h1 Messages:
 %h1 Calls
+#messages
 #calls
   %ul
     - @coll.find().each do |row|
       %li.call{:id => "#{row['tn']}"}
-        = "#{row['name']} :: #{row['tn']}"
-        %a{:onclick => 'callCust()'}
-          %img{:src => '/img/phone.png'}
+        %p
+          = "#{row['name']} :: #{row['tn']}"
+          %button{ :rel => "##{row['tn']}_ov"}
+            %img{:src => '/img/phone.png'}
 #chat
+
+
+- @coll.find().each do |row|
+  .simple_overlay{:id => "#{row['tn']}_ov"}
+    %img{:src => '/img/phone.png'}
+    = "#{row['name']} :: #{row['tn']}"

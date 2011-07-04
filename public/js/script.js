@@ -4,9 +4,7 @@
 */
 
 
-function callCust(){
 
-}
 function message(obj){
     var list="";
 
@@ -30,6 +28,7 @@ function message(obj){
 };
 
 $(document).ready(function(){
+    $("button[rel]").overlay();
     var socket = new io.Socket(null,
                    {port: 8910, rememberTransport: false,
         transports:["websocket","xhr-multipart","flashsocket"]});
