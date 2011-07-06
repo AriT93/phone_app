@@ -1,14 +1,14 @@
 var Call;
 
 function defineModels(mongoose,fn){
-    var Schema = mongoose.Schema,
-      ObjectId = Schema.ObjectId;
+  var Schema = mongoose.Schema;
+  var ObjectId = Schema.ObjectId;
 
-/**
- * Model: Call
- */
+  /**
+   * Model: Call
+   */
 
-Call = new Schema({
+  Call = new Schema({
     'id': ObjectId,
     'name': String,
     'zip': String,
@@ -16,14 +16,16 @@ Call = new Schema({
     'tn': String,
     'status': String,
     'sold': Boolean,
-    'Timestamp': Date,
     'allFlag': Boolean,
-    'Completed': Boolean
-});
+    'createdOn': Date,
+    'completedOn': Date,
+    'latitude' : Number,
+    'longitude' : Number
+  });
 
- mongoose.model('Call',Call);
-
-    fn();
+  mongoose.model('Call',Call);
+  
+  fn();
 };
 
 exports.defineModels = defineModels;
