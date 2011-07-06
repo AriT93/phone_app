@@ -30,12 +30,37 @@ function Coordinate(latitude,longitude) {
     return radius * c * 0.621371192;
   }
 }
-/*
-This is a test function
+
+function getCoordinate(zip) {
+  var coordinate;
+  $.ajax({
+    async: false,
+    type: 'GET',
+    //url: 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address='+zip,
+    url: '/location/'+zip,
+    contentType: "application/json; charset=utf-8",
+    success: function(data) {
+      if (data && data.results && data.results.length >= 1) {
+        coordinate = new Coordinate(
+          data.results[0].geometry.location.lat,
+          data.results[0].geometry.location.lng
+        );
+      }
+    },
+    error: function() {
+      alert("This ajax call didn't work");
+    }
+  });
+  return coordinate;
+}
+
+
+//This is a test function
 function test() {
-  var lawton = new Coordinate(42.482883,-96.173912);
-  var normal = new Coordinate(40.518485,-88.989245);
+  var lawton = getCoordinate(51030); 
+  var normal = getCoordinate(61761); 
+  //var lawton = new Coordinate(42.482883,-96.173912);
+  //var normal = new Coordinate(40.518485,-88.989245);
 
   alert('distance is ' + Math.round(lawton.distanceTo(normal)) + ' miles');
 }
-*/
