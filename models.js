@@ -11,6 +11,8 @@ function defineModels(mongoose,fn){
   Call = new Schema({
     'id': ObjectId,
     'name': String,
+    'city': String,
+    'state': String,
     'zip': String,
     'age': Number,
     'tn': String,

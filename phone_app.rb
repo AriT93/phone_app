@@ -11,7 +11,16 @@ get '/' do
   haml :index
 end
 post '/' do
-  call = { "name" => params['name'], "tn" => params['tn']}
+  call = {
+    "name" => params['name'],
+    "age"  => params['age'],
+    "tn" => params['tn'],
+    "city" => params['city'],
+    "state" => params['state'],
+    "zip" => params['zip'],
+    "latitude" => params['latitude'],
+    "longitude" => params['longitude']
+  }
   @coll.insert(call)
   redirect '/'
 end

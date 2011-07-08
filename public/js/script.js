@@ -27,6 +27,48 @@ function message(obj){
     }
 };
 
+function lookupLocation(zip,fn) {
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({
+      'address' : ""+zip
+    },
+    function(results,status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        fn(results[0]);
+      }
+    }
+  );
+}
+
+function updateLocation() {
+  var zip = $("#zip").val();
+  $("#latitude").val("");
+  $("#longitude").val("");
+  $("#city").val("");
+  $("#state").val("");
+
+  if (zip.length >= 5) {
+    lookupLocation(zip,function(loc) {
+      var city = "";
+      var state = "";
+      $.each(loc.address_components,function(i,v) {
+         if ($.inArray("locality",v.types) > -1) {
+           city = v.short_name; 
+         }
+         if ($.inArray("administrative_area_level_1",v.types) > -1) {
+           state = v.short_name; 
+         }
+      });
+      var lat = loc.geometry.location.lat(); 
+      var lng = loc.geometry.location.lng();
+      $("#latitude").val(lat);
+      $("#longitude").val(lng);
+      $("#city").val(city);
+      $("#state").val(state);
+    });
+  }
+}
+
 $(document).ready(function(){
     $("button[rel]").overlay();
     var socket = new io.Socket(null,
@@ -50,9 +92,14 @@ $(document).ready(function(){
     $("#call").submit(function(e){
         if($("#name").val()){
         var Call = {};
-        Call.name  = $("#name").val();
-        Call.tn    = $("#tn").val();
-        Call.age   = $("#age").val();
+        Call.name      = $("#name").val();
+        Call.tn        = $("#tn").val();
+        Call.age       = $("#age").val();
+        Call.city      = $("#city").val();
+        Call.state     = $("#state").val();
+        Call.zip       = $("#zip").val();
+        Call.latitude  = $("#latitude").val();
+        Call.longitude = $("#longitude").val();
         socket.send(JSON.stringify(Call));
         $("#name").val("");
         $("#tn").val("");
@@ -60,4 +107,6 @@ $(document).ready(function(){
         return false;
     });
 
+    $("#zip").keyup(updateLocation);
+    $("#zip").change(updateLocation);
 });

@@ -1,23 +1,18 @@
 
 require.paths.unshift('.');
 
-var sys = require('sys'),
-    http = require('http'),
-    event = require('events'),
-    io = require('socket.io'),
-    models = require('models'),
-    mongoose = require('mongoose'),
-    db,
-    Call;
-
-
-
-db = mongoose.connect("mongodb://localhost/test");
+var sys = require('sys');
+var http = require('http');
+var event = require('events');
+var io = require('socket.io');
+var models = require('models');
+var mongoose = require('mongoose');
+var Call;
+var db = mongoose.connect("mongodb://localhost/test");
 
 models.defineModels(mongoose, function(){
     Call = Call = mongoose.model('Call');
 });
-
 
 
 var socketEvent = new event.EventEmitter();
@@ -46,7 +41,13 @@ wSocket.on('connection', function(client){
         var p = JSON.parse(data);
           var c = new Call();
             c.name = p.name;
+            c.age = p.age;
             c.tn = p.tn;
+            c.city = p.city;
+            c.state = p.state;
+            c.zip = p.zip;
+            c.latitude = p.latitude;
+            c.longitude = p.longitude;
             c.save();
             client.send({announcement: "message saved"});
             socketEvent.emit("new_call",JSON.stringify(c));

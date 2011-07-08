@@ -14,7 +14,21 @@
           %input{:id => "age", :name => "age", :type => "text"}
         .prefix_1.grid_2
           %label{:for => "zip"} Zip Code:
-          %input{:id => "zip", :name => "zip", :type => "text"}
+          %input{:id => "zip", :name => "zip", :type => "text", :onblur => "getLocation();"}
+      %li
+        .prefix_1.grid_2
+          %label{:for => "city"} City:
+          %input{:id => "city", :name => "city", :type => "text", :readonly => "readonly"}
+        .prefix_1.grid_2
+          %label{:for => "state"} State:
+          %input{:id => "state", :name => "state", :type => "text", :readonly => "readonly"}
+      %li
+        .prefix_1.grid_2
+          %label{:for => "latitude"} Latitude:
+          %input{:id => "latitude", :name => "latitude", :type => "text", :readonly => "readonly"}
+        .prefix_1.grid_2
+          %label{:for => "longitude"} Longitude:
+          %input{:id => "longitude", :name => "longitude", :type => "text", :readonly => "readonly"}
       %li
         .push_1.grid_4.suffix_8
           %input{:type => "submit", :value => "Call Me!", :class => "comment_submit"}

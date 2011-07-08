@@ -1,13 +1,31 @@
 %h1 Calls
 #messages
-#calls
+.grid_12#calls
   %ul
+    %li
+      .grid_2.alpha
+        = "Name" 
+      .grid_2
+        = "Phone" 
+      .grid_2
+        = "City, State"
+      .grid_2
+        = "Zip Code" 
+      .grid_2.omega
     - @coll.find().each do |row|
       %li.call{:id => "#{row['tn']}"}
-        %p
-          = "#{row['name']} :: #{row['tn']}"
+        .grid_2.alpha
+          = row['name'] || "-"
+        .grid_2
+          = row['tn'] || "-"
+        .grid_2
+          = "#{row['city']}, #{row['state']}"
+        .grid_2
+          = row['zip'] || "-"
+        .grid_2.omega
           %button{ :rel => "##{row['tn']}_ov"}
-            %img{:src => '/img/phone.png'}
+            %img{:src => '/img/phone.png', :width => 16, :height => 16}
+      
 #chat
 
 
