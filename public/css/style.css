@@ -285,17 +285,23 @@ a:hover { color: #036; }
         margin: 1px;
         overflow: hidden;
 }
+
+.phone_icon{
+           width: 16px;
+           height: 16px;
+}
 /* the overlayed element */
 .simple_overlay {
 
 	/* must be initially hidden */
 	display:none;
 
+    color: #fff;
 	/* place overlay on top of other elements */
 	z-index:10000;
 
 	/* styling */
-	background-color:#333;
+	background-color: #666;
 
 	width:675px;
 	min-height:200px;

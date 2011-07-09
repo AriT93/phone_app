@@ -1,16 +1,16 @@
 %h1 Calls
 #messages
 .grid_12#calls
-  %ul
+  %ul#callList
     %li
       .grid_2.alpha
-        = "Name" 
+        = "Name"
       .grid_2
-        = "Phone" 
+        = "Phone"
       .grid_2
         = "City, State"
       .grid_2
-        = "Zip Code" 
+        = "Zip Code"
       .grid_2.omega
     - @coll.find().each do |row|
       %li.call{:id => "#{row['tn']}"}
@@ -24,12 +24,25 @@
           = row['zip'] || "-"
         .grid_2.omega
           %button{ :rel => "##{row['tn']}_ov"}
-            %img{:src => '/img/phone.png', :width => 16, :height => 16}
-      
+            %img.phone_icon{:src => '/img/phone.png'}
+
 #chat
 
-
-- @coll.find().each do |row|
-  .simple_overlay{:id => "#{row['tn']}_ov"}
-    %img{:src => '/img/phone.png'}
-    = "#{row['name']} :: #{row['tn']}"
+#calls_ov
+  - @coll.find().each do |row|
+    .simple_overlay{:id => "#{row['tn']}_ov"}
+      %img{:src => '/img/phone.png'}
+      .grid_12#calls
+        %ul
+          %li
+            .grid_4.alpha
+              = "#{row['name']}"
+            .grid_4.omega
+              = "#{row['tn']}"
+          %li
+            .grid_4.alpha
+              = "#{row['city']}"
+            .grid_4
+              = "#{row['state']}"
+            .grid_4.omega
+              = "#{row['zip']}"
