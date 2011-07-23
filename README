@@ -11,11 +11,16 @@ $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 $ sudo apt-add-repository ppa:chris-lea/node.js
 $ sudo apt-get update
 $ sudo apt-get install ruby rubygems mongodb-10gen nodejs
-$ sudo gem install sinatra bson_ext mongo thin SystemTimer haml rack 
+$ sudo gem install sinatra bson_ext mongo thin SystemTimer haml rack
 
 2. install npm from npmjs.org
 $ curl http://npmjs.org/install.sh | sh
-$ npm install mongodb socket.io mongoose
+$ npm install mongodb socket.io@0.6 mongoose
+
+***** NOTICE *****
+make sure to install socket.io v 0.6   there have been changes in v0.7 that
+break app.  The new features do look pretty cool and all.  I just dont' know if
+it's worth it right now to spend the time to figure out the new changes.
 
 3. start the servers
 
@@ -36,6 +41,6 @@ $ln -s ~/.pow/phone_app   /path/to/phone_app
 
 http://phone_app.dev
 
-to restart the ruby app   
+to restart the ruby app
 
 $ touch ~/.pow/phone_app/tmp/restart.txt
