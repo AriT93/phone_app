@@ -1,11 +1,11 @@
 
-require.paths.unshift('.');
+//require.paths.unshift('.');
 
 var sys = require('sys');
 var http = require('http');
 var event = require('events');
 var io = require('socket.io');
-var models = require('models');
+var models = require('./models');
 var mongoose = require('mongoose');
 var Call;
 var db = mongoose.connect("mongodb://localhost/test");
