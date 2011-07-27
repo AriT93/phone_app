@@ -122,6 +122,56 @@ function updateLocation() {
   }
 }
 
+function lookupPosition(latlng,fn) {
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({
+      'location' : latlng
+    },
+    function(results,status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        fn(results[0]);
+      }
+    }
+  );
+}
+
+function updatePosition(position) {
+  $("#zip").val("");
+  $("#latitude").val("");
+  $("#longitude").val("");
+  $("#city").val("");
+  $("#state").val("");
+  var latlng = new google.maps.LatLng(
+    position.coords.latitude,
+    position.coords.longitude
+  ); 
+  if (latlng != null) {
+    lookupPosition(latlng,function(loc) {
+      var city = "";
+      var state = "";
+      var zip = "";
+      $.each(loc.address_components,function(i,v) {
+         if ($.inArray("locality",v.types) > -1) {
+           city = v.short_name;
+         }
+         if ($.inArray("administrative_area_level_1",v.types) > -1) {
+           state = v.short_name;
+         }
+         if ($.inArray("postal_code",v.types) > -1) {
+           zip = v.short_name;
+         }
+      });
+      var lat = loc.geometry.location.lat();
+      var lng = loc.geometry.location.lng();
+      $("#latitude").val(lat);
+      $("#longitude").val(lng);
+      $("#city").val(city);
+      $("#state").val(state);
+      $("#zip").val(zip);
+    });
+  }
+}
+
 $(document).ready(function(){
     $("button[rel]").overlay();
     var socket = new io.Socket(null,
@@ -163,4 +213,8 @@ $(document).ready(function(){
 
     $("#zip").keyup(updateLocation);
     $("#zip").change(updateLocation);
+
+    // TODO: Need to put a check in here to make sure
+    // the browser supports HTML5
+    navigator.geolocation.getCurrentPosition(updatePosition);
 });
