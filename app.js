@@ -20,6 +20,7 @@ var socketListener = socketEvent.addListener("new_call",function(data){
     wSocket.broadcast({result: [data]});
 });
 
+
 var httpServer = http.createServer(function(request, response){
 
 });
@@ -31,26 +32,29 @@ var wSocket = io.listen(httpServer), buffer = [];
 wSocket.on('connection', function(client){
     console.log("connected!");
     this.broadcast({announcement: client.sessionId +" from " + client.connection.remoteAddress + " connected to call routing"});
-    // var c1 = new Call();
-    // c1.name = "robert";
-    // c1.tn = "3128675309";
-    // socketEvent.emit("new_call",JSON.stringify(c1));
 
     client.on('message', function(data){
         if(buffer.length > 5)buffer.shift();
         var p = JSON.parse(data);
-          var c = new Call();
-            c.name = p.name;
-            c.age = p.age;
-            c.tn = p.tn;
-            c.city = p.city;
-            c.state = p.state;
-            c.zip = p.zip;
-            c.latitude = p.latitude;
-            c.longitude = p.longitude;
-            c.save();
-            client.send({announcement: "message saved"});
-            socketEvent.emit("new_call",JSON.stringify(c));
+        if("callAction" in p){
+            console.log("blasting");
+            wSocket.broadcast({call: [p]});
+        }else if("callDelete" in p){
+            console.log("deleting");}
 
+        else{
+              var c = new Call();
+              c.name = p.name;
+              c.age = p.age;
+              c.tn = p.tn;
+              c.city = p.city;
+              c.state = p.state;
+              c.zip = p.zip;
+              c.latitude = p.latitude;
+              c.longitude = p.longitude;
+              c.save();
+              client.send({announcement: "message saved"});
+              socketEvent.emit("new_call",JSON.stringify(c));
+            }
     });
 });

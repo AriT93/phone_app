@@ -1,9 +1,8 @@
-
 /* Author:
 
 */
 
-
+var socket;
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
@@ -68,6 +67,7 @@ function message(obj){
     else if('result' in obj){
         for (var i in obj.result){
             Call = JSON.parse(obj.result[i]);
+            alert(JSON.parse(obj.result[i]));
             if(obj.result[i] != undefined ){
                 // list += "<li>" + Call.name + " " + Call.tn + "</li>";
                 buildCall(Call,true);
@@ -76,6 +76,15 @@ function message(obj){
         if(list != ""){
             $('<p>').html(list).appendTo($("#calls"));
 
+        }
+    }
+    else if('call' in obj){
+        for (var b in obj.call){
+            var p = obj.call[b];
+              if(obj.call[b] != undefined){
+                  $("#"+p.callAction.tn).remove();
+
+            }
         }
     }
 };
@@ -122,9 +131,25 @@ function updateLocation() {
   }
 }
 
+
+
+
+function takeCall(tn){
+    var s = "{\"callAction\":{\"tn\":" + tn + "}}";
+    CallLive = tn;
+    socket.send(s);
+
+}
+
 $(document).ready(function(){
-    $("button[rel]").overlay();
-    var socket = new io.Socket(null,
+    $("button[rel]").overlay({
+        onClose: function(){
+            $("#"+p.callAction.tn+"_ov").remove();
+            var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
+            socket.send(s);
+        }
+          });
+    socket = new io.Socket(null,
                    {port: 8910, rememberTransport: false,
         transports:["websocket","xhr-multipart","flashsocket"]});
     socket.connect();

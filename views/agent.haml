@@ -23,7 +23,7 @@
         .grid_2
           = row['zip'] || "-"
         .grid_2.omega
-          %button{ :rel => "##{row['tn']}_ov"}
+          %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
             %img.phone_icon{:src => '/img/phone.png'}
 
 #chat
