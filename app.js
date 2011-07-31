@@ -36,13 +36,22 @@ wSocket.on('connection', function(client){
     client.on('message', function(data){
         if(buffer.length > 5)buffer.shift();
         var p = JSON.parse(data);
+        console.log(JSON.stringify(p));
         if("callAction" in p){
             console.log("blasting");
             wSocket.broadcast({call: [p]});
         }else if("callDelete" in p){
-            console.log("deleting");}
+          console.log("deleting");
+            var c = Call.find({'tn': p.callDelete.tn},function(err,docs){
+                for(d in docs){
+                    docs[d].status = "called";
+                    docs[d].save();
+                }
 
-        else{
+            });
+            console.log(JSON.stringify(c));
+
+          }else{
               var c = new Call();
               c.name = p.name;
               c.age = p.age;

@@ -67,7 +67,6 @@ function message(obj){
     else if('result' in obj){
         for (var i in obj.result){
             Call = JSON.parse(obj.result[i]);
-            alert(JSON.parse(obj.result[i]));
             if(obj.result[i] != undefined ){
                 // list += "<li>" + Call.name + " " + Call.tn + "</li>";
                 buildCall(Call,true);
@@ -135,6 +134,7 @@ function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
     CallLive = tn;
     socket.send(s);
+}
 
 function lookupPosition(latlng,fn) {
   var geocoder = new google.maps.Geocoder();
@@ -187,13 +187,6 @@ function updatePosition(position) {
 }
 
 $(document).ready(function(){
-    $("button[rel]").overlay({
-        onClose: function(){
-            $("#"+p.callAction.tn+"_ov").remove();
-            var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
-            socket.send(s);
-        }
-          });
     socket = new io.Socket(null,
                    {port: 8910, rememberTransport: false,
         transports:["websocket","xhr-multipart","flashsocket"]});
@@ -212,6 +205,13 @@ $(document).ready(function(){
         }
     });
 
+    $("button[rel]").overlay({
+      onClose: function(){
+          var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
+          socket.send(s);
+          $("#"+CallLive+"_ov").remove();
+        }
+    });
     $("#call").submit(function(e){
         if($("#name").val()){
         var Call = {};
