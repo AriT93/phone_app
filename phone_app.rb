@@ -28,6 +28,9 @@ end
 get '/agent' do
   haml :agent
 end
+get '/crc' do
+  haml :crc
+end
 get '/call/:phoneNum' do
   #url = "http://webservice/cgi-bin/makecall.cgi?"+params[:phoneNum]
   #result = open(url)

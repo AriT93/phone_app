@@ -1,0 +1,66 @@
+.grid_12
+  %ul
+    %li
+      .grid_2.alpha
+        %label{:for => "agentPhone"} Phone:
+        %input{:id => "agentPhone", :name => "agentPhone", :type => "text"}
+      .prefix_1.grid_2
+        %label{:for => "zip"} Zip Code:
+        %input{:id => "zip", :name => "zip", :type => "text"}
+      .prefix_1.grid_2.omega
+        %label{:for => "distance"} Distance:
+        %input{:id => "distance", :name => "distance", :value => "20", :type => "text"}
+        %input{:id => "city", :name => "city", :type => "hidden"}
+        %input{:id => "state", :name => "state", :type => "hidden"}
+        %input{:id => "latitude", :name => "latitude", :type => "hidden"}
+        %input{:id => "longitude", :name => "longitude", :type => "hidden"}
+.grid_12#calls
+  %h1 Calls
+  %ul#callList.ui-widget
+    %li.ui-widget-header
+      .grid_2.alpha
+        = "Name"
+      .grid_2
+        = "Phone"
+      .grid_2
+        = "City"
+      .grid_2
+        = "State"
+      .grid_2
+        = "Zip Code"
+      .grid_1.omega
+    - @coll.find({"status" => {"$in" => ["all",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
+      %li.ui-widget-content.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
+        .grid_2.alpha
+          = row['name'] || "-"
+        .grid_2
+          = row['tn'] || "-"
+        .grid_2
+          = "#{row['city']}"
+        .grid_2
+          = "#{row['state']}"
+        .grid_2
+          = row['zip'] || "-"
+        .grid_1.omega
+          %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
+            %img.phone_icon{:src => '/img/phone.png'}
+.grid_3#messages
+  %h1 Messages
+#calls_ov
+  - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
+    .simple_overlay{:id => "#{row['tn']}_ov"}
+      %img{:src => '/img/phone.png'}
+      .grid_12#calls
+        %ul
+          %li
+            .grid_2.alpha
+              = "#{row['name']}"
+            .grid_2.omega
+              = "#{row['tn']}"
+          %li
+            .grid_2.alpha
+              = "#{row['city']}"
+            .grid_2
+              = "#{row['state']}"
+            .grid_2.omega
+              = "#{row['zip']}"
