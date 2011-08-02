@@ -59,17 +59,17 @@ function buildCall(obj,callList){
 
 function message(obj){
     var list="";
-    var agentLatLng = new google.maps.LatLng(
-      $('#latitude').val(),
-      $('#longitude').val()
-    );
-    var distance = $('#distance').val();
-    var state = $('#state').val();
     if('message' in obj){
     }else if('announcement' in obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
     }
     else if('result' in obj){
+        var agentLatLng = new google.maps.LatLng(
+          $('#latitude').val(),
+          $('#longitude').val()
+        );
+        var distance = $('#distance').val();
+        var state = $('#state').val();
         for (var i in obj.result){
             Call = JSON.parse(obj.result[i]);
             if(obj.result[i] != undefined ){
