@@ -293,34 +293,34 @@ li{
 /* the overlayed element */
 .simple_overlay {
 
-	/* must be initially hidden */
-	display:none;
+    /* must be initially hidden */
+    display:none;
 
     color: #fff;
-	/* place overlay on top of other elements */
-	z-index:10000;
+    /* place overlay on top of other elements */
+    z-index:10000;
 
-	/* styling */
-	background-color: #666;
+    /* styling */
+    background-color: #666;
 
-	width:675px;
-	min-height:200px;
-	border: 5px solid white;
+    width:675px;
+    min-height:200px;
+    border: 5px solid white;
 
-	/* CSS3 styling for latest browsers */
-	-moz-box-shadow:0 0 90px 5px #000;
-	-webkit-box-shadow: 0 0 90px #000;
+    /* CSS3 styling for latest browsers */
+    -moz-box-shadow:0 0 90px 5px #000;
+    -webkit-box-shadow: 0 0 90px #000;
 }
 
 /* close button positioned on upper right corner */
 .simple_overlay .close {
-	background-image:url(/img/close.png);
-	position:absolute;
-	right:-15px;
-	top:-15px;
-	cursor:pointer;
-	height:35px;
-	width:35px;
+    background-image:url(/img/close.png);
+    position:absolute;
+    right:-15px;
+    top:-15px;
+    cursor:pointer;
+    height:35px;
+    width:35px;
 }
 #banner{
        background-color: #000;
@@ -337,7 +337,7 @@ li{
 #main{
      padding-top: 10px;
      margin-top: 5px;
-     height: 400px;
+     min-height: 400px;
 }
 #footer{
          background-color: #c0c0c0;
