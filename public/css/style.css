@@ -260,12 +260,11 @@ a:hover { color: #036; }
 }
 
 #messages{
-        float: right;
-        margin: 5px;
-        padding: 3px;
-        width: 60%;
+        border: 1px solid red
 }
-
+#calls{
+        border: 1px solid blue
+}
 .contact ul{
            margin: 0;
            padding: 0;

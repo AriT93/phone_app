@@ -1,6 +1,5 @@
-%h1 Calls
-#messages
-.grid_12#calls
+.grid_10#calls
+  %h1 Calls
   %ul#callList
     %li
       .grid_2.alpha
@@ -11,9 +10,9 @@
         = "City, State"
       .grid_2
         = "Zip Code"
-      .grid_2.omega
+      .grid_1.omega
     - @coll.find("status" => {"$ne" => "called"}).each do |row|
-      %li.call{:id => "#{row['tn']}"}
+      %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}"}
         .grid_2.alpha
           = row['name'] || "-"
         .grid_2
@@ -22,12 +21,11 @@
           = "#{row['city']}, #{row['state']}"
         .grid_2
           = row['zip'] || "-"
-        .grid_2.omega
+        .grid_1.omega
           %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
             %img.phone_icon{:src => '/img/phone.png'}
-
-#chat
-
+.grid_5#messages
+  %h1 Messages3
 #calls_ov
   - @coll.find().each do |row|
     .simple_overlay{:id => "#{row['tn']}_ov"}
