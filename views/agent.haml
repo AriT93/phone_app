@@ -29,8 +29,16 @@
       .grid_2
         = "Zip Code"
       .grid_1.omega
+<<<<<<< HEAD
     - @coll.find({"status" => {"$ne" => "called"}},{:sort => [:createdOn,:ascending]}).each do |row|
       %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
+||||||| merged common ancestors
+    - @coll.find({"status" => {"$ne" => "called"}},{:sort => [:createdOn,:ascending]}).each do |row|
+      %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}"}
+=======
+    - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
+      %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}"}
+>>>>>>> bc654d1e50f2b793cbf254d9b099ae4066a52e39
         .grid_2.alpha
           = row['name'] || "-"
         .grid_2

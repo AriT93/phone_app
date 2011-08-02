@@ -43,13 +43,13 @@ function populateFields(name, tn, age, zip, index) {
 	}
 
 	if(didNothing > 0) {
-		$('#zip').onblur();
+		updateLocation();
 		setTimeout('$("#call").submit();', 1000);
 		//push button code goes here
 		lastOne = currentOne;
 		currentOne = -1;
-		setTimeout('afterPopulated();', 2000);
+		setTimeout('afterPopulated();', 1500);
 	} else {
-		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 100);
+		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 20);
 	}
 }
