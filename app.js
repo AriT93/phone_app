@@ -84,7 +84,6 @@ function handleOld() {
   var c;
   var timeToCheck;
   var rightnow = new Date();
-  console.log("executing function " + rightnow);
   // we want to query old calls, where allFlag is false.
   timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
   c = Call.find(
@@ -94,7 +93,7 @@ function handleOld() {
           'createdOn' : { $lt : timeToCheck }
         }, function(err, docs) {
              for (d in docs) {
-               console.log("allFlag for " + docs[d].name);
+               console.log("setting allFlag=true for " + docs[d].name);
                docs[d].allFlag = true;
                docs[d].save();
              }
@@ -108,7 +107,7 @@ function handleOld() {
           'createdOn' : { $lt : timeToCheck }
         }, function(err, docs) {
              for (d in docs) {
-               console.log("abandoned for " + docs[d].name);
+               console.log("setting status=abandoned for " + docs[d].name);
                docs[d].status = 'abandoned';
                docs[d].save();
                wSocket.broadcast({call: [docs[d]]});
