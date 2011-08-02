@@ -34,7 +34,7 @@ wSocket.on('connection', function(client){
         var p = JSON.parse(data);
         console.log(JSON.stringify(p));
         if("callAction" in p){
-            var c = Call.find({'tn': p.callAction.tn},function(){
+            var c = Call.find({'tn': p.callAction.tn},function(err, docs){
                 for(d in docs){
                   if(docs[d].status != ""){
                       client.send({announcement: "all ready being called"});
