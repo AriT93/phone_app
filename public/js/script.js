@@ -3,32 +3,31 @@
 */
 
 var socket;
+
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
     var bad = ['_id', 'latitude','longitude','age', 'state'];
-    for (var key in obj){
-        if(obj.hasOwnProperty(key)){
-            if($.inArray(key, bad) == -1){
-                var d = $('<div>');
-                var d2 = $('<div>');
-                d.addClass("grid_2");
-                d2.addClass("grid_2");
-                if(key == 'name'){
-                    d.addClass('alpha');
-                    d2.addClass('alpha');
-                }
-                d.html(obj[key]);
-                d2.html(obj[key]);
-                li.append(d);
-                li2.append(d2);
-
-            }
+    var keys = ['name','tn','city','state','zip'];
+    $.each(keys,function(i,key) {
+      if(obj.hasOwnProperty(key)){
+        var d = $('<div>');
+        var d2 = $('<div>');
+        d.addClass("grid_2");
+        d2.addClass("grid_2");
+        if(i == 0){
+          d.addClass('alpha');
+          d2.addClass('alpha');
         }
-    }
+        d.html(obj[key]);
+        d2.html(obj[key]);
+        li.append(d);
+        li2.append(d2);
+      }
+    });
     if(callList){
         var d = $('<div>');
-        d.addClass("grid_2");
+        d.addClass("grid_1");
         d.addClass("omega");
         var b = $("<button rel='#"+ obj.tn +"_ov'>");
         var img=$("<img class='phone_icon' src='/img/phone.png'/>");
@@ -38,7 +37,7 @@ function buildCall(obj,callList){
         li.attr('id',obj.tn);
         li.append(d);
     }
-    $("#callList li:first").after(li);
+    $("#callList li:last").after(li);
     //add to the overlay
      var ovdiv = $('<div id="' + obj.tn + '_ov">');
      ovdiv.addClass("simple_overlay");
@@ -275,5 +274,4 @@ $(document).ready(function(){
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
     
-    //limitCalls();
 });
