@@ -14,7 +14,7 @@
         %input{:id => "state", :name => "state", :type => "hidden"}
         %input{:id => "latitude", :name => "latitude", :type => "hidden"}
         %input{:id => "longitude", :name => "longitude", :type => "hidden"}
-.grid_12#calls
+.grid_15#calls
   %h1 Calls
   %ul#callList.ui-widget
     %li.ui-widget-header
@@ -44,8 +44,6 @@
         .grid_1.omega
           %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
             %img.phone_icon{:src => '/img/phone.png'}
-.grid_3#messages
-  %h1 Messages
 #calls_ov
   - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
     .simple_overlay{:id => "#{row['tn']}_ov"}
