@@ -14,7 +14,7 @@
         %input{:id => "state", :name => "state", :type => "hidden"}
         %input{:id => "latitude", :name => "latitude", :type => "hidden"}
         %input{:id => "longitude", :name => "longitude", :type => "hidden"}
-.grid_10#calls
+.grid_12#calls
   %h1 Calls
   %ul#callList
     %li
@@ -23,7 +23,9 @@
       .grid_2
         = "Phone"
       .grid_2
-        = "City, State"
+        = "City"
+      .grid_2
+        = "State"
       .grid_2
         = "Zip Code"
       .grid_1.omega
@@ -34,13 +36,15 @@
         .grid_2
           = row['tn'] || "-"
         .grid_2
-          = "#{row['city']}, #{row['state']}"
+          = "#{row['city']}"
+        .grid_2
+          = "#{row['state']}"
         .grid_2
           = row['zip'] || "-"
         .grid_1.omega
           %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
             %img.phone_icon{:src => '/img/phone.png'}
-.grid_5#messages
+.grid_3#messages
   %h1 Messages3
 #calls_ov
   - @coll.find().each do |row|
