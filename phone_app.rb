@@ -33,4 +33,7 @@ get '/location/:zip' do
      http.get "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address="+params[:zip]
   end
   res.body
-end  
+end
+get '/call/:phoneNum' do
+  
+end
