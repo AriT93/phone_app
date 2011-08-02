@@ -139,7 +139,9 @@ function updateLocation() {
       $.each(loc.address_components,function(i,v) {
          if ($.inArray("locality",v.types) > -1) {
            city = v.short_name;
-         }
+         } else if ($.inArray("sublocality",v.types) > -1) {
+           city = v.short_name;
+         } 
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
@@ -179,7 +181,9 @@ function updatePosition(position) {
       $.each(loc.address_components,function(i,v) {
          if ($.inArray("locality",v.types) > -1) {
            city = v.short_name;
-         }
+         } else if ($.inArray("sublocality",v.types) > -1) {
+           city = v.short_name;
+         } 
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
