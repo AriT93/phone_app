@@ -38,7 +38,7 @@ function buildCall(obj,callList){
         li.append(d);
     }
 //    $("#callList li:last").last(li);
-    li.appendTo("#callList").fadeIn("slow");
+      li.appendTo("#callList").hide().fadeIn("slow");
     //add to the overlay
      var ovdiv = $('<div id="' + obj.tn + '_ov">');
      ovdiv.addClass("simple_overlay");
@@ -159,14 +159,14 @@ function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
     CallLive = tn;
     socket.send(s);
-    
+
     $.ajax({
-    	  url: "/call/phoneNum="+tn,
-	  dataType: "jsonp",
-	  success: function(data){
+          url: "/call/phoneNum="+tn,
+      dataType: "jsonp",
+      success: function(data){
           },
-	  error: function(){
-	  }
+      error: function(){
+      }
     });
 }
 
@@ -275,7 +275,7 @@ $(document).ready(function(){
 
     $("#agentPhone").change(updateButton);
     $("#agentPhone").keyup(updateButton);
-    
+
     updateButton();
 
     // TODO: Need to put a check in here to make sure
