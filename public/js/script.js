@@ -31,7 +31,17 @@ function formatNum(myNum) {
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
-    var bad = ['_id', 'latitude','longitude','age', 'state'];
+    li.addClass("ui-widget-content");
+    li2.addClass("ui-widget-content");
+    var lat = obj["latitude"];
+    var lng = obj["longitude"];
+    var state = obj["state"];
+    li.attr("lat",lat);
+    li.attr("long",lng);
+    li.attr("state",state);
+    li2.attr("lat",lat);
+    li2.attr("long",lng);
+    li2.attr("state",state);
     var keys = ['name','tn','city','state','zip'];
     $.each(keys,function(i,key) {
       if(obj.hasOwnProperty(key)){
@@ -39,8 +49,6 @@ function buildCall(obj,callList){
         var d2 = $('<div>');
         d.addClass("grid_2");
         d2.addClass("grid_2");
-        d.addClass("ui-content-widget");
-        d2.addClass("ui-content-widget");
         if(i == 0){
           d.addClass('alpha');
           d2.addClass('alpha');
@@ -129,7 +137,44 @@ function message(obj){
             }
         }
     }
+    else if('chart' in obj){
+      for (var s in obj.chart) {
+        var dataItem = obj.chart[s];
+        var status = [ "new", "calling", "called", "abandoned" ];
+        for (var item in status) {
+          var data = status[item];
+          var count = 0;
+          if (dataItem[data] != undefined) {
+            count = dataItem[data];
+          }
+          $("#status\\."+data).val(count);
+        }
+      }
+      drawChart();
+    }
 };
+
+function drawChart() {
+  var status = [ "new", "calling", "called", "abandoned" ];
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Status');
+  data.addColumn('number', 'Count');
+  data.addRows(status.length);
+  var x = 0;
+  for (var item in status) {
+    var s = status[item];
+    data.setValue(x, 0, s);
+    var count = $("#status\\."+s).val();
+    if (count == undefined) {
+      count = 0;
+    }
+    count = parseInt(count);
+    data.setValue(x, 1, count);
+    x++;
+  }
+  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  chart.draw(data, {width: 450, height: 300, title: 'Call Status'});
+}
 
 function limitCalls() {
   var agentLatLng = new google.maps.LatLng(
@@ -317,5 +362,5 @@ $(document).ready(function(){
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
-
 });
+
