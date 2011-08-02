@@ -58,7 +58,7 @@ function buildCall(obj,callList){
 
 function message(obj){
     var list="";
-    var agentCoordinate = new Coordinate(
+    var agentLatLng = new google.maps.LatLng(
       $('#latitude').val(),
       $('#longitude').val()
     );
@@ -71,11 +71,11 @@ function message(obj){
         for (var i in obj.result){
             Call = JSON.parse(obj.result[i]);
             if(obj.result[i] != undefined ){
-              var custCoord = new Coordinate(
+              var custLatLng = new google.maps.LatLng(
                 Call.latitude,
                 Call.longitude
               );
-              if (agentCoordinate.within(custCoord,distance)) {
+              if (agentLatLng.within(custLatLng,distance)) {
               // list += "<li>" + Call.name + " " + Call.tn + "</li>";
                 buildCall(Call,true);
               }
@@ -98,7 +98,7 @@ function message(obj){
 };
 
 function limitCalls() {
-  var agentCoord = new Coordinate(
+  var agentLatLng = new google.maps.LatLng(
     $('#latitude').val(),
     $('#longitude').val()
   );
@@ -109,30 +109,17 @@ function limitCalls() {
     var longitude = $(this).attr("long");
     if (latitude && longitude) {
       //alert(latitude + " " + longitude); 
-      var custCoord = new Coordinate(
+      var custLatLng = new google.maps.LatLng(
         latitude,
         longitude
       );
-      if (!agentCoord.within(custCoord,distance)) {
+      if (!agentLatLng.within(custLatLng,distance)) {
         $(this).hide();
       } else {
         $(this).show();
       }
     }
   });
-}
-
-function lookupLocation(zip,fn) {
-  var geocoder = new google.maps.Geocoder();
-  geocoder.geocode({
-      'address' : ""+zip
-    },
-    function(results,status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        fn(results[0]);
-      }
-    }
-  );
 }
 
 function updateLocation() {
@@ -169,19 +156,6 @@ function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
     CallLive = tn;
     socket.send(s);
-}
-
-function lookupPosition(latlng,fn) {
-  var geocoder = new google.maps.Geocoder();
-  geocoder.geocode({
-      'location' : latlng
-    },
-    function(results,status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        fn(results[0]);
-      }
-    }
-  );
 }
 
 function updatePosition(position) {
