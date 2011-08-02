@@ -230,9 +230,16 @@ $(document).ready(function(){
         Call.age       = $("#age").val();
         Call.city      = $("#city").val();
         Call.state     = $("#state").val();
-        Call.zip       = $("#zip").val().replace(/\D/g, '');
+        Call.zip       = $("#zip").val();
         Call.latitude  = $("#latitude").val();
         Call.longitude = $("#longitude").val();
+	Call.tn        = Call.tn.replace(/\D/g, '');
+	Call.zip        = Call.zip.replace(/\D/g, '');
+	$.each(['name', 'tn', 'age', 'city', 'state', 'zip'],function(index, fieldName) {
+		if(Call[fieldName] === undefined || Call[fieldName] === '') {
+			Call[fieldName] = 'Not Submitted';
+		}
+	});
         socket.send(JSON.stringify(Call));
         }
         $(':input',"#call")
