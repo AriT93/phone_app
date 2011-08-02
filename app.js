@@ -74,16 +74,18 @@ wSocket.on('connection', function(client){
     });
 });
 
-var millisForTimeout   = 1000 *  15;
+var millisForUpdates   = 1000 *  15;
 var millisUntilAllFlag = 1000 * 120;
 var millisUntilAbandon = 1000 * 300;
+var chartData = {};
 
-setTimeout(handleOld, millisForTimeout);
+setTimeout(handleOld, millisForUpdates);
 
 function handleOld() {
   var c;
   var timeToCheck;
   var rightnow = new Date();
+  console.log(rightnow);
   // we want to query old calls, where allFlag is false.
   timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
   c = Call.find(
@@ -114,5 +116,23 @@ function handleOld() {
              }
            }
   );           
-  setTimeout(handleOld, millisForTimeout);
+  var statusToCheck = ["new","calling","called","abandoned"];
+  for (var x in statusToCheck) {
+    updateChart(statusToCheck[x]);
+  }
+  setTimeout(handleOld, millisForUpdates);
+}
+
+function updateChart(status) {
+    var c = Call.count(
+          {
+            'status' : status
+          }, function(err, count) {
+               if (count != chartData[status]) {
+                 chartData[status] = count;
+                 console.log(status + "=" + chartData[status]);
+                 wSocket.broadcast({chart: [chartData]});
+               }
+             }
+    );
 }

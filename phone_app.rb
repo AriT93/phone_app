@@ -27,6 +27,9 @@ end
 get '/agent' do
   haml :agent
 end
+get '/charts' do
+  haml :charts
+end
 get '/call/:phoneNum' do
   
 end

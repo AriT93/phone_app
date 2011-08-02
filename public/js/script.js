@@ -4,6 +4,7 @@
 
 var socket;
 
+
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
@@ -95,7 +96,44 @@ function message(obj){
             }
         }
     }
+    else if('chart' in obj){
+      for (var s in obj.chart) {
+        var dataItem = obj.chart[s];
+        var status = [ "new", "calling", "called", "abandoned" ];
+        for (var item in status) {
+          var data = status[item];
+          var count = 0;
+          if (dataItem[data] != undefined) {
+            count = dataItem[data];
+          }
+          $("#status\\."+data).val(count);
+        }
+      }
+      drawChart();
+    }
 };
+
+function drawChart() {
+  var status = [ "new", "calling", "called", "abandoned" ];
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Status');
+  data.addColumn('number', 'Count');
+  data.addRows(status.length);
+  var x = 0;
+  for (var item in status) {
+    var s = status[item];
+    data.setValue(x, 0, s);
+    var count = $("#status\\."+s).val();
+    if (count == undefined) {
+      count = 0;
+    }
+    count = parseInt(count);
+    data.setValue(x, 1, count);
+    x++;
+  }
+  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  chart.draw(data, {width: 450, height: 300, title: 'Call Status'});
+}
 
 function limitCalls() {
   var agentLatLng = new google.maps.LatLng(
@@ -256,5 +294,7 @@ $(document).ready(function(){
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
+    //google.load("visualization", "1", {packages: ["corechart"]});
     
 });
+
