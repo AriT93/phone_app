@@ -31,7 +31,17 @@ function formatNum(myNum) {
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
-    var bad = ['_id', 'latitude','longitude','age', 'state'];
+    li.addClass("ui-widget-content");
+    li2.addClass("ui-widget-content");
+    var lat = obj["latitude"];
+    var lng = obj["longitude"];
+    var state = obj["state"];
+    li.attr("lat",lat);
+    li.attr("long",lng);
+    li.attr("state",state);
+    li2.attr("lat",lat);
+    li2.attr("long",lng);
+    li2.attr("state",state);
     var keys = ['name','tn','city','state','zip'];
     $.each(keys,function(i,key) {
       if(obj.hasOwnProperty(key)){
@@ -39,8 +49,6 @@ function buildCall(obj,callList){
         var d2 = $('<div>');
         d.addClass("grid_2");
         d2.addClass("grid_2");
-        d.addClass("ui-content-widget");
-        d2.addClass("ui-content-widget");
         if(i == 0){
           d.addClass('alpha');
           d2.addClass('alpha');
