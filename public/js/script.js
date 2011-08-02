@@ -59,7 +59,11 @@ function buildCall(obj,callList){
 
 function message(obj){
     var list="";
-
+    var agentCoordinate = new Coordinate(
+      $('#latitude').val(),
+      $('#longitude').val()
+    );
+    var distance = $('#distance').val();
     if('message' in obj){
     }else if('announcement' in obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
@@ -68,8 +72,14 @@ function message(obj){
         for (var i in obj.result){
             Call = JSON.parse(obj.result[i]);
             if(obj.result[i] != undefined ){
-                // list += "<li>" + Call.name + " " + Call.tn + "</li>";
+              var custCoord = new Coordinate(
+                Call.latitude,
+                Call.longitude
+              );
+              if (agentCoordinate.within(custCoord,distance)) {
+              // list += "<li>" + Call.name + " " + Call.tn + "</li>";
                 buildCall(Call,true);
+              }
             }
         }
         if(list != ""){
