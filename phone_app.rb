@@ -29,7 +29,8 @@ get '/agent' do
   haml :agent
 end
 get '/call/:phoneNum' do
-  url = "http://webservice/cgi-bin/makecall.cgi?"+params[:phoneNum]
-  result = open(url)
-  result.read
+  #url = "http://webservice/cgi-bin/makecall.cgi?"+params[:phoneNum]
+  #result = open(url)
+  #result.read
+  '{"success":"made phone call"}'
 end
