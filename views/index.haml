@@ -22,13 +22,8 @@
         .prefix_1.grid_2
           %label{:for => "state"} State:
           %input{:id => "state", :name => "state", :type => "text", :readonly => "readonly"}
-      %li
-        .prefix_1.grid_2
-          %label{:for => "latitude"} Latitude:
-          %input{:id => "latitude", :name => "latitude", :type => "text", :readonly => "readonly"}
-        .prefix_1.grid_2
-          %label{:for => "longitude"} Longitude:
-          %input{:id => "longitude", :name => "longitude", :type => "text", :readonly => "readonly"}
+          %input{:id => "latitude", :name => "latitude", :type => "hidden"}
+          %input{:id => "longitude", :name => "longitude", :type => "hidden"}
       %li
         .push_1.grid_4.suffix_8
           %input{:type => "submit", :value => "Call Me!", :class => "comment_submit"}
