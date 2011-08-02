@@ -37,7 +37,8 @@ function buildCall(obj,callList){
         li.attr('id',obj.tn);
         li.append(d);
     }
-    $("#callList li:last").after(li);
+//    $("#callList li:last").last(li);
+    li.appendTo("#callList").fadeIn("slow");
     //add to the overlay
      var ovdiv = $('<div id="' + obj.tn + '_ov">');
      ovdiv.addClass("simple_overlay");
@@ -90,7 +91,7 @@ function message(obj){
         for (var b in obj.call){
             var p = obj.call[b];
               if(obj.call[b] != undefined){
-                  $("#"+p.callAction.tn).remove();
+                  $("#"+p.callAction.tn).fadeOut("slow", function(){$(this).remove();});
 
             }
         }
@@ -108,7 +109,7 @@ function limitCalls() {
     var latitude  = $(this).attr("lat");
     var longitude = $(this).attr("long");
     if (latitude && longitude) {
-      //alert(latitude + " " + longitude); 
+      //alert(latitude + " " + longitude);
       var custCoord = new Coordinate(
         latitude,
         longitude
@@ -271,9 +272,9 @@ $(document).ready(function(){
     $("#zip").change(updateLocation);
     $("#distance").keyup(limitCalls);
     $("#distance").change(limitCalls);
-    
+
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
-    
+
 });
