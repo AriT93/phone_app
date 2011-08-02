@@ -397,4 +397,8 @@ $(document).ready(function(){
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
+    if(window.location.hash && window.location.hash.match(/autopopulate/i))
+    	autoPopulate();
+    else if(window.location.hash && window.location.hash.match(/autoagent/i)) {
+    }
 });
