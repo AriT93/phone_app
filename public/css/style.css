@@ -321,3 +321,20 @@ a:hover { color: #036; }
 	height:35px;
 	width:35px;
 }
+#banner{
+       background-color: #000;
+       height: 30px;
+}
+#masthead{
+       background-image: url(/img/masthead.jpg);
+       background-repeat: no-repeat;
+         height: 150px;
+}
+#main{
+     margin-top: 25px;
+     height: 400px;
+}
+#footer{
+         background-color: #DCD;
+       height: 100px;
+}
