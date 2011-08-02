@@ -160,7 +160,7 @@ function takeCall(tn){
     CallLive = tn;
     socket.send(s);
     $.ajax({
-    	  url: "/call/?phoneNum="+tn,
+    	  url: "/call/?phoneNum/"+tn,
 	  dataType: "json",
 	  success: function(){
           },
