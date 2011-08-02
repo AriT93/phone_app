@@ -199,6 +199,13 @@ function updatePosition(position) {
   }
 }
 
+function updateButton() {
+  var agentPhone = $("#agentPhone").val();
+  var disable = agentPhone == null || agentPhone == "";
+  $('button').attr('disabled',disable);
+}
+
+
 $(document).ready(function(){
     socket = new io.Socket(null,
                    {port: 8910, rememberTransport: false,
@@ -256,6 +263,11 @@ $(document).ready(function(){
 
     $("#distance").keyup(limitCalls);
     $("#distance").change(limitCalls);
+
+    $("#agentPhone").change(updateButton);
+    $("#agentPhone").keyup(updateButton);
+    
+    updateButton();
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
