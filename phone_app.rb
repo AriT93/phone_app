@@ -28,7 +28,7 @@ end
 get '/agent' do
   haml :agent
 end
-get '/call:phoneNum' do
+get '/call/:phoneNum' do
   url = "http://phonecallWS/cgi-bin/makecall.cgi?"+params[:phoneNum]
   result = open(url)
   puts result.read
