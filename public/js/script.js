@@ -159,14 +159,15 @@ function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
     CallLive = tn;
     socket.send(s);
-    /*$.ajax({
-    	  url: "/call/?phoneNum/"+tn,
-	  dataType: "json",
-	  success: function(){
+    
+    $.ajax({
+    	  url: "/call/phoneNum="+tn,
+	  dataType: "jsonp",
+	  success: function(data){
           },
 	  error: function(){
 	  }
-    });*/
+    });
 }
 
 function updatePosition(position) {
