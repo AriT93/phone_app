@@ -44,13 +44,8 @@
         .grid_1.omega
           %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
             %img.phone_icon{:src => '/img/phone.png'}
-<<<<<<< HEAD
-.grid_5#messages
-  %h1 Messages
-=======
 .grid_3#messages
   %h1 Messages3
->>>>>>> 094ff2344e5dfc28d804f8539ed323802b5d1185
 #calls_ov
   - @coll.find().each do |row|
     .simple_overlay{:id => "#{row['tn']}_ov"}
