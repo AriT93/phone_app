@@ -37,7 +37,8 @@ function buildCall(obj,callList){
         li.attr('id',obj.tn);
         li.append(d);
     }
-    $("#callList li:last").after(li);
+//    $("#callList li:last").last(li);
+    li.appendTo("#callList").fadeIn("slow");
     //add to the overlay
      var ovdiv = $('<div id="' + obj.tn + '_ov">');
      ovdiv.addClass("simple_overlay");
@@ -91,7 +92,7 @@ function message(obj){
         for (var b in obj.call){
             var p = obj.call[b];
               if(obj.call[b] != undefined){
-                  $("#"+p.callAction.tn).remove();
+                  $("#"+p.callAction.tn).fadeOut("slow", function(){$(this).remove();});
 
             }
         }
@@ -232,9 +233,16 @@ $(document).ready(function(){
         Call.age       = $("#age").val();
         Call.city      = $("#city").val();
         Call.state     = $("#state").val();
-        Call.zip       = $("#zip").val().replace(/\D/g, '');
+        Call.zip       = $("#zip").val();
         Call.latitude  = $("#latitude").val();
         Call.longitude = $("#longitude").val();
+	Call.tn        = Call.tn.replace(/\D/g, '');
+	Call.zip        = Call.zip.replace(/\D/g, '');
+	$.each(['name', 'tn', 'age', 'city', 'state', 'zip'],function(index, fieldName) {
+		if(Call[fieldName] === undefined || Call[fieldName] === '') {
+			Call[fieldName] = 'Not Submitted';
+		}
+	});
         socket.send(JSON.stringify(Call));
         }
         $(':input',"#call")
@@ -248,9 +256,9 @@ $(document).ready(function(){
 
     $("#distance").keyup(limitCalls);
     $("#distance").change(limitCalls);
-    
+
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
-    
+
 });
