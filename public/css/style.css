@@ -291,6 +291,14 @@ a:hover { color: #036; }
         margin: 1px;
         overflow: hidden;
 }
+.callform ul{
+         list-style: none;
+         margin: 2px;
+}
+.callform li{
+        margin: 1px;
+        overflow: hidden;
+}
 li{
   list-style: none;
 }
@@ -336,7 +344,7 @@ li{
        padding-bottom: 5px;
 }
 #masthead{
-       background: url(/img/masthead.png) left center;
+/*       background: url(/img/masthead.png) left center;*/
        background-repeat: no-repeat;
        background-color: #c0c0c0;
        padding-top: 3px;
@@ -346,4 +354,10 @@ li{
      padding-top: 10px;
      margin-top: 5px;
      min-height: 400px;
+}
+.toplink{
+        font-weight: 900;
+        color: white;
+        padding-top: 10px;
+        text-align: center;
 }

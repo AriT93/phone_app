@@ -75,9 +75,9 @@ wSocket.on('connection', function(client){
     });
 });
 
-var millisForUpdates   = 1000 *  15;
-var millisUntilAllFlag = 1000 * 120;
-var millisUntilAbandon = 1000 * 300;
+var millisForUpdates   = 1000 *  5;
+var millisUntilAllFlag = 1000 * 45;
+var millisUntilAbandon = 1000 * 65;
 var chartData = {};
 
 setTimeout(handleOld, millisForUpdates);

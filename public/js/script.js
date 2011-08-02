@@ -3,23 +3,23 @@
 */
 
 var socket;
-
+var CallLive;
 /* Returns 10 digit number with no formatting if thinks is a phone number.
  * Returns false otherwise. */
 function isValidPhoneNum(myNum) {
         if(myNum == undefined) return false;
         myNum = myNum.replace(/\D+/g, "");
-       
+
         //I might want to do more checking that the tech didn't do something really dumb.
         //TODO!
-       
+
         if(myNum.length > 11 || myNum.length < 10) return false;
-       
+
         if (myNum.length == 11) {
                 if(myNum.substr(0, 1) != '1') return false;
                 myNum = myNum.substr(1,10); /*chop off first 1.*/
         }
-       
+
         if(myNum.substr(0, 1) == '1' || myNum.substr(0, 1) == '0') return false;
         return myNum;
 }
@@ -29,7 +29,6 @@ function formatNum(myNum) {
 }
 
 function buildCall(obj,callList){
-    alert("got here");
     var li = $('<li>');
     var li2 = $('<li>');
     li.addClass("ui-widget-content");
@@ -57,8 +56,9 @@ function buildCall(obj,callList){
           d.addClass('alpha');
           d2.addClass('alpha');
         }
-	var fieldText = obj[key];
+    var fieldText = obj[key];
 
+<<<<<<< HEAD
 	if(key == 'tn' && isValidPhoneNum(fieldText)) {
 		fieldText = formatNum(isValidPhoneNum(fieldText));
 	} else if(key == 'createdOn') {
@@ -68,6 +68,13 @@ function buildCall(obj,callList){
 	}
         
 	d.html(fieldText);
+=======
+    if(key == 'tn' && isValidPhoneNum(fieldText)) {
+        fieldText = formatNum(isValidPhoneNum(fieldText));
+    }
+
+    d.html(fieldText);
+>>>>>>> 706e5682427e9ba4263cee608fd1bef441d9216f
         d2.html(fieldText);
         li.append(d);
         li2.append(d2);
@@ -180,8 +187,10 @@ function drawChart() {
     data.setValue(x, 1, count);
     x++;
   }
-  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-  chart.draw(data, {width: 720, height: 400, title: 'Call Status'});
+  if ($("#piechart").length) {
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, {width: 720, height: 400, title: 'Call Status'});
+  }
 }
 
 function limitCalls() {
@@ -226,7 +235,7 @@ function updateLocation() {
            city = v.short_name;
          } else if ($.inArray("sublocality",v.types) > -1) {
            city = v.short_name;
-         } 
+         }
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
@@ -277,7 +286,7 @@ function updatePosition(position) {
            city = v.short_name;
          } else if ($.inArray("sublocality",v.types) > -1) {
            city = v.short_name;
-         } 
+         }
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
@@ -373,4 +382,3 @@ $(document).ready(function(){
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
 });
-
