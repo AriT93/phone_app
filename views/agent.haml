@@ -47,7 +47,7 @@
 .grid_3#messages
   %h1 Messages3
 #calls_ov
-  - @coll.find().each do |row|
+  - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
     .simple_overlay{:id => "#{row['tn']}_ov"}
       %img{:src => '/img/phone.png'}
       .grid_12#calls
