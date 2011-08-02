@@ -269,6 +269,8 @@ $(document).ready(function(){
 
     $("#zip").keyup(updateLocation);
     $("#zip").change(updateLocation);
+    $("#distance").keyup(limitCalls);
+    $("#distance").change(limitCalls);
     
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
