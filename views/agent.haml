@@ -34,7 +34,7 @@
         .grid_2.alpha
           = row['name'] || "-"
         .grid_2
-          = row['tn'] || "-"
+          = "(" + row['tn'].slice(0..2) +") " + row['tn'].slice(3..5) + "-" + row['tn'].slice(6..9)|| "-"
         .grid_2
           = "#{row['city']}"
         .grid_2
