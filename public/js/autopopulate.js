@@ -49,6 +49,6 @@ function populateFields(name, tn, age, zip, index) {
 		currentOne = -1;
 		setTimeout('afterPopulated();', 1500);
 	} else {
-		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 20);
+		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 5);
 	}
 }
