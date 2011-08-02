@@ -1,15 +1,20 @@
-.grid_12
-  %ul
-    %li
+.grid_9.agent
+  %h1 Agent Information
+  %ul.ui-widget
+    %li.ui-widget-header
       .grid_2.alpha
-        %label.ui-widget-header{:for => "agentPhone"} Phone:
-        %input.ui-widget{:id => "agentPhone", :name => "agentPhone", :type => "text"}
+        %label{:for => "agentPhone"} Phone
       .prefix_1.grid_2
-        %label.ui-widget-header{:for => "zip"} Zip Code:
-        %input.ui-widget{:id => "zip", :name => "zip", :type => "text"}
+        %label{:for => "zip"} Zip Code
       .prefix_1.grid_2.omega
-        %label.ui-widget-header{:for => "distance"} Distance:
-        %input.ui-widget{:id => "distance", :name => "distance", :value => "20", :type => "text"}
+        %label{:for => "distance"} Distance
+    %li.ui-widget-content
+      .grid_2.alpha
+        %input{:id => "agentPhone", :name => "agentPhone", :type => "text"}
+      .prefix_1.grid_2
+        %input{:id => "zip", :name => "zip", :type => "text"}
+      .prefix_1.grid_2.omega
+        %input{:id => "distance", :name => "distance", :value => "30", :type => "text"}
         %input{:id => "city", :name => "city", :type => "hidden"}
         %input{:id => "state", :name => "state", :type => "hidden"}
         %input{:id => "latitude", :name => "latitude", :type => "hidden"}

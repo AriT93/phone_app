@@ -173,7 +173,7 @@ function drawChart() {
     x++;
   }
   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-  chart.draw(data, {width: 450, height: 300, title: 'Call Status'});
+  chart.draw(data, {width: 720, height: 400, title: 'Call Status'});
 }
 
 function limitCalls() {

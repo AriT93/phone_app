@@ -283,6 +283,14 @@ a:hover { color: #036; }
         margin: 1px;
         overflow: hidden;
 }
+.agent ul{
+         list-style: none;
+         margin: 2px;
+}
+.agent li{
+        margin: 1px;
+        overflow: hidden;
+}
 li{
   list-style: none;
 }
