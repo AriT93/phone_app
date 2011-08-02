@@ -63,6 +63,7 @@ function message(obj){
       $('#longitude').val()
     );
     var distance = $('#distance').val();
+    var state = $('#state').val();
     if('message' in obj){
     }else if('announcement' in obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
@@ -75,7 +76,7 @@ function message(obj){
                 Call.latitude,
                 Call.longitude
               );
-              if (agentLatLng.within(custLatLng,distance)) {
+              if (Call.state == state && agentLatLng.within(custLatLng,distance)) {
               // list += "<li>" + Call.name + " " + Call.tn + "</li>";
                 buildCall(Call,true);
               }
@@ -103,20 +104,21 @@ function limitCalls() {
     $('#longitude').val()
   );
   var distance = $('#distance').val();
+  var agentState = $('#state').val();
 
   $('li').each(function(index,element) {
     var latitude  = $(this).attr("lat");
     var longitude = $(this).attr("long");
-    if (latitude && longitude) {
-      //alert(latitude + " " + longitude); 
+    var custState = $(this).attr("state");
+    if (latitude && longitude && custState) {
       var custLatLng = new google.maps.LatLng(
         latitude,
         longitude
       );
-      if (!agentLatLng.within(custLatLng,distance)) {
-        $(this).hide();
-      } else {
+      if (custState == agentState && agentLatLng.within(custLatLng,distance)) {
         $(this).show();
+      } else {
+        $(this).hide();
       }
     }
   });
@@ -243,6 +245,7 @@ $(document).ready(function(){
 
     $("#zip").keyup(updateLocation);
     $("#zip").change(updateLocation);
+
     $("#distance").keyup(limitCalls);
     $("#distance").change(limitCalls);
     
