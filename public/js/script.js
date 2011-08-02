@@ -4,11 +4,44 @@
 
 var socket;
 
+/* Returns 10 digit number with no formatting if thinks is a phone number.
+ * Returns false otherwise. */
+function isValidPhoneNum(myNum) {
+        if(myNum == undefined) return false;
+        myNum = myNum.replace(/\D+/g, "");
+       
+        //I might want to do more checking that the tech didn't do something really dumb.
+        //TODO!
+       
+        if(myNum.length > 11 || myNum.length < 10) return false;
+       
+        if (myNum.length == 11) {
+                if(myNum.substr(0, 1) != '1') return false;
+                myNum = myNum.substr(1,10); /*chop off first 1.*/
+        }
+       
+        if(myNum.substr(0, 1) == '1' || myNum.substr(0, 1) == '0') return false;
+        return myNum;
+}
+
+function formatNum(myNum) {
+        return '('+myNum.substr(0, 3)+')'+myNum.substr(3, 3) + '-' + myNum.substr(6, 4);
+}
 
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
-    var bad = ['_id', 'latitude','longitude','age', 'state'];
+    li.addClass("ui-widget-content");
+    li2.addClass("ui-widget-content");
+    var lat = obj["latitude"];
+    var lng = obj["longitude"];
+    var state = obj["state"];
+    li.attr("lat",lat);
+    li.attr("long",lng);
+    li.attr("state",state);
+    li2.attr("lat",lat);
+    li2.attr("long",lng);
+    li2.attr("state",state);
     var keys = ['name','tn','city','state','zip'];
     $.each(keys,function(i,key) {
       if(obj.hasOwnProperty(key)){
@@ -20,8 +53,14 @@ function buildCall(obj,callList){
           d.addClass('alpha');
           d2.addClass('alpha');
         }
-        d.html(obj[key]);
-        d2.html(obj[key]);
+	var fieldText = obj[key];
+
+	if(key == 'tn' && isValidPhoneNum(fieldText)) {
+		fieldText = formatNum(isValidPhoneNum(fieldText));
+	}
+        
+	d.html(fieldText);
+        d2.html(fieldText);
         li.append(d);
         li2.append(d2);
       }
@@ -38,7 +77,8 @@ function buildCall(obj,callList){
         li.attr('id',obj.tn);
         li.append(d);
     }
-    $("#callList li:last").after(li);
+//    $("#callList li:last").last(li);
+      li.appendTo("#callList").hide().fadeIn("slow");
     //add to the overlay
      var ovdiv = $('<div id="' + obj.tn + '_ov">');
      ovdiv.addClass("simple_overlay");
@@ -59,16 +99,17 @@ function buildCall(obj,callList){
 
 function message(obj){
     var list="";
-    var agentLatLng = new google.maps.LatLng(
-      $('#latitude').val(),
-      $('#longitude').val()
-    );
-    var distance = $('#distance').val();
     if('message' in obj){
     }else if('announcement' in obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
     }
     else if('result' in obj){
+        var agentLatLng = new google.maps.LatLng(
+          $('#latitude').val(),
+          $('#longitude').val()
+        );
+        var distance = $('#distance').val();
+        var state = $('#state').val();
         for (var i in obj.result){
             Call = JSON.parse(obj.result[i]);
             if(obj.result[i] != undefined ){
@@ -76,7 +117,7 @@ function message(obj){
                 Call.latitude,
                 Call.longitude
               );
-              if (agentLatLng.within(custLatLng,distance)) {
+              if (Call.state == state && agentLatLng.within(custLatLng,distance)) {
               // list += "<li>" + Call.name + " " + Call.tn + "</li>";
                 buildCall(Call,true);
               }
@@ -91,7 +132,7 @@ function message(obj){
         for (var b in obj.call){
             var p = obj.call[b];
               if(obj.call[b] != undefined){
-                  $("#"+p.callAction.tn).remove();
+                  $("#"+p.callAction.tn).fadeOut("slow", function(){$(this).remove();});
 
             }
         }
@@ -141,20 +182,21 @@ function limitCalls() {
     $('#longitude').val()
   );
   var distance = $('#distance').val();
+  var agentState = $('#state').val();
 
   $('li').each(function(index,element) {
     var latitude  = $(this).attr("lat");
     var longitude = $(this).attr("long");
-    if (latitude && longitude) {
-      //alert(latitude + " " + longitude); 
+    var custState = $(this).attr("state");
+    if (latitude && longitude && custState) {
       var custLatLng = new google.maps.LatLng(
         latitude,
         longitude
       );
-      if (!agentLatLng.within(custLatLng,distance)) {
-        $(this).hide();
-      } else {
+      if (custState == agentState && agentLatLng.within(custLatLng,distance)) {
         $(this).show();
+      } else {
+        $(this).hide();
       }
     }
   });
@@ -174,7 +216,9 @@ function updateLocation() {
       $.each(loc.address_components,function(i,v) {
          if ($.inArray("locality",v.types) > -1) {
            city = v.short_name;
-         }
+         } else if ($.inArray("sublocality",v.types) > -1) {
+           city = v.short_name;
+         } 
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
@@ -194,6 +238,15 @@ function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
     CallLive = tn;
     socket.send(s);
+
+    $.ajax({
+          url: "/call/phoneNum="+tn,
+      dataType: "jsonp",
+      success: function(data){
+          },
+      error: function(){
+      }
+    });
 }
 
 function updatePosition(position) {
@@ -214,7 +267,9 @@ function updatePosition(position) {
       $.each(loc.address_components,function(i,v) {
          if ($.inArray("locality",v.types) > -1) {
            city = v.short_name;
-         }
+         } else if ($.inArray("sublocality",v.types) > -1) {
+           city = v.short_name;
+         } 
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
@@ -233,6 +288,13 @@ function updatePosition(position) {
     });
   }
 }
+
+function updateButton() {
+  var agentPhone = $("#agentPhone").val();
+  var disable = agentPhone == null || agentPhone == "";
+  $('button').attr('disabled',disable);
+}
+
 
 $(document).ready(function(){
     socket = new io.Socket(null,
@@ -271,13 +333,13 @@ $(document).ready(function(){
         Call.zip       = $("#zip").val();
         Call.latitude  = $("#latitude").val();
         Call.longitude = $("#longitude").val();
-	Call.tn        = Call.tn.replace(/\D/g, '');
-	Call.zip        = Call.zip.replace(/\D/g, '');
-	$.each(['name', 'tn', 'age', 'city', 'state', 'zip'],function(index, fieldName) {
-		if(Call[fieldName] === undefined || Call[fieldName] === '') {
-			Call[fieldName] = 'Not Submitted';
-		}
-	});
+    Call.tn        = Call.tn.replace(/\D/g, '');
+    Call.zip        = Call.zip.replace(/\D/g, '');
+    $.each(['name', 'tn', 'age', 'city', 'state', 'zip'],function(index, fieldName) {
+        if(Call[fieldName] === undefined || Call[fieldName] === '') {
+            Call[fieldName] = 'Not Submitted';
+        }
+    });
         socket.send(JSON.stringify(Call));
         }
         $(':input',"#call")
@@ -288,13 +350,17 @@ $(document).ready(function(){
 
     $("#zip").keyup(updateLocation);
     $("#zip").change(updateLocation);
+
     $("#distance").keyup(limitCalls);
     $("#distance").change(limitCalls);
-    
+
+    $("#agentPhone").change(updateButton);
+    $("#agentPhone").keyup(updateButton);
+
+    updateButton();
+
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
-    //google.load("visualization", "1", {packages: ["corechart"]});
-    
 });
 

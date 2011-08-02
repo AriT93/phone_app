@@ -2,6 +2,7 @@ require 'sinatra'
 require 'mongo'
 require 'haml'
 require 'net/http'
+require 'open-uri'
 
 before do
   @db = Mongo::Connection.new.db("test")
@@ -30,6 +31,12 @@ end
 get '/charts' do
   haml :charts
 end
+get '/crc' do
+  haml :crc
+end
 get '/call/:phoneNum' do
-  
+  #url = "http://webservice/cgi-bin/makecall.cgi?"+params[:phoneNum]
+  #result = open(url)
+  #result.read
+  '{"success":"made phone call"}'
 end

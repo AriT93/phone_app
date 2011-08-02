@@ -1,4 +1,4 @@
-var fakeData = [["Malinda Molder","(345)421-3080","36041",59],["Darryl Beedle","(670)875-0278","97909",58],["Clinton Deibert","(303)939-6447","99583",41],["Nannie Streater","(995)982-7346","64444",48],["Allan Vonruden","(783)614-1231","76123",39],["Rohner","(589)547-8255","91202",70],["Hugh Cearley","(811)156-3970","35007",32],["Allan Janzen","(954)486-6309","55727",58],["Hugh Kilcrease","(286)842-2289","35540",51],["Hugh Ribas","(914)037-0994","75476",51],["Tyrone Dashner","(562)578-9694","66209",16],["Javier Gholar","(332)433-4700","80233",38],["Ted Heberling","(981)349-0321","17307",24],["Hugh Dilullo","(596)192-7974","55397",29],["Lance Angelucci","(287)934-2619","22937",28],["Rosalinda Meiser","(262)307-2451","32803",74],["Hugh Ashline","(938)280-2363","07052",34],["Katy Leaman","(494)105-3705","14878",52],["Christian Costanza","(629)624-0398","31746",44],["Jeanie Fehr","(720)318-8218","64022",65],["Louisa Parrino","(434)767-8120","47456",55],["Cody Backlund","(392)873-8404","84315",36],["Kelly Shuey","(278)164-4967","66025",47],["Clinton Poirrier","(756)338-6042","52654",29],["Christian Adami","(394)361-6359","23866",24],["Emilia Blocher","(928)175-0285","24265",56],["Fernando Kohan","(311)849-0431","68020",42],["Noemi Tousant","(805)105-0270","24112",16],["Nelson Highfill","(620)173-7366","36270",44],["Erik Sartwell","(361)394-7200","66524",19]];
+var fakeData = [["Malinda Molder","(608)677-9491","61701",68],["Darryl Beedle","(291)629-8625","52806",21],["Clinton Deibert","(967)871-4828","52807",18],["Nannie Streater","(302)995-0068","60076",25],["Allan Vonruden","(670)033-9373","61821",22],["Rohner","(558)053-7270","61801",50],["Hugh Cearley","(987)905-5914","52804",55],["Allan Janzen","(288)283-6020","61820",44],["Hugh Kilcrease","(577)621-6210","60091",52],["Hugh Ribas","(750)323-1221","60076",52],["Tyrone Dashner","(607)465-1005","60077",43],["Javier Gholar","(749)020-8106","60077",51],["Ted Heberling","(955)029-9366","60076",74],["Hugh Dilullo","(536)379-4242","52722",16],["Lance Angelucci","(744)542-6334","61265",31],["Rosalinda Meiser","(499)269-0036","60077",22],["Hugh Ashline","(829)353-8394","61701",46],["Katy Leaman","(662)842-8404","52803",50],["Christian Costanza","(425)174-8983","60022",38],["Jeanie Fehr","(690)364-0957","60022",42],["Louisa Parrino","(485)932-7331","61820",62],["Cody Backlund","(590)122-4588","52807",67],["Kelly Shuey","(272)927-2248","52722",46],["Clinton Poirrier","(848)432-5278","61704",50],["Christian Adami","(827)982-4544","60022",66],["Emilia Blocher","(650)436-5508","61265",22],["Fernando Kohan","(420)102-8039","52803",66],["Noemi Tousant","(965)365-3856","61821",18],["Nelson Highfill","(812)189-6884","52802",64],["Erik Sartwell","(780)379-0856","61701",22]];
 
 var currentOne = -1;
 var lastOne = -1;
@@ -14,8 +14,7 @@ function addClient(index) {
 }
 
 function afterPopulated() {
-
-	if(currentOne < fakeData.length) {
+	if(lastOne + 1 < fakeData.length) {
 		setTimeout("addClient("+(1 + lastOne)+");", 1000);
 	}
 }
@@ -50,6 +49,6 @@ function populateFields(name, tn, age, zip, index) {
 		currentOne = -1;
 		setTimeout('afterPopulated();', 1500);
 	} else {
-		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 20);
+		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 5);
 	}
 }
