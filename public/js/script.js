@@ -4,6 +4,30 @@
 
 var socket;
 
+/* Returns 10 digit number with no formatting if thinks is a phone number.
+ * Returns false otherwise. */
+function isValidPhoneNum(myNum) {
+        if(myNum == undefined) return false;
+        myNum = myNum.replace(/\D+/g, "");
+       
+        //I might want to do more checking that the tech didn't do something really dumb.
+        //TODO!
+       
+        if(myNum.length > 11 || myNum.length < 10) return false;
+       
+        if (myNum.length == 11) {
+                if(myNum.substr(0, 1) != '1') return false;
+                myNum = myNum.substr(1,10); /*chop off first 1.*/
+        }
+       
+        if(myNum.substr(0, 1) == '1' || myNum.substr(0, 1) == '0') return false;
+        return myNum;
+}
+
+function formatNum(myNum) {
+        return '('+myNum.substr(0, 3)+')'+myNum.substr(3, 3) + '-' + myNum.substr(6, 4);
+}
+
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
@@ -19,8 +43,14 @@ function buildCall(obj,callList){
           d.addClass('alpha');
           d2.addClass('alpha');
         }
-        d.html(obj[key]);
-        d2.html(obj[key]);
+	var fieldText = obj[key];
+
+	if(key == 'tn' && isValidPhoneNum(fieldText)) {
+		fieldText = formatNum(isValidPhoneNum(fieldText));
+	}
+        
+	d.html(fieldText);
+        d2.html(fieldText);
         li.append(d);
         li2.append(d2);
       }
