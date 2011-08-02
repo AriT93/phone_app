@@ -34,6 +34,16 @@ wSocket.on('connection', function(client){
         var p = JSON.parse(data);
         console.log(JSON.stringify(p));
         if("callAction" in p){
+            var c = Call.find({'tn': p.callAction.tn},function(){
+                for(d in docs){
+                  if(docs[d].status == "calling"){
+                      client.send({announcement: "all ready being called"});
+                  }else{
+                      docs[d].status = "calling";
+                      docs[d].save();
+                  }
+                }
+            });
             wSocket.broadcast({call: [p]});
         }else if("callDelete" in p){
             var c = Call.find({'tn': p.callDelete.tn},function(err,docs){
