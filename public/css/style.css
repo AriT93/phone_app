@@ -325,17 +325,21 @@ li{
 #banner{
        background-color: #000;
        height: 30px;
+       padding-bottom: 5px;
 }
 #masthead{
-       background-image: url(/img/masthead.png);
+       background: url(/img/masthead.png) left center;
        background-repeat: no-repeat;
-         height: 150px;
+       background-color: #c0c0c0;
+       padding-top: 3px;
+       height: 100px;
 }
 #main{
-     margin-top: 25px;
+     padding-top: 10px;
+     margin-top: 5px;
      height: 400px;
 }
 #footer{
-         background-color: #DCD;
+         background-color: #c0c0c0;
        height: 100px;
 }
