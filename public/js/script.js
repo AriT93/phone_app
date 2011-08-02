@@ -159,6 +159,14 @@ function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
     CallLive = tn;
     socket.send(s);
+    /*$.ajax({
+    	  url: "/call/?phoneNum/"+tn,
+	  dataType: "json",
+	  success: function(){
+          },
+	  error: function(){
+	  }
+    });*/
 }
 
 function updatePosition(position) {
@@ -198,6 +206,13 @@ function updatePosition(position) {
     });
   }
 }
+
+function updateButton() {
+  var agentPhone = $("#agentPhone").val();
+  var disable = agentPhone == null || agentPhone == "";
+  $('button').attr('disabled',disable);
+}
+
 
 $(document).ready(function(){
     socket = new io.Socket(null,
@@ -256,6 +271,11 @@ $(document).ready(function(){
 
     $("#distance").keyup(limitCalls);
     $("#distance").change(limitCalls);
+
+    $("#agentPhone").change(updateButton);
+    $("#agentPhone").keyup(updateButton);
+    
+    updateButton();
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
