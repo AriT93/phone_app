@@ -1,6 +1,6 @@
 function autoAgent(zip) {
 	$('#zip').val(zip);
-	acceptCall();
+	setTimeout("acceptCall();", 3000);
 }
 
 function acceptCall() {
