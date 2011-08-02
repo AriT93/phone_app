@@ -98,6 +98,31 @@ function message(obj){
     }
 };
 
+function limitCalls() {
+  var agentCoord = new Coordinate(
+    $('#latitude').val(),
+    $('#longitude').val()
+  );
+  var distance = $('#distance').val();
+
+  $('li').each(function(index,element) {
+    var latitude  = $(this).attr("lat");
+    var longitude = $(this).attr("long");
+    if (latitude && longitude) {
+      //alert(latitude + " " + longitude); 
+      var custCoord = new Coordinate(
+        latitude,
+        longitude
+      );
+      if (!agentCoord.within(custCoord,distance)) {
+        $(this).hide();
+      } else {
+        $(this).show();
+      }
+    }
+  });
+}
+
 function lookupLocation(zip,fn) {
   var geocoder = new google.maps.Geocoder();
   geocoder.geocode({
@@ -136,6 +161,7 @@ function updateLocation() {
       $("#longitude").val(lng);
       $("#city").val(city);
       $("#state").val(state);
+      limitCalls();
     });
   }
 }
@@ -192,6 +218,7 @@ function updatePosition(position) {
       $("#city").val(city);
       $("#state").val(state);
       $("#zip").val(zip);
+      limitCalls();
     });
   }
 }
@@ -243,8 +270,10 @@ $(document).ready(function(){
 
     $("#zip").keyup(updateLocation);
     $("#zip").change(updateLocation);
-
+    
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
+    
+    //limitCalls();
 });
