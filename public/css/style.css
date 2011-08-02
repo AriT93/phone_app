@@ -260,10 +260,9 @@ a:hover { color: #036; }
 }
 
 #messages{
-        border: 1px solid red
 }
 #calls{
-        border: 1px solid blue
+
 }
 .contact ul{
            margin: 0;
@@ -284,7 +283,9 @@ a:hover { color: #036; }
         margin: 1px;
         overflow: hidden;
 }
-
+li{
+  list-style: none;
+}
 .phone_icon{
            width: 16px;
            height: 16px;
@@ -326,7 +327,7 @@ a:hover { color: #036; }
        height: 30px;
 }
 #masthead{
-       background-image: url(/img/masthead.jpg);
+       background-image: url(/img/masthead.png);
        background-repeat: no-repeat;
          height: 150px;
 }
