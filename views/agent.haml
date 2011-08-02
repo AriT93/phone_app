@@ -16,8 +16,8 @@
         %input{:id => "longitude", :name => "longitude", :type => "hidden"}
 .grid_12#calls
   %h1 Calls
-  %ul#callList
-    %li
+  %ul#callList.ui-widget
+    %li.ui-widget-header
       .grid_2.alpha
         = "Name"
       .grid_2
@@ -30,7 +30,7 @@
         = "Zip Code"
       .grid_1.omega
     - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
-      %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
+      %li.ui-widget-content.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
         .grid_2.alpha
           = row['name'] || "-"
         .grid_2

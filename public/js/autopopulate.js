@@ -14,7 +14,7 @@ function addClient(index) {
 }
 
 function afterPopulated() {
-	if(lastOne < fakeData.length) {
+	if(lastOne + 1 < fakeData.length) {
 		setTimeout("addClient("+(1 + lastOne)+");", 1000);
 	}
 }

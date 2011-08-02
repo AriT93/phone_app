@@ -39,6 +39,8 @@ function buildCall(obj,callList){
         var d2 = $('<div>');
         d.addClass("grid_2");
         d2.addClass("grid_2");
+        d.addClass("ui-content-widget");
+        d2.addClass("ui-content-widget");
         if(i == 0){
           d.addClass('alpha');
           d2.addClass('alpha');
@@ -169,7 +171,9 @@ function updateLocation() {
       $.each(loc.address_components,function(i,v) {
          if ($.inArray("locality",v.types) > -1) {
            city = v.short_name;
-         }
+         } else if ($.inArray("sublocality",v.types) > -1) {
+           city = v.short_name;
+         } 
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
@@ -218,7 +222,9 @@ function updatePosition(position) {
       $.each(loc.address_components,function(i,v) {
          if ($.inArray("locality",v.types) > -1) {
            city = v.short_name;
-         }
+         } else if ($.inArray("sublocality",v.types) > -1) {
+           city = v.short_name;
+         } 
          if ($.inArray("administrative_area_level_1",v.types) > -1) {
            state = v.short_name;
          }
