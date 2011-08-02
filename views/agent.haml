@@ -45,7 +45,7 @@
           %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
             %img.phone_icon{:src => '/img/phone.png'}
 .grid_3#messages
-  %h1 Messages3
+  %h1 Messages
 #calls_ov
   - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
     .simple_overlay{:id => "#{row['tn']}_ov"}
