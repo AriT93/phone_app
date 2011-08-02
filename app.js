@@ -36,7 +36,7 @@ wSocket.on('connection', function(client){
         if("callAction" in p){
             var c = Call.find({'tn': p.callAction.tn},function(err, docs){
                 for(d in docs){
-                  if(docs[d].status != ""){
+                  if(docs[d].status != "new"){
                       client.send({announcement: "all ready being called"});
                   }else{
                       docs[d].status = "calling";
