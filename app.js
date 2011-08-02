@@ -44,6 +44,7 @@ wSocket.on('connection', function(client){
                   }
                 }
             });
+            console.log(p);
             wSocket.broadcast({call: [p]});
         }else if("callDelete" in p){
             var c = Call.find({'tn': p.callDelete.tn},function(err,docs){
@@ -88,7 +89,7 @@ function handleOld() {
   timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
   c = Call.find(
         {
-          'allFlag'   : false, 
+          'allFlag'   : false,
           'status'    : 'new',
           'createdOn' : { $lt : timeToCheck }
         }, function(err, docs) {
@@ -110,9 +111,14 @@ function handleOld() {
                console.log("setting status=abandoned for " + docs[d].name);
                docs[d].status = 'abandoned';
                docs[d].save();
-               wSocket.broadcast({call: [docs[d]]});
+               var p = docs[d];
+               var ca = { };
+               ca.callAction={ };
+               ca.callAction.tn=p.tn;
+               console.log(ca);
+               wSocket.broadcast({call: [ca]});
              }
            }
-  );           
+  );
   setTimeout(handleOld, millisForTimeout);
 }

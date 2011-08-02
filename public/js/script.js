@@ -236,13 +236,13 @@ $(document).ready(function(){
         Call.zip       = $("#zip").val();
         Call.latitude  = $("#latitude").val();
         Call.longitude = $("#longitude").val();
-	Call.tn        = Call.tn.replace(/\D/g, '');
-	Call.zip        = Call.zip.replace(/\D/g, '');
-	$.each(['name', 'tn', 'age', 'city', 'state', 'zip'],function(index, fieldName) {
-		if(Call[fieldName] === undefined || Call[fieldName] === '') {
-			Call[fieldName] = 'Not Submitted';
-		}
-	});
+    Call.tn        = Call.tn.replace(/\D/g, '');
+    Call.zip        = Call.zip.replace(/\D/g, '');
+    $.each(['name', 'tn', 'age', 'city', 'state', 'zip'],function(index, fieldName) {
+        if(Call[fieldName] === undefined || Call[fieldName] === '') {
+            Call[fieldName] = 'Not Submitted';
+        }
+    });
         socket.send(JSON.stringify(Call));
         }
         $(':input',"#call")
