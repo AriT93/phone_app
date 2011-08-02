@@ -1,3 +1,20 @@
+.grid_12
+  %ul
+    %li
+      .grid_2.alpha
+        %label{:for => "phone"} Phone:
+        %input{:id => "phone", :name => "phone", :type => "text"}
+      .prefix_1.grid_2
+        %label{:for => "zip"} Zip Code:
+        %input{:id => "zip", :name => "zip", :type => "text"}
+      .prefix_1.grid_2.omega
+        %label{:for => "distance"} Distance:
+        %input{:id => "distance", :name => "distance", :value => "20", :type => "text"}
+        %input{:id => "city", :name => "city", :type => "hidden"}
+        %input{:id => "state", :name => "state", :type => "hidden"}
+        %input{:id => "latitude", :name => "latitude", :type => "hidden"}
+        %input{:id => "longitude", :name => "longitude", :type => "hidden"}
+        
 %h1 Calls
 #messages
 .grid_12#calls
