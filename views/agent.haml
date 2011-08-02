@@ -29,7 +29,8 @@
       .grid_2
         = "Zip Code"
       .grid_1.omega
-    - @coll.find("status" => {"$ne" => "called"}).each do |row|
+    - @coll.find({"status" => {"$ne" => "called"}},
+                 {:sort => [:createdOn,:ascending]}).each do |row|
       %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}"}
         .grid_2.alpha
           = row['name'] || "-"
