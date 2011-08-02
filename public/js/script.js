@@ -406,6 +406,8 @@ $(document).ready(function(){
     navigator.geolocation.getCurrentPosition(updatePosition);
     if(window.location.hash && window.location.hash.match(/autopopulate/i))
         autoPopulate();
-    else if(window.location.hash && window.location.hash.match(/autoagent/i)) {
+    else if(window.location.hash && window.location.hash.match(/autoagent=(\d{5})/i)) {
+    	var zip = window.location.hash.match(/autoagent=(\d{5})/i);
+    	setTimeout("autoAgent("+zip[1]+");",3000);
     }
 });
