@@ -30,7 +30,7 @@
         = "Zip Code"
       .grid_1.omega
     - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
-      %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}"}
+      %li.call{:id => "#{row['tn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
         .grid_2.alpha
           = row['name'] || "-"
         .grid_2
