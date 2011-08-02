@@ -1,6 +1,3 @@
-
-//require.paths.unshift('.');
-
 var sys = require('sys');
 var http = require('http');
 var event = require('events');
@@ -30,7 +27,6 @@ httpServer.listen(8910);
 var wSocket = io.listen(httpServer), buffer = [];
 
 wSocket.on('connection', function(client){
-    console.log("connected!");
     this.broadcast({announcement: client.sessionId +" from " + client.connection.remoteAddress + " connected to call routing"});
 
     client.on('message', function(data){
@@ -38,16 +34,13 @@ wSocket.on('connection', function(client){
         var p = JSON.parse(data);
         console.log(JSON.stringify(p));
         if("callAction" in p){
-            console.log("blasting");
             wSocket.broadcast({call: [p]});
         }else if("callDelete" in p){
-          console.log("deleting");
             var c = Call.find({'tn': p.callDelete.tn},function(err,docs){
                 for(d in docs){
                     docs[d].status = "called";
                     docs[d].save();
                 }
-
             });
             console.log(JSON.stringify(c));
 
