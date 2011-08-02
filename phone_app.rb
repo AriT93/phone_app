@@ -27,13 +27,6 @@ end
 get '/agent' do
   haml :agent
 end
-get '/location/:zip' do
-  content_type :json 
-  res = Net::HTTP.start("maps.googleapis.com",80) do |http|
-     http.get "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address="+params[:zip]
-  end
-  res.body
-end
 get '/call/:phoneNum' do
   
 end

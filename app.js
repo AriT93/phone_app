@@ -62,11 +62,58 @@ wSocket.on('connection', function(client){
               c.city = p.city;
               c.state = p.state;
               c.zip = p.zip;
+              c.status = 'new';
+              c.allFlag = false;
               c.latitude = p.latitude;
               c.longitude = p.longitude;
+              c.createdOn = new Date();
               c.save();
               client.send({announcement: "message saved"});
               socketEvent.emit("new_call",JSON.stringify(c));
             }
     });
 });
+
+var millisForTimeout   = 1000 *  15;
+var millisUntilAllFlag = 1000 * 120;
+var millisUntilAbandon = 1000 * 300;
+
+setTimeout(handleOld, millisForTimeout);
+
+function handleOld() {
+  var c;
+  var timeToCheck;
+  var rightnow = new Date();
+  console.log("executing function " + rightnow);
+  // we want to query old calls, where allFlag is false.
+  timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
+  c = Call.find(
+        {
+          'allFlag'   : false, 
+          'status'    : 'new',
+          'createdOn' : { $lt : timeToCheck }
+        }, function(err, docs) {
+             for (d in docs) {
+               console.log("allFlag for " + docs[d].name);
+               docs[d].allFlag = true;
+               docs[d].save();
+             }
+           }
+  );
+  // we want to query really old calls.
+  timeToCheck = new Date(rightnow.getTime() - millisUntilAbandon);
+  c = Call.find(
+        {
+          'status'    : 'new',
+          'createdOn' : { $lt : timeToCheck }
+        }, function(err, docs) {
+             for (d in docs) {
+               console.log("abandoned for " + docs[d].name);
+               docs[d].status = 'abandoned';
+               docs[d].save();
+               wSocket.broadcast({call: [docs[d]]});
+             }
+           }
+  );           
+  setTimeout(handleOld, millisForTimeout);
+}
