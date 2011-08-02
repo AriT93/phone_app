@@ -230,7 +230,7 @@ $(document).ready(function(){
         Call.age       = $("#age").val();
         Call.city      = $("#city").val();
         Call.state     = $("#state").val();
-        Call.zip       = $("#zip").val();
+        Call.zip       = $("#zip").val().replace(/\D/g, '');
         Call.latitude  = $("#latitude").val();
         Call.longitude = $("#longitude").val();
         socket.send(JSON.stringify(Call));
