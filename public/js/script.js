@@ -15,6 +15,8 @@ function buildCall(obj,callList){
         var d2 = $('<div>');
         d.addClass("grid_2");
         d2.addClass("grid_2");
+        d.addClass("ui-content-widget");
+        d2.addClass("ui-content-widget");
         if(i == 0){
           d.addClass('alpha');
           d2.addClass('alpha');
