@@ -29,7 +29,7 @@ get '/agent' do
   haml :agent
 end
 get '/call/:phoneNum' do
-  url = "http://webserver/cgi-bin/makecall.cgi?"+params[:phoneNum]
+  url = "http://cobiapartment.cluenet.org:12345/cgi-bin/makecall.cgi?"+params[:phoneNum]
   result = open(url)
   result.read
 end
