@@ -29,6 +29,7 @@ function formatNum(myNum) {
 }
 
 function buildCall(obj,callList){
+    alert("got here");
     var li = $('<li>');
     var li2 = $('<li>');
     li.addClass("ui-widget-content");
@@ -36,13 +37,16 @@ function buildCall(obj,callList){
     var lat = obj["latitude"];
     var lng = obj["longitude"];
     var state = obj["state"];
+    var createdOn = obj["createdOn"];
     li.attr("lat",lat);
     li.attr("long",lng);
     li.attr("state",state);
+    li.attr("createdon",createdOn);
     li2.attr("lat",lat);
     li2.attr("long",lng);
     li2.attr("state",state);
-    var keys = ['name','tn','city','state','zip'];
+    li2.attr("createdon",createdOn);
+    var keys = ['name','tn','city','state','zip','createdOn'];
     $.each(keys,function(i,key) {
       if(obj.hasOwnProperty(key)){
         var d = $('<div>');
@@ -57,6 +61,10 @@ function buildCall(obj,callList){
 
 	if(key == 'tn' && isValidPhoneNum(fieldText)) {
 		fieldText = formatNum(isValidPhoneNum(fieldText));
+	} else if(key == 'createdOn') {
+		fieldText = 0;
+		d.attr('title', 'timeElapsed');
+		d2.attr('title', 'timeElapsed');
 	}
         
 	d.html(fieldText);
@@ -358,6 +366,8 @@ $(document).ready(function(){
     $("#agentPhone").keyup(updateButton);
 
     updateButton();
+    // keeps time elapsed updating.
+    updateTimeElapsed();
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
