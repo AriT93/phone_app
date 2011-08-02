@@ -58,7 +58,6 @@ function buildCall(obj,callList){
         }
     var fieldText = obj[key];
 
-<<<<<<< HEAD
 	if(key == 'tn' && isValidPhoneNum(fieldText)) {
 		fieldText = formatNum(isValidPhoneNum(fieldText));
 	} else if(key == 'createdOn') {
@@ -68,13 +67,6 @@ function buildCall(obj,callList){
 	}
         
 	d.html(fieldText);
-=======
-    if(key == 'tn' && isValidPhoneNum(fieldText)) {
-        fieldText = formatNum(isValidPhoneNum(fieldText));
-    }
-
-    d.html(fieldText);
->>>>>>> 706e5682427e9ba4263cee608fd1bef441d9216f
         d2.html(fieldText);
         li.append(d);
         li2.append(d2);
