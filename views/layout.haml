@@ -22,20 +22,19 @@
 
   %script{:src => "js/libs/modernizr-1.7.min.js"}
 %body
-  .container_16
+  .heady
     #banner
-      .push_10.grid_2.toplink.alpha
-        %p
+      .container_16
+        .grid_2.push_14.toplink
           Login
-      .push_10.grid_2.toplink
-        %p
+        .grid_2.push_10.toplink
           Get a Quote!
-      .push_10.grid_2.toplink.omega
-        %p
+        .grid_2.push_6.toplink
           Home
     #masthead
-      .grid_14
+      .grid_16
         %img{:src => "/img/masthead.png"}
+  .container_16
     #main{:role => "main"}
       = yield
     %footer
