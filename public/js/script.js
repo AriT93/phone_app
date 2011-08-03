@@ -142,7 +142,7 @@ function message(obj){
             Call.latitude,
             Call.longitude
           );
-          if (Call.allFlag == false && Call.state == state && agentLatLng.within(custLatLng,distance)) {
+          if (Call.state == state && agentLatLng.within(custLatLng,distance)) {
             buildCall(Call,true);
           }
         }
@@ -172,9 +172,9 @@ function message(obj){
             }
         }
     }else if ('ab_call' in obj){
-        for(var b in obj.call){
-            var ab = obj.call[b];
-            if(obj.call[b] != undefined){
+        for(var b in obj.ab_call){
+            var ab = obj.ab_call[b];
+            if(obj.ab_call[b] != undefined){
                 $("#"+ab.callAction.tn).fadeOut("slow", function(){$(this).remove();});
                 alert(ab.callAction.tn);
                   $("#" + ab.callAction.tn + "_ov").remove();
