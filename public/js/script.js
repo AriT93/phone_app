@@ -212,7 +212,7 @@ function drawChart() {
   }
   if ($("#piechart").length) {
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    chart.draw(data, {width: 720, height: 400, title: 'Call Status'});
+    chart.draw(data, {is3D : true, width: 720, height: 400, title: 'Call Status'});
   }
 }
 
@@ -406,6 +406,8 @@ $(document).ready(function(){
     navigator.geolocation.getCurrentPosition(updatePosition);
     if(window.location.hash && window.location.hash.match(/autopopulate/i))
         autoPopulate();
-    else if(window.location.hash && window.location.hash.match(/autoagent/i)) {
+    else if(window.location.hash && window.location.hash.match(/autoagent=(\d{5})/i)) {
+    	var zip = window.location.hash.match(/autoagent=(\d{5})/i);
+    	setTimeout("autoAgent("+zip[1]+");",3000);
     }
 });

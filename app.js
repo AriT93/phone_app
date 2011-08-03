@@ -86,7 +86,6 @@ function handleOld() {
   var c;
   var timeToCheck;
   var rightnow = new Date();
-  console.log(rightnow);
   // we want to query old calls, where allFlag is false.
   timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
   c = Call.find(
