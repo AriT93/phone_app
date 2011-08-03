@@ -105,7 +105,7 @@ function buildCall(obj,callList){
         d.addClass("omega");
         var b = $("<button rel='#"+ obj.tn +"_ov' onclick=takeCall("+ obj.tn +");>");
     b.overlay({
-      onClose: function(e){
+      onClose: function(){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
           $("#" + CallLive + "_ov").remove();
@@ -277,7 +277,7 @@ function updateLocation() {
 
 function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
-   // CallLive = tn;
+    CallLive = tn;
     socket.send(s);
     // $.ajax({
     //       url: "/call/phoneNum="+tn,
@@ -356,7 +356,7 @@ $(document).ready(function(){
     });
 
     $("button[rel]").overlay({
-      onClose: function(e){
+      onClose: function(){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
           $("#" + CallLive + "_ov").remove();
