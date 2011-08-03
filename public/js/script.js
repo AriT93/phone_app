@@ -91,6 +91,7 @@ function buildCall(obj,callList){
      var img2 =$("<img src='/img/phone.png'/>");
      var grid = $('<div>');
      grid.addClass('grid_12');
+       grid.attr('id',"calls");
      var ulcall = $('<ul>');
      li2.appendTo(ulcall);
      li3.appendTo(ulcall);
