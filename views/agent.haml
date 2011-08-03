@@ -33,7 +33,7 @@
         = "State"
       .grid_2
         = "Zip Code"
-      .grid_1
+      .grid_2
         Time
       .grid_1.omega
     - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
@@ -60,9 +60,9 @@
       .grid_12#calls
         %ul
           %li
-            .grid_4.alpha.ov_top
+            .grid_5.alpha.ov_top
               = "#{row['name']}"
-            .grid_4.omega.ov_top
+            .grid_5.omega.ov_top
               = "#{row['tn']}"
           %li
             .grid_2.alpha
