@@ -34,7 +34,7 @@
       .grid_2
         = "Zip Code"
       .grid_1
-        = "Time"
+        Time
       .grid_1.omega
     - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
       %li.ui-widget-content.call{:id => "#{row['tn']}",:createdOn => "#{row['createdOn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
@@ -51,7 +51,7 @@
         .grid_2{:title => "timeElapsed"}
           = 0
         .grid_1.omega
-          %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
+          %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']});"}
             %img.phone_icon{:src => '/img/phone.png'}
 #calls_ov
   - @coll.find({"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
@@ -60,9 +60,9 @@
       .grid_12#calls
         %ul
           %li
-            .grid_2.alpha
+            .grid_4.alpha.ov_top
               = "#{row['name']}"
-            .grid_2.omega
+            .grid_4.omega.ov_top
               = "#{row['tn']}"
           %li
             .grid_2.alpha

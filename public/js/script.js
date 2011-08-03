@@ -52,7 +52,7 @@ function buildCall(obj,callList){
         var d2 = $('<div>');
         var d3 = $('<div>');
         d.addClass("grid_2");
-        d2.addClass("grid_2");
+        d2.addClass("grid_4");
         d3.addClass("grid_2");
         if(i == 0){
           d.addClass('alpha');
