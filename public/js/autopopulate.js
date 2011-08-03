@@ -43,12 +43,12 @@ function populateFields(name, tn, age, zip, index) {
 
 	if(didNothing > 0) {
 		updateLocation();
-		setTimeout('$("#call").submit();', 1000);
+		setTimeout('$("#call").submit();', 200);
 		//push button code goes here
 		lastOne = currentOne;
 		currentOne = -1;
-		setTimeout('afterPopulated();', 1500);
+		setTimeout('afterPopulated();', 201);
 	} else {
-		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 5);
+		setTimeout("populateFields('"+name+"','"+tn+"','"+age+"','"+zip+"');", 10);
 	}
 }

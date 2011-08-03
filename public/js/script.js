@@ -36,13 +36,16 @@ function buildCall(obj,callList){
     var lat = obj["latitude"];
     var lng = obj["longitude"];
     var state = obj["state"];
+    var createdOn = obj["createdOn"];
     li.attr("lat",lat);
     li.attr("long",lng);
     li.attr("state",state);
+    li.attr("createdon",createdOn);
     li2.attr("lat",lat);
     li2.attr("long",lng);
     li2.attr("state",state);
-    var keys = ['name','tn','city','state','zip'];
+    li2.attr("createdon",createdOn);
+    var keys = ['name','tn','city','state','zip','createdOn'];
     $.each(keys,function(i,key) {
       if(obj.hasOwnProperty(key)){
         var d = $('<div>');
@@ -57,6 +60,10 @@ function buildCall(obj,callList){
 
     if(key == 'tn' && isValidPhoneNum(fieldText)) {
         fieldText = formatNum(isValidPhoneNum(fieldText));
+    } else if(key == 'createdOn') {
+        fieldText = 0;
+        d.attr('title', 'timeElapsed');
+        d2.attr('title', 'timeElapsed');
     }
 
     d.html(fieldText);
@@ -69,7 +76,7 @@ function buildCall(obj,callList){
         var d = $('<div>');
         d.addClass("grid_1");
         d.addClass("omega");
-        var b = $("<button rel='#"+ obj.tn +"_ov'>");
+        var b = $("<button rel='#"+ obj.tn +"_ov' onclick=takeCall("+ obj.tn +")>");
         var img=$("<img class='phone_icon' src='/img/phone.png'/>");
         d.append(b);
         b.append(img);
@@ -104,6 +111,8 @@ function message(obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
     }
     else if('result' in obj){
+      var page = window.location;
+      if (page.match(/agent$/)) {
         var agentLatLng = new google.maps.LatLng(
           $('#latitude').val(),
           $('#longitude').val()
@@ -117,18 +126,26 @@ function message(obj){
                 Call.latitude,
                 Call.longitude
               );
-              if (Call.state == state && agentLatLng.within(custLatLng,distance)) {
-              // list += "<li>" + Call.name + " " + Call.tn + "</li>";
+              if (Call.allFlag == false && Call.state == state && agentLatLng.within(custLatLng,distance)) {
                 buildCall(Call,true);
               }
             }
         }
+        } else if (page.match(/crc$/)) {
+          for (var i in obj.result){
+            if(obj.result[i] != undefined ){
+              Call = JSON.parse(obj.result[i]);
+              if (Call.status == "new" && Call.allFlag) {
+                buildCall(Call,true);
+              }
+            }
+          }
+        }
         if(list != ""){
             $('<p>').html(list).appendTo($("#calls"));
-
         }
     }
-    else if('call' in obj){
+    else if ('call' in obj) {
         for (var b in obj.call){
             var p = obj.call[b];
               if(obj.call[b] != undefined){
@@ -360,6 +377,8 @@ $(document).ready(function(){
     $("#agentPhone").keyup(updateButton);
 
     updateButton();
+    // keeps time elapsed updating.
+//    updateTimeElapsed();
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
