@@ -291,6 +291,14 @@ a:hover { color: #036; }
         margin: 1px;
         overflow: hidden;
 }
+.callform ul{
+         list-style: none;
+         margin: 2px;
+}
+.callform li{
+        margin: 1px;
+        overflow: hidden;
+}
 li{
   list-style: none;
 }
