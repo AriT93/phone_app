@@ -90,7 +90,7 @@ function buildCall(obj,callList){
         var d = $('<div>');
         d.addClass("grid_1");
         d.addClass("omega");
-        var b = $("<button rel='#"+ obj.tn +"_ov' onclick=takeCall("+ obj.tn +")>");
+        var b = $("<button rel='#"+ obj.tn +"_ov' onclick=takeCall("+ obj.tn +");>");
         var img=$("<img class='phone_icon' src='/img/phone.png'/>");
         d.append(b);
         b.append(img);
@@ -115,7 +115,13 @@ function buildCall(obj,callList){
      ovdiv.append(img2);
      ovdiv.append(grid);
     $("#calls_ov").append(ovdiv);
-    $("button[rel]").overlay();
+    $("button[rel]").overlay({
+      onClose: function(){
+          var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
+          socket.send(s);
+          $("#"+CallLive+"_ov").remove();
+        }
+    });
 
 }
 
@@ -399,7 +405,7 @@ $(document).ready(function(){
     // the browser supports HTML5
     navigator.geolocation.getCurrentPosition(updatePosition);
     if(window.location.hash && window.location.hash.match(/autopopulate/i))
-    	autoPopulate();
+        autoPopulate();
     else if(window.location.hash && window.location.hash.match(/autoagent/i)) {
     }
 });
