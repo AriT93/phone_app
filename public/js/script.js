@@ -67,14 +67,15 @@ function buildCall(obj,callList){
         fieldText = 0;
         d.attr('title', 'timeElapsed');
     }
-
     d.html(fieldText);
           if(key == 'tn' || key == 'name'){
               d2.html(fieldText);
+              d2.addClass('ov_top');
               d3 = undefined;
           }else{
               d2 = undefined;
               d3.html(fieldText);
+              d3.addClass('ov_bottom');
           }
     li.append(d);
           if(d2 != undefined){
