@@ -31,8 +31,8 @@ function formatNum(myNum) {
 function buildCall(obj,callList){
     var li = $('<li>');
     var li2 = $('<li>');
+    var li3 = $('<li>');
     li.addClass("ui-widget-content");
-    li2.addClass("ui-widget-content");
     var lat = obj["latitude"];
     var lng = obj["longitude"];
     var state = obj["state"];
@@ -50,11 +50,14 @@ function buildCall(obj,callList){
       if(obj.hasOwnProperty(key)){
         var d = $('<div>');
         var d2 = $('<div>');
+        var d3 = $('<div>');
         d.addClass("grid_2");
         d2.addClass("grid_2");
+        d3.addClass("grid_2");
         if(i == 0){
           d.addClass('alpha');
           d2.addClass('alpha');
+          d3.addClass('alpha');
         }
     var fieldText = obj[key];
 
@@ -63,13 +66,23 @@ function buildCall(obj,callList){
     } else if(key == 'createdOn') {
         fieldText = 0;
         d.attr('title', 'timeElapsed');
-        d2.attr('title', 'timeElapsed');
     }
 
     d.html(fieldText);
-        d2.html(fieldText);
-        li.append(d);
-        li2.append(d2);
+          if(key == 'tn' || key == 'name'){
+              d2.html(fieldText);
+              d3 = undefined;
+          }else{
+              d2 = undefined;
+              d3.html(fieldText);
+          }
+    li.append(d);
+          if(d2 != undefined){
+              li2.append(d2);
+          }
+          if(d3 != undefined){
+              li3.append(d3);
+          }
       }
     });
     if(callList){
@@ -95,6 +108,7 @@ function buildCall(obj,callList){
      grid.attr('id','calls');
      var ulcall = $('<ul>');
      ulcall.append(li2);
+     ulcall.append(li3);
      grid.append(ulcall);
      ovdiv.append('<a class="close"></a>');
      ovdiv.append(img2);
