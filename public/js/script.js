@@ -58,15 +58,15 @@ function buildCall(obj,callList){
         }
     var fieldText = obj[key];
 
-	if(key == 'tn' && isValidPhoneNum(fieldText)) {
-		fieldText = formatNum(isValidPhoneNum(fieldText));
-	} else if(key == 'createdOn') {
-		fieldText = 0;
-		d.attr('title', 'timeElapsed');
-		d2.attr('title', 'timeElapsed');
-	}
-        
-	d.html(fieldText);
+    if(key == 'tn' && isValidPhoneNum(fieldText)) {
+        fieldText = formatNum(isValidPhoneNum(fieldText));
+    } else if(key == 'createdOn') {
+        fieldText = 0;
+        d.attr('title', 'timeElapsed');
+        d2.attr('title', 'timeElapsed');
+    }
+
+    d.html(fieldText);
         d2.html(fieldText);
         li.append(d);
         li2.append(d2);
@@ -76,7 +76,7 @@ function buildCall(obj,callList){
         var d = $('<div>');
         d.addClass("grid_1");
         d.addClass("omega");
-        var b = $("<button rel='#"+ obj.tn +"_ov'>");
+        var b = $("<button rel='#"+ obj.tn +"_ov' onclick=takeCall("+ obj.tn +")>");
         var img=$("<img class='phone_icon' src='/img/phone.png'/>");
         d.append(b);
         b.append(img);
