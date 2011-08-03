@@ -269,7 +269,6 @@ function takeCall(tn){
 }
 
 function updatePosition(position) {
-  alert("updatePosition");
   $("#zip").val("");
   $("#latitude").val("");
   $("#longitude").val("");
