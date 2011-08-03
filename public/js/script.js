@@ -172,8 +172,10 @@ function drawChart() {
     data.setValue(x, 1, count);
     x++;
   }
-  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-  chart.draw(data, {width: 720, height: 400, title: 'Call Status'});
+  if ($("#piechart").length) {
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, {width: 720, height: 400, title: 'Call Status'});
+  }
 }
 
 function limitCalls() {
