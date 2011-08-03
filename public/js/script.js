@@ -141,12 +141,11 @@ function message(obj){
             }
           }
         }
-        }
         if(list != ""){
             $('<p>').html(list).appendTo($("#calls"));
         }
     }
-    else if('call' in obj){
+    else if ('call' in obj) {
         for (var b in obj.call){
             var p = obj.call[b];
               if(obj.call[b] != undefined){
@@ -270,6 +269,7 @@ function takeCall(tn){
 }
 
 function updatePosition(position) {
+  alert("updatePosition");
   $("#zip").val("");
   $("#latitude").val("");
   $("#longitude").val("");
@@ -379,7 +379,7 @@ $(document).ready(function(){
 
     updateButton();
     // keeps time elapsed updating.
-    updateTimeElapsed();
+//    updateTimeElapsed();
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
