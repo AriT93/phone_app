@@ -105,45 +105,45 @@ function buildCall(obj,callList){
 }
 
 function message(obj){
+    var page = window.location.href;
     var list="";
     if('message' in obj){
-    }else if('announcement' in obj){
+    } else if('announcement' in obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
-    }
-    else if('result' in obj){
-      var page = window.location;
-      if (page.match(/agent$/)) {
-        var agentLatLng = new google.maps.LatLng(
-          $('#latitude').val(),
-          $('#longitude').val()
-        );
-        var distance = $('#distance').val();
-        var state = $('#state').val();
-        for (var i in obj.result){
-            Call = JSON.parse(obj.result[i]);
-            if(obj.result[i] != undefined ){
-              var custLatLng = new google.maps.LatLng(
-                Call.latitude,
-                Call.longitude
-              );
-              if (Call.allFlag == false && Call.state == state && agentLatLng.within(custLatLng,distance)) {
-                buildCall(Call,true);
-              }
-            }
-        }
-        } else if (page.match(/crc$/)) {
-          for (var i in obj.result){
-            if(obj.result[i] != undefined ){
-              Call = JSON.parse(obj.result[i]);
-              if (Call.status == "new" && Call.allFlag) {
-                buildCall(Call,true);
-              }
-            }
+    } else if('result' in obj && page.match(/agent$/)) {
+      var agentLatLng = new google.maps.LatLng(
+        $('#latitude').val(),
+        $('#longitude').val()
+      );
+      var distance = $('#distance').val();
+      var state = $('#state').val();
+      for (var i in obj.result){
+        if(obj.result[i] != undefined ){
+          Call = JSON.parse(obj.result[i]);
+          var custLatLng = new google.maps.LatLng(
+            Call.latitude,
+            Call.longitude
+          );
+          if (Call.allFlag == false && Call.state == state && agentLatLng.within(custLatLng,distance)) {
+            buildCall(Call,true);
           }
         }
-        if(list != ""){
-            $('<p>').html(list).appendTo($("#calls"));
+      }
+      if(list != ""){
+        $('<p>').html(list).appendTo($("#calls"));
+      }
+    } else if ('crc_call' in obj && page.match(/crc$/)) {
+      for (var i in obj.crc_call){
+        if(obj.crc_call[i] != undefined ){
+          Call = obj.crc_call[i];
+          if (Call.status == "new" && Call.allFlag == true) {
+            buildCall(Call,true);
+          }
         }
+      }
+      if(list != ""){
+        $('<p>').html(list).appendTo($("#calls"));
+      }
     }
     else if ('call' in obj) {
         for (var b in obj.call){
@@ -378,7 +378,7 @@ $(document).ready(function(){
 
     updateButton();
     // keeps time elapsed updating.
-//    updateTimeElapsed();
+    updateTimeElapsed();
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
