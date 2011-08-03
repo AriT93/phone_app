@@ -83,18 +83,6 @@ function buildCall(obj,callList){
           }
       }
     });
-    if(callList){
-        var d = $('<div>');
-        d.addClass("grid_1");
-        d.addClass("omega");
-        var b = $("<button rel='#"+ obj.tn +"_ov' onclick=takeCall("+ obj.tn +");>");
-        var img=$("<img class='phone_icon' src='/img/phone.png'/>");
-        d.append(b);
-        b.append(img);
-        li.addClass("call");
-        li.attr('id',obj.tn);
-        li.append(d);
-    }
 //    $("#callList li:last").last(li);
       li.appendTo("#callList").hide().fadeIn("slow");
     //add to the overlay
@@ -111,14 +99,32 @@ function buildCall(obj,callList){
      ovdiv.append(img2);
      ovdiv.append(grid);
      ovdiv.appendTo("#calls_ov");
-    $("button[rel]").overlay({
-      onClose: function(){
+    if(callList){
+        var d = $('<div>');
+        d.addClass("grid_1");
+        d.addClass("omega");
+        var b = $("<button rel='#"+ obj.tn +"_ov' onclick=takeCall("+ obj.tn +");>");
+    b.overlay({
+      onClose: function(e){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
-          //alert(s + "   : " + CallLive);
           $("#" + CallLive + "_ov").remove();
         }
     });
+        var img=$("<img class='phone_icon' src='/img/phone.png'/>");
+        d.append(b);
+        b.append(img);
+        li.addClass("call");
+        li.attr('id',obj.tn);
+        li.append(d);
+    }
+    //$("button[rel]").overlay({
+     // onClose: function(e){
+      //    var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
+       //   socket.send(s);
+        //  $("#" + CallLive + "_ov").remove();
+     //   }
+    //});
     //alert("added :" + obj.tn);
 }
 
@@ -271,7 +277,7 @@ function updateLocation() {
 
 function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
-    CallLive = tn;
+   // CallLive = tn;
     socket.send(s);
     // $.ajax({
     //       url: "/call/phoneNum="+tn,
@@ -350,10 +356,9 @@ $(document).ready(function(){
     });
 
     $("button[rel]").overlay({
-      onClose: function(){
+      onClose: function(e){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
-          //alert(s + "  "+ CallLive);
           $("#" + CallLive + "_ov").remove();
         }
     });
