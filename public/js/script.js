@@ -125,6 +125,8 @@ function message(obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
     }
     else if('result' in obj){
+      var page = window.location;
+      if (page.match(/agent$/)) {
         var agentLatLng = new google.maps.LatLng(
           $('#latitude').val(),
           $('#longitude').val()
@@ -138,18 +140,26 @@ function message(obj){
                 Call.latitude,
                 Call.longitude
               );
-              if (Call.state == state && agentLatLng.within(custLatLng,distance)) {
-              // list += "<li>" + Call.name + " " + Call.tn + "</li>";
+              if (Call.allFlag == false && Call.state == state && agentLatLng.within(custLatLng,distance)) {
                 buildCall(Call,true);
               }
             }
         }
+        } else if (page.match(/crc$/)) {
+          for (var i in obj.result){
+            if(obj.result[i] != undefined ){
+              Call = JSON.parse(obj.result[i]);
+              if (Call.status == "new" && Call.allFlag) {
+                buildCall(Call,true);
+              }
+            }
+          }
+        }
         if(list != ""){
             $('<p>').html(list).appendTo($("#calls"));
-
         }
     }
-    else if('call' in obj){
+    else if ('call' in obj) {
         for (var b in obj.call){
             var p = obj.call[b];
               if(obj.call[b] != undefined){
@@ -382,7 +392,7 @@ $(document).ready(function(){
 
     updateButton();
     // keeps time elapsed updating.
-    updateTimeElapsed();
+//    updateTimeElapsed();
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
