@@ -115,11 +115,11 @@ function buildCall(obj,callList){
       onClose: function(){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
-          alert(s + "   : " + CallLive);
+          //alert(s + "   : " + CallLive);
           $("#" + CallLive + "_ov").remove();
         }
     });
-    alert("added :" + obj.tn);
+    //alert("added :" + obj.tn);
 }
 
 function message(obj){
@@ -129,22 +129,11 @@ function message(obj){
     } else if('announcement' in obj){
         $('<p>').html(obj.announcement).appendTo($("#messages"));
     } else if('result' in obj && page.match(/agent$/)) {
-      var agentLatLng = new google.maps.LatLng(
-        $('#latitude').val(),
-        $('#longitude').val()
-      );
-      var distance = $('#distance').val();
-      var state = $('#state').val();
       for (var i in obj.result){
         if(obj.result[i] != undefined ){
           Call = JSON.parse(obj.result[i]);
-          var custLatLng = new google.maps.LatLng(
-            Call.latitude,
-            Call.longitude
-          );
-          if (Call.state == state && agentLatLng.within(custLatLng,distance)) {
-            buildCall(Call,true);
-          }
+          buildCall(Call,true);
+          limitCalls();
         }
       }
       if(list != ""){
@@ -176,7 +165,7 @@ function message(obj){
             var ab = obj.ab_call[b];
             if(obj.ab_call[b] != undefined){
                 $("#"+ab.callAction.tn).fadeOut("slow", function(){$(this).remove();});
-                alert(ab.callAction.tn);
+                //alert(ab.callAction.tn);
                   $("#" + ab.callAction.tn + "_ov").remove();
                 }
             }
@@ -364,7 +353,7 @@ $(document).ready(function(){
       onClose: function(){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
-          alert(s + "  "+ CallLive);
+          //alert(s + "  "+ CallLive);
           $("#" + CallLive + "_ov").remove();
         }
     });
