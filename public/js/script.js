@@ -212,7 +212,7 @@ function drawChart() {
   }
   if ($("#piechart").length) {
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    chart.draw(data, {width: 720, height: 400, title: 'Call Status'});
+    chart.draw(data, {is3D : true, width: 720, height: 400, title: 'Call Status'});
   }
 }
 
