@@ -60,9 +60,10 @@ function buildCall(obj,callList){
           d3.addClass('alpha');
         }
     var fieldText = obj[key];
-
-    if(key == 'tn' && isValidPhoneNum(fieldText)) {
-        fieldText = formatNum(isValidPhoneNum(fieldText));
+// && isValidPhoneNum(fieldText)
+    if(key == 'tn') {
+//        fieldText = formatNum(isValidPhoneNum(fieldText));
+        fieldText=formatNum(fieldText);
     } else if(key == 'createdOn') {
         fieldText = 0;
         d.attr('title', 'timeElapsed');
@@ -407,7 +408,7 @@ $(document).ready(function(){
     if(window.location.hash && window.location.hash.match(/autopopulate/i))
         autoPopulate();
     else if(window.location.hash && window.location.hash.match(/autoagent=(\d{5})/i)) {
-    	var zip = window.location.hash.match(/autoagent=(\d{5})/i);
-    	setTimeout("autoAgent("+zip[1]+");",3000);
+        var zip = window.location.hash.match(/autoagent=(\d{5})/i);
+        setTimeout("autoAgent("+zip[1]+");",3000);
     }
 });
