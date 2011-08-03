@@ -404,11 +404,12 @@ $(document).ready(function(){
 
     // TODO: Need to put a check in here to make sure
     // the browser supports HTML5
-    navigator.geolocation.getCurrentPosition(updatePosition);
     if(window.location.hash && window.location.hash.match(/autopopulate/i))
         autoPopulate();
     else if(window.location.hash && window.location.hash.match(/autoagent=(\d{5})/i)) {
         var zip = window.location.hash.match(/autoagent=(\d{5})/i);
-        setTimeout("autoAgent("+zip[1]+");",3000);
+        setTimeout("autoAgent("+zip[1]+");",1000);
+    } else {
+    	navigator.geolocation.getCurrentPosition(updatePosition);
     }
 });
