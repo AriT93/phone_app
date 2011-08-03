@@ -24,7 +24,18 @@
 %body
   .container_16
     #banner
+      .push_10.grid_2.toplink.alpha
+        %p
+          Login
+      .push_10.grid_2.toplink
+        %p
+          Get a Quote!
+      .push_10.grid_2.toplink.omega
+        %p
+          Home
     #masthead
+      .grid_14
+        %img{:src => "/img/masthead.png"}
     #main{:role => "main"}
       = yield
     %footer
