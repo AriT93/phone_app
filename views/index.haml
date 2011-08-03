@@ -1,29 +1,41 @@
-.prefix_2.grid_10.suffix_2#form
+.prefix_2.grid_7.suffix_2
+  %p If you would like an Agent to call you and provide you with more information please fill out you information below.
+%br
+.prefix_2.grid_7.suffix_2.callform#form
   %form{:id => "call", :name => "call", :method => "POST", :action => "",:class => "contact"}
-    %ul
-      %li
+    %ul.ui-widget
+      %li.ui-widget-header
+        .grid_2
+          %label{:for => "name"} Name
         .prefix_1.grid_2
-          %label{:for => "name"} Name:
+          %label{:for => "tn"} Phone
+      %li.ui-widget-content
+        .grid_2
           %input{:id => "name", :name => "name", :type => "text"}
-        .prefix_1.grid_3
-          %label{:for => "tn"} Telephone Number:
-          %input{:id => "tn", :name => "tn", :type => "text"}
-      %li
         .prefix_1.grid_2
-          %label{:for => "age"} Age:
+          %input{:id => "tn", :name => "tn", :type => "text"}
+      %li.ui-widget-header
+        .grid_2
+          %label{:for => "age"} Age
+        .prefix_1.grid_2
+          %label{:for => "zip"} Zip Code
+      %li.ui-widget-content
+        .grid_2
           %input{:id => "age", :name => "age", :type => "text"}
         .prefix_1.grid_2
-          %label{:for => "zip"} Zip Code:
           %input{:id => "zip", :name => "zip", :type => "text" }
-      %li
+      %li.ui-widget-header
+        .grid_2
+          %label{:for => "city"} City
         .prefix_1.grid_2
-          %label{:for => "city"} City:
+          %label{:for => "state"} State
+      %li.ui-widget-content
+        .grid_2
           %input{:id => "city", :name => "city", :type => "text", :readonly => "readonly"}
         .prefix_1.grid_2
-          %label{:for => "state"} State:
           %input{:id => "state", :name => "state", :type => "text", :readonly => "readonly"}
-          %input{:id => "latitude", :name => "latitude", :type => "hidden"}
-          %input{:id => "longitude", :name => "longitude", :type => "hidden"}
-      %li
+      %li.ui-widget-content
+        %input{:id => "latitude", :name => "latitude", :type => "hidden"}
+        %input{:id => "longitude", :name => "longitude", :type => "hidden"}
         .push_1.grid_4.suffix_8
           %input{:type => "submit", :value => "Call Me!", :class => "comment_submit"}
