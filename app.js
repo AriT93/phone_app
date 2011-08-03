@@ -99,6 +99,7 @@ function handleOld() {
                console.log("setting allFlag=true for " + docs[d].name);
                docs[d].allFlag = true;
                docs[d].save();
+               wSocket.broadcast({crc_call: [docs[d]]});
              }
            }
   );
