@@ -41,10 +41,6 @@ function buildCall(obj,callList){
     li.attr("long",lng);
     li.attr("state",state);
     li.attr("createdon",createdOn);
-    li2.attr("lat",lat);
-    li2.attr("long",lng);
-    li2.attr("state",state);
-    li2.attr("createdon",createdOn);
     var keys = ['name','tn','city','state','zip','createdOn'];
     $.each(keys,function(i,key) {
       if(obj.hasOwnProperty(key)){
@@ -107,23 +103,23 @@ function buildCall(obj,callList){
      var img2 =$("<img src='/img/phone.png'/>");
      var grid = $('<div>');
      grid.addClass('grid_12');
-     grid.attr('id','calls');
      var ulcall = $('<ul>');
-     ulcall.append(li2);
-     ulcall.append(li3);
+     li2.appendTo(ulcall);
+     li3.appendTo(ulcall);
      grid.append(ulcall);
      ovdiv.append('<a class="close"></a>');
      ovdiv.append(img2);
      ovdiv.append(grid);
-    $("#calls_ov").append(ovdiv);
+     ovdiv.appendTo("#calls_ov");
     $("button[rel]").overlay({
       onClose: function(){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
-          $("#"+CallLive+"_ov").remove();
+          alert(s + "   : " + CallLive);
+          $("#" + CallLive + "_ov").remove();
         }
     });
-
+    alert("added :" + obj.tn);
 }
 
 function message(obj){
@@ -175,7 +171,16 @@ function message(obj){
 
             }
         }
-    }
+    }else if ('ab_call' in obj){
+        for(var b in obj.call){
+            var ab = obj.call[b];
+            if(obj.call[b] != undefined){
+                $("#"+ab.callAction.tn).fadeOut("slow", function(){$(this).remove();});
+                alert(ab.callAction.tn);
+                  $("#" + ab.callAction.tn + "_ov").remove();
+                }
+            }
+        }
     else if('chart' in obj){
       for (var s in obj.chart) {
         var dataItem = obj.chart[s];
@@ -279,15 +284,14 @@ function takeCall(tn){
     var s = "{\"callAction\":{\"tn\":" + tn + "}}";
     CallLive = tn;
     socket.send(s);
-
-    $.ajax({
-          url: "/call/phoneNum="+tn,
-      dataType: "jsonp",
-      success: function(data){
-          },
-      error: function(){
-      }
-    });
+    // $.ajax({
+    //       url: "/call/phoneNum="+tn,
+    //   dataType: "jsonp",
+    //   success: function(data){
+    //       },
+    //   error: function(){
+    //   }
+    // });
 }
 
 function updatePosition(position) {
@@ -360,7 +364,8 @@ $(document).ready(function(){
       onClose: function(){
           var s = "{\"callDelete\":{\"tn\":" + CallLive + "}}";
           socket.send(s);
-          $("#"+CallLive+"_ov").remove();
+          alert(s + "  "+ CallLive);
+          $("#" + CallLive + "_ov").remove();
         }
     });
     $("#call").submit(function(e){

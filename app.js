@@ -32,7 +32,6 @@ wSocket.on('connection', function(client){
     client.on('message', function(data){
         if(buffer.length > 5)buffer.shift();
         var p = JSON.parse(data);
-        console.log(JSON.stringify(p));
         if("callAction" in p){
             var c = Call.find({'tn': p.callAction.tn},function(err, docs){
                 for(d in docs){
@@ -54,7 +53,7 @@ wSocket.on('connection', function(client){
                 }
             });
             console.log(JSON.stringify(c));
-
+            console.log(p);
           }else{
               var c = new Call();
               c.name = p.name;
@@ -75,9 +74,9 @@ wSocket.on('connection', function(client){
     });
 });
 
-var millisForUpdates   = 1000 *  5;
-var millisUntilAllFlag = 1000 * 45;
-var millisUntilAbandon = 1000 * 65;
+var millisForUpdates   = 1000 *  10;
+var millisUntilAllFlag = 1000 * 55;
+var millisUntilAbandon = 1000 * 75;
 var chartData = {};
 
 setTimeout(handleOld, millisForUpdates);
@@ -118,10 +117,10 @@ function handleOld() {
                ca.callAction={ };
                ca.callAction.tn=p.tn;
                console.log(ca);
-               wSocket.broadcast({call: [ca]});
+               wSocket.broadcast({ab_call: [ca]});
              }
            }
-  );           
+  );
   var statusToCheck = ["new","calling","called","abandoned"];
   for (var x in statusToCheck) {
     updateChart(statusToCheck[x]);
