@@ -1,143 +1,162 @@
-var sys = require('sys');
-var http = require('http');
-var event = require('events');
-var io = require('socket.io');
-var models = require('./models');
-var mongoose = require('mongoose');
-var Call;
-var db = mongoose.connect("mongodb://localhost/test");
-
-models.defineModels(mongoose, function(){
-    Call = Call = mongoose.model('Call');
-});
-
-
-var socketEvent = new event.EventEmitter();
-var socketListener = socketEvent.addListener("new_call",function(data){
-    wSocket.broadcast({result: [data]});
-});
-
-
-var httpServer = http.createServer(function(request, response){
-
-});
-
-httpServer.listen(8910);
-
-var wSocket = io.listen(httpServer), buffer = [];
-
-wSocket.on('connection', function(client){
-    this.broadcast({announcement: client.sessionId +" from " + client.connection.remoteAddress + " connected to call routing"});
-
-    client.on('message', function(data){
-        if(buffer.length > 5)buffer.shift();
-        var p = JSON.parse(data);
-        if("callAction" in p){
-            var c = Call.find({'tn': p.callAction.tn},function(err, docs){
-                for(d in docs){
-                  if(docs[d].status != "new"){
-                      client.send({announcement: "all ready being called"});
-                  }else{
-                      docs[d].status = "calling";
-                      docs[d].save();
-                  }
-                }
-            });
-            console.log(p);
-            wSocket.broadcast({call: [p]});
-        }else if("callDelete" in p){
-            var c = Call.find({'tn': p.callDelete.tn},function(err,docs){
-                for(d in docs){
-                    docs[d].status = "called";
-                    docs[d].save();
-                }
-            });
-            console.log(JSON.stringify(c));
-            console.log(p);
-          }else{
-              var c = new Call();
-              c.name = p.name;
-              c.age = p.age;
-              c.tn = p.tn;
-              c.city = p.city;
-              c.state = p.state;
-              c.zip = p.zip;
-              c.status = 'new';
-              c.allFlag = false;
-              c.latitude = p.latitude;
-              c.longitude = p.longitude;
-              c.createdOn = new Date();
-              c.save();
-              client.send({announcement: "message saved"});
-              socketEvent.emit("new_call",JSON.stringify(c));
-            }
+(function() {
+  var Call, buffer, db, event, handleOld, http, httpServer, io, millisForUpdates, millisUntilAbandon, millisUntilAllFlag, models, mongoose, socketEvent, socketListener, sys, updateChart, wSocket;
+  sys = require("sys");
+  http = require("http");
+  event = require("events");
+  io = require("socket.io");
+  models = require("./models");
+  mongoose = require("mongoose");
+  Call = '';
+  db = mongoose.connect("mongodb://localhost/test");
+  models.defineModels(mongoose, function() {
+    return Call = Call = mongoose.model('Call');
+  });
+  socketEvent = new event.EventEmitter();
+  socketListener = socketEvent.addListener("new_call", function(data) {
+    return wSocket.broadcast({
+      result: [data]
     });
-});
-
-var millisForUpdates   = 1000 *  10;
-var millisUntilAllFlag = 1000 * 55;
-var millisUntilAbandon = 1000 * 75;
-var chartData = {};
-
-setTimeout(handleOld, millisForUpdates);
-
-function handleOld() {
-  var c;
-  var timeToCheck;
-  var rightnow = new Date();
-  // we want to query old calls, where allFlag is false.
-  timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
-  c = Call.find(
-        {
-          'allFlag'   : false,
-          'status'    : 'new',
-          'createdOn' : { $lt : timeToCheck }
+  });
+  httpServer = http.createServer(function(req, res) {});
+  httpServer.listen("8910");
+  wSocket = io.listen(httpServer);
+  buffer = [];
+  wSocket.on('connection', function(client) {
+    wSocket.broadcast({
+      announcement: client.sessionID + " from " + client.connection.remoteAddress + " connected to call routing"
+    });
+    return client.on('message', function(data) {
+      var c, p;
+      if (buffer.length > 5) {
+        buffer.shift();
+      }
+      p = JSON.parse(data);
+      if (p['callAction'] != null) {
+        c = Call.find({
+          'tn': p.callAction.tn
         }, function(err, docs) {
-             for (d in docs) {
-               console.log("setting allFlag=true for " + docs[d].name);
-               docs[d].allFlag = true;
-               docs[d].save();
-               wSocket.broadcast({crc_call: [docs[d]]});
-             }
-           }
-  );
-  // we want to query really old calls.
-  timeToCheck = new Date(rightnow.getTime() - millisUntilAbandon);
-  c = Call.find(
-        {
-          'status'    : 'new',
-          'createdOn' : { $lt : timeToCheck }
+          var d, _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = docs.length; _i < _len; _i++) {
+            d = docs[_i];
+            _results.push(d.status !== "new" ? client.send({
+              announcement: "all ready being called"
+            }) : (d.status = "calling", d.save()));
+          }
+          return _results;
+        });
+        return wSocket.broadcast({
+          call: [p]
+        });
+      } else if (p["callDelete"] != null) {
+        return c = Call.find({
+          'tn': p.callDelete.tn
         }, function(err, docs) {
-             for (d in docs) {
-               console.log("setting status=abandoned for " + docs[d].name);
-               docs[d].status = 'abandoned';
-               docs[d].save();
-               var p = docs[d];
-               var ca = { };
-               ca.callAction={ };
-               ca.callAction.tn=p.tn;
-               console.log(ca);
-               wSocket.broadcast({ab_call: [ca]});
-             }
-           }
-  );
-  var statusToCheck = ["new","calling","called","abandoned"];
-  for (var x in statusToCheck) {
-    updateChart(statusToCheck[x]);
-  }
-  setTimeout(handleOld, millisForUpdates);
-}
-
-function updateChart(status) {
-    var c = Call.count(
-          {
-            'status' : status
-          }, function(err, count) {
-               if (count != chartData[status]) {
-                 chartData[status] = count;
-                 console.log(status + "=" + chartData[status]);
-                 wSocket.broadcast({chart: [chartData]});
-               }
-             }
-    );
-}
+          var d, _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = docs.length; _i < _len; _i++) {
+            d = docs[_i];
+            d.status = "called";
+            _results.push(d.save());
+          }
+          return _results;
+        });
+      } else {
+        console.log("in the save");
+        c = new Call();
+        c.name = p.name;
+        c.age = p.age;
+        c.tn = p.tn;
+        c.city = p.city;
+        c.state = p.state;
+        c.zip = p.zip;
+        c.status = 'new';
+        c.allFlag = false;
+        c.latitude = p.latitude;
+        c.longitude = p.longitude;
+        c.createdOn = new Date();
+        c.save();
+        client.send({
+          announcement: "message saved"
+        });
+        return socketEvent.emit("new_call", JSON.stringify(c));
+      }
+    });
+  });
+  millisForUpdates = 1000 * 10;
+  millisUntilAllFlag = 1000 * 55;
+  millisUntilAbandon = 1000 * 75;
+  handleOld = function() {
+    var c, rightnow, statusToCheck, timeToCheck, x, _i, _len;
+    console.log("hiya");
+    rightnow = new Date();
+    timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
+    c = Call.find({
+      'allFlag': false,
+      'status': 'new',
+      'createdOn': {
+        $lt: timeToCheck
+      }
+    }, function(err, docs) {
+      var d, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = docs.length; _i < _len; _i++) {
+        d = docs[_i];
+        console.log("setting allFlag=true for " + d.name);
+        d.allFlag = true;
+        d.save();
+        _results.push(wSocket.broadcast({
+          crc_call: [d]
+        }));
+      }
+      return _results;
+    });
+    timeToCheck = Date(rightnow.getTime() - millisUntilAbandon);
+    c = Call.find({
+      'status': 'new',
+      'createdOn': {
+        $lt: timeToCheck
+      }
+    }, function(err, docs) {
+      var ca, d, p, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = docs.length; _i < _len; _i++) {
+        d = docs[_i];
+        console.log("setting status=abandoned for " + d.name);
+        d.status = 'abandoned';
+        d.save();
+        p = d;
+        ca = {};
+        ca.callAction = {};
+        ca.callAction.tn = p.tn;
+        console.log(ca);
+        _results.push(wSocket.broadcast({
+          ab_call: [ca]
+        }));
+      }
+      return _results;
+    });
+    statusToCheck = ["new", "calling", "called", "abandoned"];
+    for (_i = 0, _len = statusToCheck.length; _i < _len; _i++) {
+      x = statusToCheck[_i];
+      updateChart(statusToCheck[x]);
+    }
+    return setTimeout(handleOld, 2000);
+  };
+  setTimeout(handleOld, 2000);
+  updateChart = function(status) {
+    var c;
+    console.log(" update chart");
+    return c = Call.count({
+      'status': status
+    }, function(err, count) {
+      if (count !== chartData[status]) {
+        chartData[status] = count;
+        console.log(status + " = " + chartData[status]);
+        return wSocket.broadcast({
+          chart: [chartData]
+        });
+      }
+    });
+  };
+}).call(this);
