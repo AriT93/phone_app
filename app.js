@@ -101,10 +101,7 @@
       _results = [];
       for (_i = 0, _len = docs.length; _i < _len; _i++) {
         d = docs[_i];
-        if (timeToCheck > d.createdOn) {
-          console.log(timeToCheck - d.createdOn);
-        }
-        console.log("setting allFlag=true for " + d.name + " : " + d.createdOn);
+        console.log("setting allFlag=true for " + d.name);
         d.allFlag = true;
         d.save();
         _results.push(wSocket.broadcast({
@@ -113,8 +110,7 @@
       }
       return _results;
     });
-    timeToCheck = Date(rightnow.getTime() - millisUntilAbandon);
-    console.log(new Date(timeToCheck));
+    timeToCheck = new Date(rightnow.getTime() - millisUntilAbandon);
     c = Call.find({
       'status': 'new',
       'createdOn': {
@@ -122,18 +118,10 @@
       }
     }, function(err, docs) {
       var ca, d, p, _i, _len, _results;
-      if (err != null) {
-        console.log("error: " + err);
-      }
       _results = [];
       for (_i = 0, _len = docs.length; _i < _len; _i++) {
         d = docs[_i];
-        if (timeToCheck > d.createdOn) {
-          console.log(timeToCheck - d.createdOn);
-        } else {
-          console.log("what?  ");
-        }
-        console.log("setting status=abandoned for " + d.name + " : " + d.createdOn);
+        console.log("setting status=abandoned for " + d.name);
         d.status = 'abandoned';
         d.save();
         p = d;
@@ -150,7 +138,8 @@
     statusToCheck = ["new", "calling", "called", "abandoned"];
     for (_i = 0, _len = statusToCheck.length; _i < _len; _i++) {
       x = statusToCheck[_i];
-      updateChart(statusToCheck[x]);
+      console.log(x + " : checking");
+      updateChart(x);
     }
     return setTimeout(handleOld, millisForUpdates);
   };
@@ -162,7 +151,7 @@
     }, function(err, count) {
       if (count !== chartData[status]) {
         chartData[status] = count;
-        console.log(status + " = " + chartData[status]);
+        console.log("charting: " + status + " = " + chartData[status]);
         return wSocket.broadcast({
           chart: [chartData]
         });
