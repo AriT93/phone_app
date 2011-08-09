@@ -1,5 +1,5 @@
 (function() {
-  var Call, buffer, db, event, handleOld, http, httpServer, io, millisForUpdates, millisUntilAbandon, millisUntilAllFlag, models, mongoose, socketEvent, socketListener, sys, updateChart, wSocket;
+  var Call, buffer, chartData, db, event, handleOld, http, httpServer, io, millisForUpdates, millisUntilAbandon, millisUntilAllFlag, models, mongoose, socketEvent, socketListener, sys, updateChart, wSocket;
   sys = require("sys");
   http = require("http");
   event = require("events");
@@ -62,7 +62,6 @@
           return _results;
         });
       } else {
-        console.log("in the save");
         c = new Call();
         c.name = p.name;
         c.age = p.age;
@@ -86,9 +85,9 @@
   millisForUpdates = 1000 * 10;
   millisUntilAllFlag = 1000 * 55;
   millisUntilAbandon = 1000 * 75;
+  chartData = {};
   handleOld = function() {
     var c, rightnow, statusToCheck, timeToCheck, x, _i, _len;
-    console.log("hiya");
     rightnow = new Date();
     timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
     c = Call.find({
@@ -102,7 +101,10 @@
       _results = [];
       for (_i = 0, _len = docs.length; _i < _len; _i++) {
         d = docs[_i];
-        console.log("setting allFlag=true for " + d.name);
+        if (timeToCheck > d.createdOn) {
+          console.log(timeToCheck - d.createdOn);
+        }
+        console.log("setting allFlag=true for " + d.name + " : " + d.createdOn);
         d.allFlag = true;
         d.save();
         _results.push(wSocket.broadcast({
@@ -112,6 +114,7 @@
       return _results;
     });
     timeToCheck = Date(rightnow.getTime() - millisUntilAbandon);
+    console.log(new Date(timeToCheck));
     c = Call.find({
       'status': 'new',
       'createdOn': {
@@ -119,10 +122,18 @@
       }
     }, function(err, docs) {
       var ca, d, p, _i, _len, _results;
+      if (err != null) {
+        console.log("error: " + err);
+      }
       _results = [];
       for (_i = 0, _len = docs.length; _i < _len; _i++) {
         d = docs[_i];
-        console.log("setting status=abandoned for " + d.name);
+        if (timeToCheck > d.createdOn) {
+          console.log(timeToCheck - d.createdOn);
+        } else {
+          console.log("what?  ");
+        }
+        console.log("setting status=abandoned for " + d.name + " : " + d.createdOn);
         d.status = 'abandoned';
         d.save();
         p = d;
@@ -141,12 +152,11 @@
       x = statusToCheck[_i];
       updateChart(statusToCheck[x]);
     }
-    return setTimeout(handleOld, 2000);
+    return setTimeout(handleOld, millisForUpdates);
   };
-  setTimeout(handleOld, 2000);
+  setTimeout(handleOld, millisForUpdates);
   updateChart = function(status) {
     var c;
-    console.log(" update chart");
     return c = Call.count({
       'status': status
     }, function(err, count) {

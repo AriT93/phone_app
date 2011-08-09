@@ -107,7 +107,8 @@ function handleOld() {
         {
           'status'    : 'new',
           'createdOn' : { $lt : timeToCheck }
-        }, function(err, docs) {
+        }, fun
+ction(err, docs) {
              for (d in docs) {
                console.log("setting status=abandoned for " + docs[d].name);
                docs[d].status = 'abandoned';
