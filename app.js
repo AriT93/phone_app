@@ -1,5 +1,5 @@
 (function() {
-  var Call, buffer, db, event, handleOld, http, httpServer, io, millisForUpdates, millisUntilAbandon, millisUntilAllFlag, models, mongoose, socketEvent, socketListener, sys, updateChart, wSocket;
+  var Call, buffer, chartData, db, event, handleOld, http, httpServer, io, millisForUpdates, millisUntilAbandon, millisUntilAllFlag, models, mongoose, socketEvent, socketListener, sys, updateChart, wSocket;
   sys = require("sys");
   http = require("http");
   event = require("events");
@@ -62,7 +62,6 @@
           return _results;
         });
       } else {
-        console.log("in the save");
         c = new Call();
         c.name = p.name;
         c.age = p.age;
@@ -86,9 +85,9 @@
   millisForUpdates = 1000 * 10;
   millisUntilAllFlag = 1000 * 55;
   millisUntilAbandon = 1000 * 75;
+  chartData = {};
   handleOld = function() {
     var c, rightnow, statusToCheck, timeToCheck, x, _i, _len;
-    console.log("hiya");
     rightnow = new Date();
     timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag);
     c = Call.find({
@@ -111,7 +110,7 @@
       }
       return _results;
     });
-    timeToCheck = Date(rightnow.getTime() - millisUntilAbandon);
+    timeToCheck = new Date(rightnow.getTime() - millisUntilAbandon);
     c = Call.find({
       'status': 'new',
       'createdOn': {
@@ -139,20 +138,20 @@
     statusToCheck = ["new", "calling", "called", "abandoned"];
     for (_i = 0, _len = statusToCheck.length; _i < _len; _i++) {
       x = statusToCheck[_i];
-      updateChart(statusToCheck[x]);
+      console.log(x + " : checking");
+      updateChart(x);
     }
-    return setTimeout(handleOld, 2000);
+    return setTimeout(handleOld, millisForUpdates);
   };
-  setTimeout(handleOld, 2000);
+  setTimeout(handleOld, millisForUpdates);
   updateChart = function(status) {
     var c;
-    console.log(" update chart");
     return c = Call.count({
       'status': status
     }, function(err, count) {
       if (count !== chartData[status]) {
         chartData[status] = count;
-        console.log(status + " = " + chartData[status]);
+        console.log("charting: " + status + " = " + chartData[status]);
         return wSocket.broadcast({
           chart: [chartData]
         });
