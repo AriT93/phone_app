@@ -10,10 +10,10 @@ acceptCall = ->
     if ! potatoes.length
         return
 
-    for b in $('button')
-        if b.is(":visible")
-            b.click()
-            b.attr('rel').each(
+    for $b in $('button')
+        if $b.is(":visible")
+            $b.click()
+            $b.attr('rel').each(
                 () ->
                     this.click()
             )
