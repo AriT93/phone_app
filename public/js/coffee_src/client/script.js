@@ -1,124 +1,12 @@
-var acceptCall, addClient, afterPopulate, autoAgent, autoPopulate, buildCall, currentOne, drawChart, formatNum, lasOne, limitCalls, lookupLocation, lookupPosition, message, populateFields, takeCall, toRad, updateButton, updateLocation, updatePosition, updateTimeElapsed, validPhoneNum;
+var CallLive, buildCall, drawChart, formatNum, limitCalls, message, socket, takeCall, updateButton, updateLocation, updatePosition, validPhoneNum;
 var __indexOf = Array.prototype.indexOf || function(item) {
   for (var i = 0, l = this.length; i < l; i++) {
     if (this[i] === item) return i;
   }
   return -1;
 };
-autoAgent = function(zip) {
-  $('zip').val(zip);
-  updateLocation();
-  return setTimeout("acceptCall()", 100);
-};
-acceptCall = function() {
-  var $b, potatoes, _i, _len, _ref, _results;
-  setTimeout("acceptCall()", 4000);
-  potatoes = $('#callList').children;
-  if (!potatoes.length) {
-    return;
-  }
-  _ref = $('button');
-  _results = [];
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    $b = _ref[_i];
-    if ($b.is(":visible")) {
-      $b.click();
-      $b.attr('rel').each(function() {
-        return this.click();
-      });
-      break;
-    }
-  }
-  return _results;
-};
-currentOne = -1;
-lasOne = -1;
-autoPopulate = function() {
-  return addClient(0);
-};
-addClient = function(index) {
-  currentOne = index;
-  return $.each(['name', 'tn', 'age', 'zip'], function(index, data) {
-    $('#' + data).val('');
-    return populateFields(fakeData[index][0], fakeData[index][2], fakeData[index][3], fakeData[index][2]);
-  });
-};
-afterPopulate = function() {
-  if (lastOne + 1 < fakeData.length) {
-    return setTimeout(addClient(lastOne + 1, 1000));
-  }
-};
-populateFields = function(name, tn, age, zip, index) {
-  var addLet, didNothing, lastOne;
-  didNothing = 0;
-  if (name.length > 0) {
-    addLet = name.substr(0, 1);
-    name = name.substr(1);
-    $('#name').val($('#name').val() + addLet);
-  } else if (tn.length > 0) {
-    addLet = tn.substr(0, 1);
-    tn = tn.substr(1);
-    $('#tn').val($('#tn').val() + addLet);
-  } else if (age.length > 0) {
-    addLet = age.substr(0, 1);
-    age = age.substr(1);
-    $('#age').val($('#age').val() + addLet);
-  } else if (zip.length > 0) {
-    addLet = zip.substr(0, 1);
-    zip = zip.substr(1);
-    $('#zip').val($('#zip').val() + addLet);
-  } else {
-    didNothing = 1;
-  }
-  if (didNothing > 0) {
-    updateLocation();
-    setTimeout('$(#call").submit();', 200);
-    lastOne = currentOne;
-    currentOne = -1;
-    return setTimeout('afterPopulate();', 201);
-  } else {
-    return setTimeout("populateFields('" + name(+"','" + tn + "', '" + age(+"','" + zip(+"' );"))));
-  }
-};
-toRad = function(degrees) {
-  return Math.PI * (degrees / 180);
-};
-google.maps.LatLng.prototype.distanceTo = function() {
-  var a, c, dLat, dLon, lat1, lat2, radius;
-  radius = 6371;
-  dLat = toRad(this.lat - ltlng.lat);
-  dLon = toRad(this.lng - latlng.lng);
-  lat1 = toRad(this.loat);
-  lat2 = toRad(latlng.lat);
-  a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-  c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return radius * c * 0.921371192;
-};
-google.maps.LatLng.prototype.within = function(latlng, radius) {
-  return this.distanctTo(latlng) <= radius;
-};
-lookupLocation = function(zip, fn) {
-  var geocoder;
-  geocoder = new google.maps.Geocoder;
-  return geocoder.geocode({
-    "address": "" + zip
-  }, function(results, status) {
-    if (status === google.maps.GeocoderStatus.OK) {
-      return fn(results[0]);
-    }
-  });
-};
-lookupPosition = function(latlng, fn) {
-  var geocoder;
-  geocoder = new google.maps.Geocoder;
-  return geocoder.geocode({
-    "location": latlng
-  }, function(results, status) {
-    if (status === google.maps.GeocoderStatus.OK) {
-      return fn(results[0]);
-    }
-  });
-};
+socket = "";
+CallLive = "";
 validPhoneNum = function(myNum) {
   if (myNum === void 0) {
     return false;
@@ -383,7 +271,7 @@ updateLocation = function() {
   }
 };
 takeCall = function(tn) {
-  var CallLive, s;
+  var s;
   s = {
     callAction: {
       tn: tn
@@ -424,9 +312,7 @@ updatePosition = function(position) {
       $("#latitude").val(lat());
       $("#longitude").val(lng());
       $("#city").val(city);
-      alert(city);
       $("#state").val(state);
-      alert(state);
       $("#zip").val(zip);
       return limitCalls;
     });
@@ -439,13 +325,13 @@ updateButton = function() {
   return $('button').attr('disabled', disable);
 };
 $(document).ready(function() {
-  var socket;
   socket = new io.Socket(null, {
-    port: 8910,
-    rememberTransport: false,
-    transports: ["websocket", "xhr-multipart", "flashsocket"]
+    port: "8910",
+    rememberTransport: "false",
+    transports: ["websocket"]
   });
-  socket.connect;
+  socket.connect();
+  alert(socket);
   socket.on('message', function(obj) {
     var i, _i, _len, _ref, _results;
     if (obj !== void 0) {
@@ -508,68 +394,3 @@ $(document).ready(function() {
   updateTimeElapsed();
   return navigator.geolocation.getCurrentPosition(updatePosition);
 });
-updatePosition = function(position) {
-  var latlng;
-  $("#zip").val("");
-  $("#latitude").val("");
-  $("#longitude").val("");
-  $("#city").val("");
-  $("#state").val("");
-  latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-  if (latlng !== null) {
-    return lookupPosition(latlng, function(loc) {
-      var city, lat, lng, state, zip;
-      city = "";
-      state = "";
-      zip = "";
-      $.each(loc.address_components, function(i, v) {
-        if ($.inArray("locality", v.types > -1)) {
-          city = v.short_name;
-        } else if ($.inArray("sublocality", v.types > -1)) {
-          city = v.short_name;
-        }
-        if ($.inArray("administrative_area_level_1", v.types > -1)) {
-          state = v.short_name;
-        }
-        if ($.inArray("postal_code", v.types > -1)) {
-          return zip = v.short_name;
-        }
-      });
-      lat = loc.geometry.location.lat;
-      lng = loc.geometry.location.lng;
-      $("#latitude").val(lat);
-      $("#longitude").val(lng);
-      $("#city").val(city);
-      $("#state").val(state);
-      $("zip").val(zip);
-      return limitCalls();
-    });
-  }
-};
-updateTimeElapsed = function() {
-  var $callList, currUnixTime, todaysDate;
-  setTimeout("updateTimeElapsed()", 10000);
-  todaysDate = new Date;
-  currUnixTime = Math.round(todaysDate.getTime() / 1000);
-  $callList = $('#callList');
-  return $callList.children().each(function() {
-    var createdDate, unixTime;
-    if ($(this).attr('createdon') !== void 0) {
-      createdDate = new Date($callList.attr('createdDate'));
-      unixTime = Math.round(createdDate.getTime / 1000);
-      return $callList.children.each(function() {
-        var difference, minutes, seconds;
-        if ($(this).attr('title') === 'timeElapsed') {
-          difference = currUnixTime - unixTime;
-          seconds = difference % 60;
-          if (seconds < 10) {
-            seconds = '0' + seconds;
-          }
-          difference -= seconds;
-          minutes = difference / 60;
-          return $(this).html(minutes + ':' + seconds);
-        }
-      });
-    }
-  });
-};

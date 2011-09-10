@@ -78,7 +78,8 @@
         client.send({
           announcement: "message saved"
         });
-        return socketEvent.emit("new_call", JSON.stringify(c));
+        socketEvent.emit("new_call", JSON.stringify(c));
+        return console.log("saved");
       }
     });
   });
@@ -94,7 +95,7 @@
       'allFlag': false,
       'status': 'new',
       'createdOn': {
-        $lt: timeToCheck
+        "$lt": timeToCheck
       }
     }, function(err, docs) {
       var d, _i, _len, _results;
@@ -110,11 +111,11 @@
       }
       return _results;
     });
-    timeToCheck = new Date(rightnow.getTime() - millisUntilAbandon);
+    timeToCheck = Date(rightnow.getTime() - millisUntilAbandon);
     c = Call.find({
       'status': 'new',
       'createdOn': {
-        $lt: timeToCheck
+        "$lt": timeToCheck
       }
     }, function(err, docs) {
       var ca, d, p, _i, _len, _results;
@@ -138,8 +139,7 @@
     statusToCheck = ["new", "calling", "called", "abandoned"];
     for (_i = 0, _len = statusToCheck.length; _i < _len; _i++) {
       x = statusToCheck[_i];
-      console.log(x + " : checking");
-      updateChart(x);
+      updateChart(statusToCheck[x]);
     }
     return setTimeout(handleOld, millisForUpdates);
   };
@@ -151,7 +151,6 @@
     }, function(err, count) {
       if (count !== chartData[status]) {
         chartData[status] = count;
-        console.log("charting: " + status + " = " + chartData[status]);
         return wSocket.broadcast({
           chart: [chartData]
         });

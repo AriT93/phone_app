@@ -1,5 +1,5 @@
-socket
-CallLive
+socket = ""
+CallLive = ""
 
 validPhoneNum = (myNum) ->
     if myNum == undefined
@@ -187,17 +187,21 @@ limitCalls = () ->
 
 updateLocation = ->
     zip = $("#zip").val
-    $("#latitude").val
-    $("#longitude").val
-    $("#city").val
-    $("#state").val
+    $("#latitude").val ""
+    $("#longitude").val ""
+    $("#city").val ""
+    $("#state").val ""
 
     if zip.length >= 5
         lookupLocation zip, (loc) ->
             city = ""
             state = ""
             $.each loc.address_components, (i,v) ->
-                if $.inArray "locality", v.types > -1
+                if $.inArray("locality", v.types) > -1
+                    city = v.short_name
+                else if $.inArray("sublocality", v.types) > -1
+                    city = v.short_name
+                if $.inArray("administrative_area_level_1", v.types) > -1
                     state = v.short_name
             lat = loc.geometry.location.lat
             lng = loc.geometry.longitude.lng
@@ -226,22 +230,22 @@ updatePosition = (position) ->
             state = ""
             zip = ""
             $.each loc.address_components, (i,v) ->
-                if $.inArray "locality", v.types > -1
+                if $.inArray("locality", v.types) > -1
                     city = v.short_name
-                else if $.inArray "sublocality", v.types > -1
+                else if $.inArray( "sublocality", v.types ) > -1
                     city = v.short_name
-                if $.inArray "administrative_area_level_1", v.types > -1
+                if $.inArray("administrative_area_level_1", v.types  ) > -1
                     state = v.short_name
-                if $.inArray "postal_code", v.types > -1
+                if $.inArray("postal_code", v.types) > -1
                     zip = v.short_name
 
             lat = loc.geometry.location.lat
             lng = loc.geometry.location.lng
-            $("#latitude").val lat
-            $("#longitude").val lng
+            $("#latitude").val lat()
+            $("#longitude").val lng()
             $("#city").val city
             $("#state").val state
-            $("zip").val zip
+            $("#zip").val zip
             limitCalls
 
 updateButton = ->
@@ -251,9 +255,9 @@ updateButton = ->
 
 
 $(document).ready ->
-    socket = new io.Socket null,
-        {port: 8910, rememberTransport: false,transports:["websocket", "xhr-multipart", "flashsocket"]}
-    socket.connect
+    socket = new io.Socket null, {port: "8910", rememberTransport: "false", transports:["websocket"]}
+    socket.connect()
+    alert(socket)
     socket.on 'message', (obj) ->
         if obj != undefined
             if 'buffer' in obj
@@ -307,8 +311,4 @@ $(document).ready ->
     # keeps time elapsed updating.
     updateTimeElapsed();
 
-    if window.location.hash && window.location.hash.match /autoagent=(\d{5}_/i
-        zip = window.location.hash.match /autoagent=(\d{5}/i
-        setTimeout "autoAgent(#{zip[1]}),1000"
-    else
-        navigator.geolocation.getCurrentPosition updatePosition
+    navigator.geolocation.getCurrentPosition updatePosition

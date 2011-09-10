@@ -56,17 +56,18 @@ wSocket.on 'connection', (client)->
             c.save()
             client.send {announcement: "message saved"}
             socketEvent.emit "new_call", JSON.stringify(c)
+            console.log "saved"
 
 millisForUpdates = (1000 * 10)
 millisUntilAllFlag = 1000 * 55
 millisUntilAbandon = 1000 * 75
 chartData = {}
 
-console.log "update: " + millisForUpdates + " allflag: " + millisUntilAllFlag + " abandon: " + millisUntilAbandon
+#console.log "update: " + millisForUpdates + " allflag: " + millisUntilAllFlag + " abandon: " + millisUntilAbandon
 
 handleOld = ->
     rightnow = new Date()
-    console.log rightnow.getTime() - millisUntilAllFlag
+#    console.log rightnow.getTime() - millisUntilAllFlag
     timeToCheck = new Date rightnow.getTime() - millisUntilAllFlag
     c = Call.find { 'allFlag': false, 'status' : 'new', 'createdOn' : { "$lt" : timeToCheck}},
         (err, docs) ->
@@ -101,5 +102,5 @@ updateChart = (status)->
     (err,count) ->
         if count isnt  chartData[status]
             chartData[status] = count
-            console.log  status + " = " + chartData[status]
+#            console.log  status + " = " + chartData[status]
             wSocket.broadcast {chart: [chartData]}
