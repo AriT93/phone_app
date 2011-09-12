@@ -105,15 +105,16 @@ message = (obj) ->
     if 'message' in obj
     else if 'announcement' in obj
         $('<p>').html(obj.announcement).appendTo "#messages"
-    else if 'result' in obj && page.match /agent$/
+    else if obj.result? && page.match(/agent$/)
+        alert(JSON.stringify(obj))
         for i in obj.result
             if i != undefined
-                Call = JSON.parse i
-                buildCall Call, true
+                Call = JSON.parse(i)
+                buildCall(Call, true)
                 limitCalls
         if list != ""
             $('<p>').html(list).appendTo $("#calls")
-    else if 'crc_call' in obj && page.match /crc$/
+    else if obj.crc_call? && page.match(/crc$/)
         for i in obj.crc_call
             if i != undefined
                 Call = i
@@ -121,22 +122,23 @@ message = (obj) ->
                     buildCall Call, true
         if list != ""
             $('<p>').html(list).appendTo $("#calls")
-    else if 'call' in obj
+    else if obj.call?
+        alert(JSON.stringify(obj) + obj.call?)
         for call in obj.call
             p = call
             if call != undefined
-                $("##{p.callAction.tn}").fadeOut "slow", -> $(this).remove
-    else if 'ab_call' in obj
+                $("#" + p.callAction.tn).fadeOut "slow", -> $(this).remove
+    else if obj.ab_call?
         for call in obj.ab_call
             ab = call
             if call != undefined
-                $("##{ab.callAction.tn}").fadeOut "slow", -> $(this).remove
-    else if 'chart' in obj
+                $("#"+ab.callAction.tn).fadeOut "slow", -> $(this).remove
+    else if obj.chart? && page.match(/charts&/)
         for s in obj.chart
             dataItem = s
             status ["new", "calling", "called", "abandoned"]
             for item in status
-                data = status[item]
+                data = item
                 count = 0
                 if dataItem[data] != undefined
                     count = dataItem[data]
@@ -152,7 +154,7 @@ drawChart = () ->
     data.addRows status.length
     x = 0
     for item in status
-        s = status[item]
+        s = item
         data.setValue x, 0, s
         count = $("#status.#{s}").val
         if count == undefined
@@ -255,9 +257,9 @@ updateButton = ->
 
 
 $(document).ready ->
-    socket = new io.Socket null, {port: "8910", rememberTransport: "false", transports:["websocket"]}
+    navigator.geolocation.getCurrentPosition updatePosition
+    socket = new io.Socket null, {port: "8910", rememberTransport: "false", transports:["websocket","flashsocket","xhr-multipart"]}
     socket.connect()
-    alert(socket)
     socket.on 'message', (obj) ->
         if obj != undefined
             if 'buffer' in obj
@@ -266,8 +268,6 @@ $(document).ready ->
                         message i
             else
                 message obj
-
-
 
     $("button[rel]").overlay {
         onClose: ->
@@ -288,11 +288,10 @@ $(document).ready ->
             Call.longitude = $("#longitude").val();
             Call.tn        = Call.tn.replace(/\D/g, '');
             Call.zip        = Call.zip.replace(/\D/g, '');
+            socket.send JSON.stringify Call
             ['name','tn','age','city','state', 'zip'].each (index, fieldName) ->
                 if Call[fieldName] == undefined || Call[fieldName] == ''
                     Call[fieldName] = 'Not Submitted'
-
-            socket.send JSON.stringify Call
         $(':input', '#call')
             .not ':button, :reset, :submit, :hidden'
             .val ''

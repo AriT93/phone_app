@@ -118,7 +118,8 @@ message = function(obj) {
   list = '';
   if (__indexOf.call(obj, 'message') >= 0) {} else if (__indexOf.call(obj, 'announcement') >= 0) {
     return $('<p>').html(obj.announcement).appendTo("#messages");
-  } else if (__indexOf.call(obj, 'result') >= 0 && page.match(/agent$/)) {
+  } else if ((obj.result != null) && page.match(/agent$/)) {
+    alert(JSON.stringify(obj));
     _ref = obj.result;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       i = _ref[_i];
@@ -131,7 +132,7 @@ message = function(obj) {
     if (list !== "") {
       return $('<p>').html(list).appendTo($("#calls"));
     }
-  } else if (__indexOf.call(obj, 'crc_call') >= 0 && page.match(/crc$/)) {
+  } else if ((obj.crc_call != null) && page.match(/crc$/)) {
     _ref2 = obj.crc_call;
     for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
       i = _ref2[_j];
@@ -145,7 +146,8 @@ message = function(obj) {
     if (list !== "") {
       return $('<p>').html(list).appendTo($("#calls"));
     }
-  } else if (__indexOf.call(obj, 'call') >= 0) {
+  } else if (obj.call != null) {
+    alert(JSON.stringify(obj) + (obj.call != null));
     _ref3 = obj.call;
     _results = [];
     for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
@@ -156,7 +158,7 @@ message = function(obj) {
       }) : void 0);
     }
     return _results;
-  } else if (__indexOf.call(obj, 'ab_call') >= 0) {
+  } else if (obj.ab_call != null) {
     _ref4 = obj.ab_call;
     _results2 = [];
     for (_l = 0, _len4 = _ref4.length; _l < _len4; _l++) {
@@ -167,7 +169,7 @@ message = function(obj) {
       }) : void 0);
     }
     return _results2;
-  } else if (__indexOf.call(obj, 'chart') >= 0) {
+  } else if ((obj.chart != null) && page.match(/charts&/)) {
     _ref5 = obj.chart;
     for (_m = 0, _len5 = _ref5.length; _m < _len5; _m++) {
       s = _ref5[_m];
@@ -175,7 +177,7 @@ message = function(obj) {
       status(["new", "calling", "called", "abandoned"]);
       for (_n = 0, _len6 = status.length; _n < _len6; _n++) {
         item = status[_n];
-        data = status[item];
+        data = item;
         count = 0;
         if (dataItem[data] !== void 0) {
           count = dataItem[data];
@@ -196,7 +198,7 @@ drawChart = function() {
   x = 0;
   for (_i = 0, _len = status.length; _i < _len; _i++) {
     item = status[_i];
-    s = status[item];
+    s = item;
     data.setValue(x, 0, s);
     count = $("#status." + s).val;
     if (count === void 0) {
@@ -325,13 +327,13 @@ updateButton = function() {
   return $('button').attr('disabled', disable);
 };
 $(document).ready(function() {
+  navigator.geolocation.getCurrentPosition(updatePosition);
   socket = new io.Socket(null, {
     port: "8910",
     rememberTransport: "false",
-    transports: ["websocket"]
+    transports: ["websocket", "flashsocket", "xhr-multipart"]
   });
   socket.connect();
-  alert(socket);
   socket.on('message', function(obj) {
     var i, _i, _len, _ref, _results;
     if (obj !== void 0) {
@@ -374,12 +376,12 @@ $(document).ready(function() {
       Call.longitude = $("#longitude").val();
       Call.tn = Call.tn.replace(/\D/g, '');
       Call.zip = Call.zip.replace(/\D/g, '');
+      socket.send(JSON.stringify(Call));
       ['name', 'tn', 'age', 'city', 'state', 'zip'].each(function(index, fieldName) {
         if (Call[fieldName] === void 0 || Call[fieldName] === '') {
           return Call[fieldName] = 'Not Submitted';
         }
       });
-      socket.send(JSON.stringify(Call));
     }
     $(':input', '#call').not(':button, :reset, :submit, :hidden'.val(''));
     return false;

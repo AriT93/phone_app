@@ -59,16 +59,16 @@ wSocket.on 'connection', (client)->
             console.log "saved"
 
 millisForUpdates = (1000 * 10)
-millisUntilAllFlag = 1000 * 55
-millisUntilAbandon = 1000 * 75
+millisUntilAllFlag = (1000 * 55)
+millisUntilAbandon = (1000 * 75)
 chartData = {}
 
-#console.log "update: " + millisForUpdates + " allflag: " + millisUntilAllFlag + " abandon: " + millisUntilAbandon
+console.log "update: " + millisForUpdates + " allflag: " + millisUntilAllFlag + " abandon: " + millisUntilAbandon
 
 handleOld = ->
     rightnow = new Date()
 #    console.log rightnow.getTime() - millisUntilAllFlag
-    timeToCheck = new Date rightnow.getTime() - millisUntilAllFlag
+    timeToCheck = new Date(rightnow.getTime() - millisUntilAllFlag)
     c = Call.find { 'allFlag': false, 'status' : 'new', 'createdOn' : { "$lt" : timeToCheck}},
         (err, docs) ->
             for d in docs
@@ -76,11 +76,11 @@ handleOld = ->
                 d.allFlag = true
                 d.save()
                 wSocket.broadcast {crc_call: [d]}
-    timeToCheck = Date rightnow.getTime() - millisUntilAbandon
+    timeToCheck = new Date(rightnow.getTime() - millisUntilAbandon)
     c = Call.find { 'status' : 'new', 'createdOn' : {"$lt": timeToCheck}},
         (err,docs) ->
             for d in docs
-                console.log "setting status=abandoned for " + d.name
+                console.log "setting status=abandoned for " + d.name + ": "  + d.createdOn + " : " + timeToCheck
                 d.status = 'abandoned'
                 d.save()
                 p = d
@@ -92,7 +92,7 @@ handleOld = ->
 
     statusToCheck = ["new", "calling" , "called", "abandoned"]
     for x in statusToCheck
-        updateChart statusToCheck[x]
+        updateChart x
     setTimeout(handleOld,millisForUpdates)
 
 setTimeout(handleOld,millisForUpdates)
@@ -102,5 +102,5 @@ updateChart = (status)->
     (err,count) ->
         if count isnt  chartData[status]
             chartData[status] = count
-#            console.log  status + " = " + chartData[status]
+            console.log  status + " = " + chartData[status]
             wSocket.broadcast {chart: [chartData]}

@@ -10,7 +10,7 @@ updateTimeElapsed = function() {
     if ($(this).attr('createdon') !== void 0) {
       createdDate = new Date($callList.attr('createdDate'));
       unixTime = Math.round(createdDate.getTime / 1000);
-      return $callList.children.each(function() {
+      return $callList.children().each(function() {
         var difference, minutes, seconds;
         if ($(this).attr('title') === 'timeElapsed') {
           difference = currUnixTime - unixTime;

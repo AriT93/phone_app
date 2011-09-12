@@ -7,7 +7,7 @@ updateTimeElapsed = () ->
         if $(this).attr('createdon') != undefined
             createdDate = new Date $callList.attr('createdDate')
             unixTime = Math.round createdDate.getTime / 1000
-            $callList.children.each () ->
+            $callList.children().each () ->
                 if $(this).attr('title') == 'timeElapsed'
                     difference = currUnixTime - unixTime
                     seconds = difference % 60
