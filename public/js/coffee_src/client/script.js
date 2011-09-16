@@ -27,13 +27,13 @@ validPhoneNum = function(myNum) {
   return myNum;
 };
 formatNum = function(myNum) {
-  return '(' + myNum.substr(0, 3 + ')' + myNum.substr(3, 3 + '-' + myNum.substr(6, 4)));
+  return '(' + myNum.substr(0, 3) + ')' + myNum.substr(3, 3) + '-' + myNum.substr(6, 4);
 };
 buildCall = function(obj, callList) {
-  var b, createdOn, d, grid, img, img2, keys, lat, li, li2, li3, lng, ovdiv, state, ulcall;
+  var b, createdOn, d, d2, d3, fieldText, grid, img, img2, key, keys, lat, li, li2, li3, lng, ovdiv, state, ulcall, _i, _len;
   li = $('<li>');
   li2 = $('<li>');
-  li3 = $('<li');
+  li3 = $('<li>');
   li.addClass("ui-widget-content");
   lat = obj['latitude'];
   lng = obj['longitude'];
@@ -44,12 +44,12 @@ buildCall = function(obj, callList) {
   li.attr("state", state);
   li.attr("createdOn", createdOn);
   keys = ['name', 'tn', 'city', 'state', 'zip', 'createdOn'];
-  keys.each(function(i, key) {
-    var d, d2, d3, fieldText;
-    if (obj.hasOwnproperty(key)) {
-      d = $('<div');
-      d2 = $('<div');
-      d3 = $('<div');
+  for (_i = 0, _len = keys.length; _i < _len; _i++) {
+    key = keys[_i];
+    if (obj.hasOwnProperty(key)) {
+      d = $('<div>');
+      d2 = $('<div>');
+      d3 = $('<div>');
       d.addClass("grid_2");
       d2.addClass("grid_4");
       d3.addClass("grid_2");
@@ -76,9 +76,9 @@ buildCall = function(obj, callList) {
       li2.append(d2);
     }
     if (d3 !== void 0) {
-      return li3.append(d3);
+      li3.append(d3);
     }
-  });
+  }
   li.appendTo('#callList').hide().fadeIn("slow");
   ovdiv = $('<div id="' + obj.tn + '_ov">');
   ovdiv.addClass("simple_overlay");
@@ -98,7 +98,8 @@ buildCall = function(obj, callList) {
     d = $('<div>');
     d.addClass("grid_1");
     d.addClass("omega");
-    return b = $('<button rel="#' + obj.tn + '_ov" onclick=takeCall(' + obj.tn + ');>', b.overlay({
+    b = $('<button rel="#' + obj.tn + '_ov" onclick=takeCall(' + obj.tn + ');>');
+    b.overlay({
       onClose: function() {
         var s;
         s = {
@@ -109,7 +110,13 @@ buildCall = function(obj, callList) {
         socket.send(s);
         return $("#" + CallLive + "_ov").remove;
       }
-    }), img = $('<img class="phone_icon" src="/img/phone.png"/>'), d.append(b), b.append(img), li.addClass("call"), li.attr('id', obj.tn), li.append);
+    });
+    img = $('<img class="phone_icon" src="/img/phone.png"/>');
+    d.append(b);
+    b.append(img);
+    li.addClass("call");
+    li.attr('id', obj.tn);
+    return li.append(d);
   }
 };
 message = function(obj) {
@@ -119,7 +126,6 @@ message = function(obj) {
   if (__indexOf.call(obj, 'message') >= 0) {} else if (__indexOf.call(obj, 'announcement') >= 0) {
     return $('<p>').html(obj.announcement).appendTo("#messages");
   } else if ((obj.result != null) && page.match(/agent$/)) {
-    alert(JSON.stringify(obj));
     _ref = obj.result;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       i = _ref[_i];
@@ -147,7 +153,6 @@ message = function(obj) {
       return $('<p>').html(list).appendTo($("#calls"));
     }
   } else if (obj.call != null) {
-    alert(JSON.stringify(obj) + (obj.call != null));
     _ref3 = obj.call;
     _results = [];
     for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {

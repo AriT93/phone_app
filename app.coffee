@@ -25,22 +25,27 @@ wSocket.on 'connection', (client)->
     client.on 'message', (data)->
         if buffer.length > 5
             buffer.shift()
-        p = JSON.parse data
+        console.log data
+        p = data
+        #p = JSON.parse data
+        console.log " this is p: " + p
         if p['callAction']?
             c = Call.find {'tn': p.callAction.tn}, (err,docs)->
                 for d in docs
                     if d.status != "new"
-                        client.send {announcement: "all ready being called"}
+                        client.send {announcement: "allready being called"}
                     else
                         d.status = "calling"
                         d.save()
             wSocket.broadcast {call: [p]}
-        else if p["callDelete"]?
+        else if p['callDelete']?
+            console.log p
             c = Call.find {'tn': p.callDelete.tn}, (err,docs) ->
                 for d in docs
                     d.status = "called"
                     d.save()
         else
+            p = JSON.parse data
             c = new Call()
             c.name = p.name
             c.age = p.age

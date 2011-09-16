@@ -20,13 +20,13 @@ validPhoneNum = (myNum) ->
     return myNum
 
 formatNum = (myNum) ->
-    return '(' + myNum.substr 0, 3 + ')' + myNum.substr 3,3 + '-' + myNum.substr 6,4
+    return '(' + myNum.substr(0, 3) + ')' + myNum.substr(3,3) + '-' + myNum.substr(6,4)
 
 
 buildCall = (obj,callList) ->
     li = $('<li>')
     li2 = $('<li>')
-    li3 = $('<li')
+    li3 = $('<li>')
     li.addClass "ui-widget-content"
     lat = obj['latitude']
     lng = obj['longitude']
@@ -37,11 +37,11 @@ buildCall = (obj,callList) ->
     li.attr "state", state
     li.attr "createdOn", createdOn
     keys = ['name', 'tn', 'city', 'state', 'zip', 'createdOn']
-    keys.each (i,key) ->
-        if obj.hasOwnproperty key
-            d = $('<div')
-            d2 = $('<div')
-            d3 = $('<div')
+    for key in keys
+        if obj.hasOwnProperty key
+            d = $('<div>')
+            d2 = $('<div>')
+            d3 = $('<div>')
             d.addClass "grid_2"
             d2.addClass "grid_4"
             d3.addClass "grid_2"
@@ -65,7 +65,6 @@ buildCall = (obj,callList) ->
             li2.append d2
         if d3 != undefined
             li3.append d3
-
     li.appendTo('#callList').hide().fadeIn("slow")
     ovdiv = $('<div id="' + obj.tn + '_ov">')
     ovdiv.addClass "simple_overlay"
@@ -85,19 +84,18 @@ buildCall = (obj,callList) ->
         d = $('<div>')
         d.addClass "grid_1"
         d.addClass "omega"
-        b = $('<button rel="#'+ obj.tn + '_ov" onclick=takeCall(' + obj.tn + ');>'
+        b = $('<button rel="#'+ obj.tn + '_ov" onclick=takeCall(' + obj.tn + ');>')
         b.overlay {
             onClose: () ->
                 s = {callDelete:{tn: CallLive}}
                 socket.send s
-                $("##{CallLive}_ov").remove}
+                $("#" + CallLive + "_ov").remove}
         img = $('<img class="phone_icon" src="/img/phone.png"/>')
         d.append b
         b.append img
         li.addClass "call"
         li.attr 'id', obj.tn
         li.append d
-
 
 message = (obj) ->
     page = window.location.href
@@ -106,7 +104,6 @@ message = (obj) ->
     else if 'announcement' in obj
         $('<p>').html(obj.announcement).appendTo "#messages"
     else if obj.result? && page.match(/agent$/)
-        alert(JSON.stringify(obj))
         for i in obj.result
             if i != undefined
                 Call = JSON.parse(i)
@@ -123,7 +120,6 @@ message = (obj) ->
         if list != ""
             $('<p>').html(list).appendTo $("#calls")
     else if obj.call?
-        alert(JSON.stringify(obj) + obj.call?)
         for call in obj.call
             p = call
             if call != undefined
