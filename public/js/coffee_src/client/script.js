@@ -120,7 +120,7 @@ buildCall = function(obj, callList) {
   }
 };
 message = function(obj) {
-  var Call, ab, call, count, data, dataItem, i, item, list, p, page, s, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _m, _n, _ref, _ref2, _ref3, _ref4, _ref5, _results, _results2;
+  var Call, ab, call, count, dataItem, i, item, list, p, page, s, status, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _m, _n, _ref, _ref2, _ref3, _ref4, _ref5, _results, _results2;
   page = window.location.href;
   list = '';
   if (__indexOf.call(obj, 'message') >= 0) {} else if (__indexOf.call(obj, 'announcement') >= 0) {
@@ -174,38 +174,36 @@ message = function(obj) {
       }) : void 0);
     }
     return _results2;
-  } else if ((obj.chart != null) && page.match(/charts&/)) {
+  } else if ((obj.chart != null) && page.match(/charts$/)) {
     _ref5 = obj.chart;
     for (_m = 0, _len5 = _ref5.length; _m < _len5; _m++) {
       s = _ref5[_m];
       dataItem = s;
-      status(["new", "calling", "called", "abandoned"]);
+      status = ["new", "calling", "called", "abandoned"];
       for (_n = 0, _len6 = status.length; _n < _len6; _n++) {
         item = status[_n];
-        data = item;
         count = 0;
-        if (dataItem[data] !== void 0) {
-          count = dataItem[data];
+        if (dataItem[item] !== void 0) {
+          count = dataItem[item];
         }
-        $("#status." + data).val(count);
+        $("#status\\." + item).val(count);
       }
     }
-    return drawChart;
+    return drawChart();
   }
 };
 drawChart = function() {
-  var chart, count, data, item, s, status, x, _i, _len;
+  var chart, count, data, item, status, x, _i, _len;
   status = ["new", "calling", "called", "abandoned"];
-  data = new google.visualization.DataTablle;
+  data = new google.visualization.DataTable();
   data.addColumn('string', 'Status');
   data.addColumn('number', 'Count');
   data.addRows(status.length);
   x = 0;
   for (_i = 0, _len = status.length; _i < _len; _i++) {
     item = status[_i];
-    s = item;
-    data.setValue(x, 0, s);
-    count = $("#status." + s).val;
+    data.setValue(x, 0, item);
+    count = $('#status\\.' + item).val();
     if (count === void 0) {
       count = 0;
     }
@@ -213,23 +211,24 @@ drawChart = function() {
     data.setValue(x, 1, count);
     x++;
   }
-  if ($("#piechart").length) {
+  if ($('#piechart').length) {
     chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    return chart.draw(data, {
-      is3D: true,
-      width: 720,
-      height: 400,
-      title: 'Call Status'
-    });
   }
+  chart.draw(data, {
+    is3D: true,
+    width: 720,
+    height: 400,
+    title: 'Call Status'
+  });
+  return true;
 };
 limitCalls = function() {
   var agentLatLng, agentState, distance;
   agentLatLng = new google.maps.LatLng;
-  $('#latitude').val;
-  $('#longitude').val;
-  distance = $("#distance").val;
-  agentState = $('#state').val;
+  $('#latitude').val();
+  $('#longitude').val();
+  distance = $("#distance").val();
+  agentState = $('#state').val();
   return $('li').each(function(index, element) {
     var custLatLng, custState, latitude, longitude;
     latitude = $(this).attr("lat");
@@ -247,11 +246,11 @@ limitCalls = function() {
 };
 updateLocation = function() {
   var zip;
-  zip = $("#zip").val;
-  $("#latitude").val("");
-  $("#longitude").val("");
-  $("#city").val("");
-  $("#state").val("");
+  zip = $('#zip').val();
+  $('#latitude').val("");
+  $('#longitude').val("");
+  $('#city').val("");
+  $('#state').val("");
   if (zip.length >= 5) {
     return lookupLocation(zip, function(loc) {
       var city, lat, lng, state;
@@ -267,12 +266,12 @@ updateLocation = function() {
           return state = v.short_name;
         }
       });
-      lat = loc.geometry.location.lat;
-      lng = loc.geometry.longitude.lng;
-      $("#latitude").val(lat);
-      $("#longitude").val(lng);
-      $("#city").val(city);
-      $("#state").val(state);
+      lat = loc.geometry.location.lat();
+      lng = loc.geometry.location.lng();
+      $('#latitude').val(lat);
+      $('#longitude').val(lng);
+      $('#city').val(city);
+      $('#state').val(state);
       return limitCalls;
     });
   }
@@ -289,11 +288,11 @@ takeCall = function(tn) {
 };
 updatePosition = function(position) {
   var latlng;
-  $("#zip").val("");
-  $("#latitude").val("");
-  $("#longitude").val("");
-  $("#city").val("");
-  $("#state").val("");
+  $('#zip').val("");
+  $('#latitude').val("");
+  $('#longitude').val("");
+  $('#city').val("");
+  $('#state').val("");
   latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
   if (latlng !== null) {
     return lookupPosition(latlng, function(loc) {
@@ -316,11 +315,11 @@ updatePosition = function(position) {
       });
       lat = loc.geometry.location.lat;
       lng = loc.geometry.location.lng;
-      $("#latitude").val(lat());
-      $("#longitude").val(lng());
-      $("#city").val(city);
-      $("#state").val(state);
-      $("#zip").val(zip);
+      $('#latitude').val(lat());
+      $('#longitude').val(lng());
+      $('#city').val(city);
+      $('#state').val(state);
+      $('#zip').val(zip);
       return limitCalls;
     });
   }
@@ -355,7 +354,7 @@ $(document).ready(function() {
       }
     }
   });
-  $("button[rel]").overlay({
+  $('button[rel]').overlay({
     onClose: function() {
       var s;
       s = {
@@ -364,21 +363,21 @@ $(document).ready(function() {
         }
       };
       socket.send(s);
-      return $("#" + CallLive + "_ov").remove;
+      return $('#' + CallLive + '_ov').remove;
     }
   });
-  $("#call").submit(function(e) {
+  $('#call').submit(function(e) {
     var Call;
     if ($("#name").val) {
       Call = {};
-      Call.name = $("#name").val();
-      Call.tn = $("#tn").val();
-      Call.age = $("#age").val();
-      Call.city = $("#city").val();
-      Call.state = $("#state").val();
-      Call.zip = $("#zip").val();
-      Call.latitude = $("#latitude").val();
-      Call.longitude = $("#longitude").val();
+      Call.name = $('#name').val();
+      Call.tn = $('#tn').val();
+      Call.age = $('#age').val();
+      Call.city = $('#city').val();
+      Call.state = $('#state').val();
+      Call.zip = $('#zip').val();
+      Call.latitude = $('#latitude').val();
+      Call.longitude = $('#longitude').val();
       Call.tn = Call.tn.replace(/\D/g, '');
       Call.zip = Call.zip.replace(/\D/g, '');
       socket.send(JSON.stringify(Call));
@@ -391,12 +390,12 @@ $(document).ready(function() {
     $(':input', '#call').not(':button, :reset, :submit, :hidden'.val(''));
     return false;
   });
-  $("#zip").keyup(updateLocation);
-  $("#zip").change(updateLocation);
-  $("#distance").keyup(limitCalls);
-  $("#distance").change(limitCalls);
-  $("#agentPhone").change(updateButton);
-  $("#agentPhone").keyup(updateButton);
+  $('#zip').keyup(updateLocation);
+  $('#zip').change(updateLocation);
+  $('#distance').keyup(limitCalls());
+  $('#distance').change(limitCalls());
+  $('#agentPhone').change(updateButton());
+  $('#agentPhone').keyup(updateButton());
   updateButton();
   updateTimeElapsed();
   return navigator.geolocation.getCurrentPosition(updatePosition);

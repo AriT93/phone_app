@@ -105,7 +105,7 @@ setTimeout(handleOld,millisForUpdates)
 updateChart = (status)->
     c = Call.count { 'status': status},
     (err,count) ->
-        if count isnt  chartData[status]
+        if count isnt chartData[status]
             chartData[status] = count
             console.log  status + " = " + chartData[status]
             wSocket.broadcast {chart: [chartData]}

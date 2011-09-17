@@ -15,4 +15,4 @@ updateTimeElapsed = () ->
                         seconds = '0' + seconds
                     difference -= seconds
                     minutes = difference/60
-                    $(this).html minutes + ':' + seconds
+                    $(this).html(minutes + ':' + seconds)

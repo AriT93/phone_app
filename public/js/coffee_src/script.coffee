@@ -129,46 +129,45 @@ message = (obj) ->
             ab = call
             if call != undefined
                 $("#"+ab.callAction.tn).fadeOut "slow", -> $(this).remove
-    else if obj.chart? && page.match(/charts&/)
+    else if obj.chart? && page.match(/charts$/)
         for s in obj.chart
             dataItem = s
-            status ["new", "calling", "called", "abandoned"]
+            status = ["new", "calling", "called", "abandoned"]
             for item in status
-                data = item
                 count = 0
-                if dataItem[data] != undefined
-                    count = dataItem[data]
-                $("#status.#{data}").val(count)
-        drawChart
+                if dataItem[item] != undefined
+                    count = dataItem[item]
+                $("#status\\." + item).val(count)
+        drawChart()
 
 
 drawChart = () ->
     status = ["new", "calling", "called", "abandoned"]
-    data = new google.visualization.DataTablle
-    data.addColumn 'string', 'Status'
-    data.addColumn 'number', 'Count'
-    data.addRows status.length
+    data = new google.visualization.DataTable()
+    data.addColumn( 'string', 'Status')
+    data.addColumn( 'number', 'Count')
+    data.addRows(status.length)
     x = 0
     for item in status
-        s = item
-        data.setValue x, 0, s
-        count = $("#status.#{s}").val
-        if count == undefined
+        data.setValue x, 0, item
+        count = $('#status\\.' + item).val()
+        if count is undefined
             count = 0
-        count = parseInt count
-        data.setValue x, 1, count
+        count = parseInt(count)
+        data.setValue(x, 1, count)
         x++
-    if $("#piechart").length
-        chart = new google.visualization.PieChart document.getElementById('piechart')
-        chart.draw data, {is3D: true, width: 720, height: 400, title: 'Call Status'}
+    if $('#piechart').length
+        chart = new google.visualization.PieChart(document.getElementById('piechart'))
+    chart.draw( data, {is3D: true, width: 720, height: 400, title: 'Call Status'})
+    true
 
 
 limitCalls = () ->
     agentLatLng = new google.maps.LatLng
-    $('#latitude').val
-    $('#longitude').val
-    distance = $("#distance").val
-    agentState = $('#state').val
+    $('#latitude').val()
+    $('#longitude').val()
+    distance = $("#distance").val()
+    agentState = $('#state').val()
 
     $('li').each (index, element) ->
         latitude = $(this).attr "lat"
@@ -184,12 +183,11 @@ limitCalls = () ->
 
 
 updateLocation = ->
-    zip = $("#zip").val
-    $("#latitude").val ""
-    $("#longitude").val ""
-    $("#city").val ""
-    $("#state").val ""
-
+    zip = $('#zip').val()
+    $('#latitude').val("")
+    $('#longitude').val("")
+    $('#city').val("")
+    $('#state').val("")
     if zip.length >= 5
         lookupLocation zip, (loc) ->
             city = ""
@@ -201,12 +199,12 @@ updateLocation = ->
                     city = v.short_name
                 if $.inArray("administrative_area_level_1", v.types) > -1
                     state = v.short_name
-            lat = loc.geometry.location.lat
-            lng = loc.geometry.longitude.lng
-            $("#latitude").val lat
-            $("#longitude").val lng
-            $("#city").val city
-            $("#state").val state
+            lat = loc.geometry.location.lat()
+            lng = loc.geometry.location.lng()
+            $('#latitude').val(lat)
+            $('#longitude').val(lng)
+            $('#city').val(city)
+            $('#state').val(state)
             limitCalls
 
 takeCall = (tn) ->
@@ -216,11 +214,11 @@ takeCall = (tn) ->
 
 
 updatePosition = (position) ->
-    $("#zip").val ""
-    $("#latitude").val ""
-    $("#longitude").val ""
-    $("#city").val ""
-    $("#state").val ""
+    $('#zip').val("")
+    $('#latitude').val("")
+    $('#longitude').val("")
+    $('#city').val("")
+    $('#state').val("")
     latlng = new google.maps.LatLng  position.coords.latitude,  position.coords.longitude
     if latlng != null
         lookupPosition latlng, (loc)->
@@ -239,11 +237,11 @@ updatePosition = (position) ->
 
             lat = loc.geometry.location.lat
             lng = loc.geometry.location.lng
-            $("#latitude").val lat()
-            $("#longitude").val lng()
-            $("#city").val city
-            $("#state").val state
-            $("#zip").val zip
+            $('#latitude').val lat()
+            $('#longitude').val lng()
+            $('#city').val city
+            $('#state').val state
+            $('#zip').val zip
             limitCalls
 
 updateButton = ->
@@ -265,23 +263,23 @@ $(document).ready ->
             else
                 message obj
 
-    $("button[rel]").overlay {
+    $('button[rel]').overlay {
         onClose: ->
             s = {callDelete: {tn: CallLive}}
             socket.send s
-            $("##{CallLive}_ov").remove}
+            $('#' + CallLive + '_ov').remove}
 
-    $("#call").submit (e) ->
+    $('#call').submit (e) ->
         if $("#name").val
             Call = {}
-            Call.name      = $("#name").val();
-            Call.tn        = $("#tn").val();
-            Call.age       = $("#age").val();
-            Call.city      = $("#city").val();
-            Call.state     = $("#state").val();
-            Call.zip       = $("#zip").val();
-            Call.latitude  = $("#latitude").val();
-            Call.longitude = $("#longitude").val();
+            Call.name      = $('#name').val();
+            Call.tn        = $('#tn').val();
+            Call.age       = $('#age').val();
+            Call.city      = $('#city').val();
+            Call.state     = $('#state').val();
+            Call.zip       = $('#zip').val();
+            Call.latitude  = $('#latitude').val();
+            Call.longitude = $('#longitude').val();
             Call.tn        = Call.tn.replace(/\D/g, '');
             Call.zip        = Call.zip.replace(/\D/g, '');
             socket.send JSON.stringify Call
@@ -293,14 +291,14 @@ $(document).ready ->
             .val ''
             return false
 
-    $("#zip").keyup(updateLocation);
-    $("#zip").change(updateLocation);
+    $('#zip').keyup(updateLocation);
+    $('#zip').change(updateLocation);
 
-    $("#distance").keyup(limitCalls);
-    $("#distance").change(limitCalls);
+    $('#distance').keyup(limitCalls());
+    $('#distance').change(limitCalls());
 
-    $("#agentPhone").change(updateButton);
-    $("#agentPhone").keyup(updateButton);
+    $('#agentPhone').change(updateButton());
+    $('#agentPhone').keyup(updateButton());
 
     updateButton();
     # keeps time elapsed updating.
