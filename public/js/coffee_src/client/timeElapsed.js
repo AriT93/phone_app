@@ -13,7 +13,9 @@ updateTimeElapsed = function() {
       return $(this).children().each(function() {
         var difference, minutes, seconds;
         if ($(this).attr('title') === 'timeElapsed') {
+          alert($(this).attr('title'));
           difference = currUnixTime - unixTime;
+          alert(difference);
           seconds = difference % 60;
           if (seconds < 10) {
             seconds = '0' + seconds;

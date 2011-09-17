@@ -3,7 +3,7 @@ toRad = (degrees) ->
 
 google.maps.LatLng.prototype.distanceTo = () ->
     radius = 6371
-    dLat = toRad this.lat - ltlng.lat
+    dLat = toRad this.lat - latlng.lat
     dLon = toRad this.lng - latlng.lng
     lat1 = toRad this.loat
     lat2 = toRad latlng.lat
@@ -12,7 +12,7 @@ google.maps.LatLng.prototype.distanceTo = () ->
     return radius * c * 0.921371192
 
 google.maps.LatLng.prototype.within = (latlng, radius) ->
-    return this.distanctTo(latlng) <= radius
+    return this.distanceTo(latlng) <= radius
 
 lookupLocation = (zip, fn) ->
     geocoder = new google.maps.Geocoder

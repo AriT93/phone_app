@@ -5,7 +5,7 @@ toRad = function(degrees) {
 google.maps.LatLng.prototype.distanceTo = function() {
   var a, c, dLat, dLon, lat1, lat2, radius;
   radius = 6371;
-  dLat = toRad(this.lat - ltlng.lat);
+  dLat = toRad(this.lat - latlng.lat);
   dLon = toRad(this.lng - latlng.lng);
   lat1 = toRad(this.loat);
   lat2 = toRad(latlng.lat);
@@ -14,7 +14,7 @@ google.maps.LatLng.prototype.distanceTo = function() {
   return radius * c * 0.921371192;
 };
 google.maps.LatLng.prototype.within = function(latlng, radius) {
-  return this.distanctTo(latlng) <= radius;
+  return this.distanceTo(latlng) <= radius;
 };
 lookupLocation = function(zip, fn) {
   var geocoder;
