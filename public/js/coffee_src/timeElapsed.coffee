@@ -1,13 +1,13 @@
 updateTimeElapsed = () ->
-    setTimeout("updateTimeElapsed()", 10000)
+    setTimeout("updateTimeElapsed();", 10000)
     todaysDate = new Date
-    currUnixTime = Math.round todaysDate.getTime() /1000
+    currUnixTime = Math.round(todaysDate.getTime() /1000)
     $callList = $('#callList')
     $callList.children().each () ->
-        if $(this).attr('createdon') != undefined
-            createdDate = new Date $callList.attr('createdDate')
-            unixTime = Math.round createdDate.getTime / 1000
-            $callList.children().each () ->
+        if $(this).attr('createdOn') != undefined
+            createdDate = new Date($(this).attr('createdOn'))
+            unixTime = Math.round(createdDate.getTime() / 1000)
+            $(this).children().each () ->
                 if $(this).attr('title') == 'timeElapsed'
                     difference = currUnixTime - unixTime
                     seconds = difference % 60
