@@ -8,7 +8,7 @@ updateTimeElapsed = function() {
   return $callList.children().each(function() {
     var createdDate, unixTime;
     if ($(this).attr('createdOn') !== void 0) {
-      createdDate = new Date(Date($(this).attr('createdOn')));
+      createdDate = new Date($(this).attr('createdOn'));
       unixTime = Math.round(createdDate.getTime() / 1000);
       return $(this).children().each(function() {
         var difference, minutes, seconds;

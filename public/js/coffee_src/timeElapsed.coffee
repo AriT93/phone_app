@@ -5,7 +5,7 @@ updateTimeElapsed = () ->
     $callList = $('#callList')
     $callList.children().each () ->
         if $(this).attr('createdOn') != undefined
-            createdDate = new Date(Date($(this).attr('createdOn')))
+            createdDate = new Date($(this).attr('createdOn'))
             unixTime = Math.round(createdDate.getTime() / 1000)
             $(this).children().each () ->
                 if $(this).attr('title') == 'timeElapsed'
