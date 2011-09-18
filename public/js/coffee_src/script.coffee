@@ -108,7 +108,7 @@ message = (obj) ->
             if i != undefined
                 Call = JSON.parse(i)
                 buildCall(Call, true)
-                limitCalls
+                limitCalls()
         if list != ""
             $('<p>').html(list).appendTo $("#calls")
     else if obj.crc_call? && page.match(/crc$/)
@@ -163,22 +163,19 @@ drawChart = () ->
 
 
 limitCalls = () ->
-    agentLatLng = new google.maps.LatLng
-    $('#latitude').val()
-    $('#longitude').val()
-    distance = $("#distance").val()
+    agentLatLng = new google.maps.LatLng( $('#latitude').val(),    $('#longitude').val())
+    distance = $('#distance').val()
     agentState = $('#state').val()
-
     $('li').each (index, element) ->
-        latitude = $(this).attr "lat"
-        longitude = $(this).attr 'long'
-        custState = $(this).attr 'state'
+        latitude = $(this).attr('lat')
+        longitude = $(this).attr('long')
+        custState = $(this).attr('state')
         if latitude && longitude && custState
-            custLatLng = new google.maps.LatLng  latitude, longitude
-            if custState == agentState && agentLatLng.within custLatLng, distance
-                $this.show()
+            custLatLng = new google.maps.LatLng(latitude, longitude)
+            if custState == agentState && agentLatLng.within( custLatLng, distance)
+                $(this).show()
             else
-                $this.hide
+                $(this).hide()
 
 
 
@@ -205,7 +202,7 @@ updateLocation = ->
             $('#longitude').val(lng)
             $('#city').val(city)
             $('#state').val(state)
-            limitCalls
+            limitCalls()
 
 takeCall = (tn) ->
     s = {callAction: {tn: tn}}
@@ -219,7 +216,7 @@ updatePosition = (position) ->
     $('#longitude').val("")
     $('#city').val("")
     $('#state').val("")
-    latlng = new google.maps.LatLng  position.coords.latitude,  position.coords.longitude
+    latlng = new google.maps.LatLng position.coords.latitude,  position.coords.longitude
     if latlng != null
         lookupPosition latlng, (loc)->
             city = ""
@@ -234,15 +231,14 @@ updatePosition = (position) ->
                     state = v.short_name
                 if $.inArray("postal_code", v.types) > -1
                     zip = v.short_name
-
-            lat = loc.geometry.location.lat
-            lng = loc.geometry.location.lng
-            $('#latitude').val lat()
-            $('#longitude').val lng()
-            $('#city').val city
-            $('#state').val state
-            $('#zip').val zip
-            limitCalls
+            lat = loc.geometry.location.lat()
+            lng = loc.geometry.location.lng()
+            $('#latitude').val(lat)
+            $('#longitude').val(lng)
+            $('#city').val(city)
+            $('#state').val(state)
+            $('#zip').val(zip)
+            limitCalls()
 
 updateButton = ->
     agentPhone = $("#agentPhone").val
@@ -251,8 +247,7 @@ updateButton = ->
 
 
 $(document).ready ->
-    navigator.geolocation.getCurrentPosition updatePosition
-    socket = new io.Socket null, {port: "8910", rememberTransport: "false", transports:["websocket","flashsocket","xhr-multipart"]}
+    socket = new io.Socket null, {port: "8910", rememberTransport: "false", transports:["websocket","xhr-multipart","flashsocket"]}
     socket.connect()
     socket.on 'message', (obj) ->
         if obj != undefined
@@ -270,7 +265,7 @@ $(document).ready ->
             $('#' + CallLive + '_ov').remove}
 
     $('#call').submit (e) ->
-        if $("#name").val
+        if $("#name").val()
             Call = {}
             Call.name      = $('#name').val();
             Call.tn        = $('#tn').val();
@@ -291,17 +286,17 @@ $(document).ready ->
             .val ''
             return false
 
-    $('#zip').keyup(updateLocation);
-    $('#zip').change(updateLocation);
+    $('#zip').keyup(updateLocation)
+    $('#zip').change(updateLocation)
 
-    $('#distance').keyup(limitCalls());
-    $('#distance').change(limitCalls());
+    $('#distance').keyup(limitCalls)
+    $('#distance').change(limitCalls)
 
-    $('#agentPhone').change(updateButton());
-    $('#agentPhone').keyup(updateButton());
+    $('#agentPhone').change(updateButton)
+    $('#agentPhone').keyup(updateButton)
 
-    updateButton();
+    updateButton()
     # keeps time elapsed updating.
-    updateTimeElapsed();
+    updateTimeElapsed()
 
-    navigator.geolocation.getCurrentPosition updatePosition
+    navigator.geolocation.getCurrentPosition(updatePosition)

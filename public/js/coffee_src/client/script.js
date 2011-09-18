@@ -132,7 +132,7 @@ message = function(obj) {
       if (i !== void 0) {
         Call = JSON.parse(i);
         buildCall(Call, true);
-        limitCalls;
+        limitCalls();
       }
     }
     if (list !== "") {
@@ -224,22 +224,20 @@ drawChart = function() {
 };
 limitCalls = function() {
   var agentLatLng, agentState, distance;
-  agentLatLng = new google.maps.LatLng;
-  $('#latitude').val();
-  $('#longitude').val();
-  distance = $("#distance").val();
+  agentLatLng = new google.maps.LatLng($('#latitude').val(), $('#longitude').val());
+  distance = $('#distance').val();
   agentState = $('#state').val();
   return $('li').each(function(index, element) {
     var custLatLng, custState, latitude, longitude;
-    latitude = $(this).attr("lat");
+    latitude = $(this).attr('lat');
     longitude = $(this).attr('long');
     custState = $(this).attr('state');
     if (latitude && longitude && custState) {
       custLatLng = new google.maps.LatLng(latitude, longitude);
       if (custState === agentState && agentLatLng.within(custLatLng, distance)) {
-        return $this.show();
+        return $(this).show();
       } else {
-        return $this.hide;
+        return $(this).hide();
       }
     }
   });
@@ -272,7 +270,7 @@ updateLocation = function() {
       $('#longitude').val(lng);
       $('#city').val(city);
       $('#state').val(state);
-      return limitCalls;
+      return limitCalls();
     });
   }
 };
@@ -313,14 +311,14 @@ updatePosition = function(position) {
           return zip = v.short_name;
         }
       });
-      lat = loc.geometry.location.lat;
-      lng = loc.geometry.location.lng;
-      $('#latitude').val(lat());
-      $('#longitude').val(lng());
+      lat = loc.geometry.location.lat();
+      lng = loc.geometry.location.lng();
+      $('#latitude').val(lat);
+      $('#longitude').val(lng);
       $('#city').val(city);
       $('#state').val(state);
       $('#zip').val(zip);
-      return limitCalls;
+      return limitCalls();
     });
   }
 };
@@ -331,11 +329,10 @@ updateButton = function() {
   return $('button').attr('disabled', disable);
 };
 $(document).ready(function() {
-  navigator.geolocation.getCurrentPosition(updatePosition);
   socket = new io.Socket(null, {
     port: "8910",
     rememberTransport: "false",
-    transports: ["websocket", "flashsocket", "xhr-multipart"]
+    transports: ["websocket", "xhr-multipart", "flashsocket"]
   });
   socket.connect();
   socket.on('message', function(obj) {
@@ -368,7 +365,7 @@ $(document).ready(function() {
   });
   $('#call').submit(function(e) {
     var Call;
-    if ($("#name").val) {
+    if ($("#name").val()) {
       Call = {};
       Call.name = $('#name').val();
       Call.tn = $('#tn').val();
@@ -392,10 +389,10 @@ $(document).ready(function() {
   });
   $('#zip').keyup(updateLocation);
   $('#zip').change(updateLocation);
-  $('#distance').keyup(limitCalls());
-  $('#distance').change(limitCalls());
-  $('#agentPhone').change(updateButton());
-  $('#agentPhone').keyup(updateButton());
+  $('#distance').keyup(limitCalls);
+  $('#distance').change(limitCalls);
+  $('#agentPhone').change(updateButton);
+  $('#agentPhone').keyup(updateButton);
   updateButton();
   updateTimeElapsed();
   return navigator.geolocation.getCurrentPosition(updatePosition);

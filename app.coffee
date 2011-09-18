@@ -64,8 +64,8 @@ wSocket.on 'connection', (client)->
             console.log "saved"
 
 millisForUpdates = (1000 * 10)
-millisUntilAllFlag = (1000 * 55)
-millisUntilAbandon = (1000 * 75)
+millisUntilAllFlag = (1000 * 555)
+millisUntilAbandon = (1000 * 1075)
 chartData = {}
 
 console.log "update: " + millisForUpdates + " allflag: " + millisUntilAllFlag + " abandon: " + millisUntilAbandon
