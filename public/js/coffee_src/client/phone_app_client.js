@@ -1,152 +1,5 @@
 (function() {
-  var CallLive, acceptCall, addClient, afterPopulate, autoAgent, autoPopulate, buildCall, currentOne, drawChart, formatNum, lasOne, limitCalls, lookupLocation, lookupPosition, message, populateFields, socket, takeCall, toRad, updateButton, updateLocation, updatePosition, updateTimeElapsed, validPhoneNum;
-  var __indexOf = Array.prototype.indexOf || function(item) {
-    for (var i = 0, l = this.length; i < l; i++) {
-      if (this[i] === item) return i;
-    }
-    return -1;
-  };
-  toRad = function(degrees) {
-    return Math.PI * (degrees / 180);
-  };
-  google.maps.LatLng.prototype.distanceTo = function(latlng) {
-    var a, c, dLat, dLon, lat1, lat2, radius;
-    radius = 6371;
-    dLat = toRad(this.lat() - latlng.lat());
-    dLon = toRad(this.lng() - latlng.lng());
-    lat1 = toRad(this.lat());
-    lat2 = toRad(latlng.lat());
-    a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return radius * c * 0.921371192;
-  };
-  google.maps.LatLng.prototype.within = function(latlng, radius) {
-    return this.distanceTo(latlng) <= radius;
-  };
-  lookupLocation = function(zip, fn) {
-    var geocoder;
-    geocoder = new google.maps.Geocoder;
-    return geocoder.geocode({
-      "address": "" + zip
-    }, function(results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
-        return fn(results[0]);
-      }
-    });
-  };
-  lookupPosition = function(latlng, fn) {
-    var geocoder;
-    geocoder = new google.maps.Geocoder;
-    return geocoder.geocode({
-      "location": latlng
-    }, function(results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
-        return fn(results[0]);
-      }
-    });
-  };
-  updateTimeElapsed = function() {
-    var $callList, currUnixTime, todaysDate;
-    setTimeout(updateTimeElapsed, 10000);
-    todaysDate = new Date();
-    currUnixTime = Math.round(todaysDate.getTime() / 1000);
-    $callList = $('#callList');
-    return $callList.children().each(function() {
-      var createdDate, unixTime;
-      if ($(this).attr('createdOn') !== void 0) {
-        createdDate = new Date($(this).attr('createdOn'));
-        unixTime = Math.round(createdDate.getTime() / 1000);
-        return $(this).children().each(function() {
-          var difference, minutes, seconds;
-          if ($(this).attr('title') === 'timeElapsed') {
-            difference = currUnixTime - unixTime;
-            seconds = difference % 60;
-            if (seconds < 10) {
-              seconds = '0' + seconds;
-            }
-            difference -= seconds;
-            minutes = difference / 60;
-            return $(this).html(minutes + ':' + seconds);
-          }
-        });
-      }
-    });
-  };
-  autoAgent = function(zip) {
-    $('zip').val(zip);
-    updateLocation();
-    return setTimeout("acceptCall()", 100);
-  };
-  acceptCall = function() {
-    var $b, potatoes, _i, _len, _ref, _results;
-    setTimeout("acceptCall()", 4000);
-    potatoes = $('#callList').children;
-    if (!potatoes.length) {
-      return;
-    }
-    _ref = $('button');
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      $b = _ref[_i];
-      if ($b.is(":visible")) {
-        $b.click();
-        $b.attr('rel').each(function() {
-          return this.click();
-        });
-        break;
-      }
-    }
-    return _results;
-  };
-  currentOne = -1;
-  lasOne = -1;
-  autoPopulate = function() {
-    return addClient(0);
-  };
-  addClient = function(index) {
-    currentOne = index;
-    return $.each(['name', 'tn', 'age', 'zip'], function(index, data) {
-      $('#' + data).val('');
-      return populateFields(fakeData[index][0], fakeData[index][2], fakeData[index][3], fakeData[index][2]);
-    });
-  };
-  afterPopulate = function() {
-    if (lastOne + 1 < fakeData.length) {
-      return setTimeout(addClient(lastOne + 1, 1000));
-    }
-  };
-  populateFields = function(name, tn, age, zip, index) {
-    var addLet, didNothing, lastOne;
-    didNothing = 0;
-    if (name.length > 0) {
-      addLet = name.substr(0, 1);
-      name = name.substr(1);
-      $('#name').val($('#name').val() + addLet);
-    } else if (tn.length > 0) {
-      addLet = tn.substr(0, 1);
-      tn = tn.substr(1);
-      $('#tn').val($('#tn').val() + addLet);
-    } else if (age.length > 0) {
-      addLet = age.substr(0, 1);
-      age = age.substr(1);
-      $('#age').val($('#age').val() + addLet);
-    } else if (zip.length > 0) {
-      addLet = zip.substr(0, 1);
-      zip = zip.substr(1);
-      $('#zip').val($('#zip').val() + addLet);
-    } else {
-      didNothing = 1;
-    }
-    if (didNothing > 0) {
-      updateLocation();
-      setTimeout('$(#call").submit();', 200);
-      lastOne = currentOne;
-      currentOne = -1;
-      return setTimeout('afterPopulate();', 201);
-    } else {
-      return setTimeout("populateFields('" + name(+"','" + tn + "', '" + age(+"','" + zip(+"' );"))));
-    }
-  };
+  var CallLive, buildCall, drawChart, formatNum, limitCalls, lookupLocation, lookupPosition, message, socket, takeCall, toRad, typeAndContent, updateButton, updateLocation, updatePosition, updateTimeElapsed, validPhoneNum;
   socket = "";
   CallLive = "";
   validPhoneNum = function(myNum) {
@@ -261,77 +114,74 @@
       return li.append(d);
     }
   };
-  message = function(obj) {
-    var Call, ab, call, count, dataItem, i, item, list, p, page, s, status, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _m, _n, _ref, _ref2, _ref3, _ref4, _ref5, _results, _results2;
+  typeAndContent = function(message) {
+    var content, ignore, type, _ref;
+    _ref = message.match(/(.*?):(.*)/), ignore = _ref[0], type = _ref[1], content = _ref[2];
+    return {
+      type: type,
+      content: content
+    };
+  };
+  message = function(message) {
+    var Call, ab, content, count, dataItem, item, list, p, page, s, status, type, _i, _j, _len, _len2, _ref;
     page = window.location.href;
     list = '';
-    if (__indexOf.call(obj, 'message') >= 0) {} else if (__indexOf.call(obj, 'announcement') >= 0) {
-      return $('<p>').html(obj.announcement).appendTo("#messages");
-    } else if ((obj.result != null) && page.match(/agent$/)) {
-      _ref = obj.result;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        i = _ref[_i];
-        if (i !== void 0) {
-          Call = JSON.parse(i);
+    _ref = typeAndContent(message), type = _ref.type, content = _ref.content;
+    switch (type) {
+      case 'result':
+        if (page.match(/agent$/)) {
+          Call = JSON.parse(content);
           buildCall(Call, true);
           limitCalls();
+          if (list !== "") {
+            return $('<p>').html(list).appendTo("#messages");
+          }
         }
-      }
-      if (list !== "") {
-        return $('<p>').html(list).appendTo($("#calls"));
-      }
-    } else if ((obj.crc_call != null) && page.match(/crc$/)) {
-      _ref2 = obj.crc_call;
-      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-        i = _ref2[_j];
-        if (i !== void 0) {
-          Call = i;
+        break;
+      case 'crc_call':
+        if (page.match(/crc$/)) {
+          Call = content;
           if (Call.status === 'new' & Call.allFlag === true) {
             buildCall(Call, true);
           }
-        }
-      }
-      if (list !== "") {
-        return $('<p>').html(list).appendTo($("#calls"));
-      }
-    } else if (obj.call != null) {
-      _ref3 = obj.call;
-      _results = [];
-      for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
-        call = _ref3[_k];
-        p = call;
-        _results.push(call !== void 0 ? $("#" + p.callAction.tn).fadeOut("slow", function() {
-          return $(this).remove;
-        }) : void 0);
-      }
-      return _results;
-    } else if (obj.ab_call != null) {
-      _ref4 = obj.ab_call;
-      _results2 = [];
-      for (_l = 0, _len4 = _ref4.length; _l < _len4; _l++) {
-        call = _ref4[_l];
-        ab = call;
-        _results2.push(call !== void 0 ? $("#" + ab.callAction.tn).fadeOut("slow", function() {
-          return $(this).remove;
-        }) : void 0);
-      }
-      return _results2;
-    } else if ((obj.chart != null) && page.match(/charts$/)) {
-      _ref5 = obj.chart;
-      for (_m = 0, _len5 = _ref5.length; _m < _len5; _m++) {
-        s = _ref5[_m];
-        dataItem = s;
-        status = ["new", "calling", "called", "abandoned"];
-        for (_n = 0, _len6 = status.length; _n < _len6; _n++) {
-          item = status[_n];
-          count = 0;
-          if (dataItem[item] !== void 0) {
-            count = dataItem[item];
+          if (list !== "") {
+            return $('<p>').html(list).appendTo($("#calls"));
           }
-          $("#status\\." + item).val(count);
         }
-      }
-      return drawChart();
+        break;
+      case 'call':
+        p = content;
+        if (call !== void 0) {
+          return $("#" + p.callAction.tn).fadeOut("slow", function() {
+            return $(this).remove;
+          });
+        }
+        break;
+      case 'ab_call':
+        ab = content;
+        if (call !== void 0) {
+          return $("#" + ab.callAction.tn).fadeOut("slow", function() {
+            return $(this).remove;
+          });
+        }
+        break;
+      case 'chart':
+        if (page.match(/charts$/)) {
+          for (_i = 0, _len = content.length; _i < _len; _i++) {
+            s = content[_i];
+            dataItem = s;
+            status = ["new", "calling", "called", "abandoned"];
+            for (_j = 0, _len2 = status.length; _j < _len2; _j++) {
+              item = status[_j];
+              count = 0;
+              if (dataItem[item] !== void 0) {
+                count = dataItem[item];
+              }
+              $("#status\\." + item).val(count);
+            }
+          }
+          return drawChart();
+        }
     }
   };
   drawChart = function() {
@@ -477,22 +327,7 @@
       transports: ["websocket", "xhr-multipart", "flashsocket"]
     });
     socket.connect();
-    socket.on('message', function(obj) {
-      var i, _i, _len, _ref, _results;
-      if (obj !== void 0) {
-        if (__indexOf.call(obj, 'buffer') >= 0) {
-          _ref = obj.buffer;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            i = _ref[_i];
-            _results.push(i !== void 0 ? message(i) : void 0);
-          }
-          return _results;
-        } else {
-          return message(obj);
-        }
-      }
-    });
+    socket.on('message', message);
     $('button[rel]').overlay({
       onClose: function() {
         var s;
@@ -539,4 +374,70 @@
     updateTimeElapsed();
     return navigator.geolocation.getCurrentPosition(updatePosition);
   });
+  toRad = function(degrees) {
+    return Math.PI * (degrees / 180);
+  };
+  google.maps.LatLng.prototype.distanceTo = function(latlng) {
+    var a, c, dLat, dLon, lat1, lat2, radius;
+    radius = 6371;
+    dLat = toRad(this.lat() - latlng.lat());
+    dLon = toRad(this.lng() - latlng.lng());
+    lat1 = toRad(this.lat());
+    lat2 = toRad(latlng.lat());
+    a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return radius * c * 0.921371192;
+  };
+  google.maps.LatLng.prototype.within = function(latlng, radius) {
+    return this.distanceTo(latlng) <= radius;
+  };
+  lookupLocation = function(zip, fn) {
+    var geocoder;
+    geocoder = new google.maps.Geocoder;
+    return geocoder.geocode({
+      "address": "" + zip
+    }, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        return fn(results[0]);
+      }
+    });
+  };
+  lookupPosition = function(latlng, fn) {
+    var geocoder;
+    geocoder = new google.maps.Geocoder;
+    return geocoder.geocode({
+      "location": latlng
+    }, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        return fn(results[0]);
+      }
+    });
+  };
+  updateTimeElapsed = function() {
+    var $callList, currUnixTime, todaysDate;
+    setTimeout(updateTimeElapsed, 10000);
+    todaysDate = new Date();
+    currUnixTime = Math.round(todaysDate.getTime() / 1000);
+    $callList = $('#callList');
+    return $callList.children().each(function() {
+      var createdDate, unixTime;
+      if ($(this).attr('createdOn') !== void 0) {
+        createdDate = new Date($(this).attr('createdOn'));
+        unixTime = Math.round(createdDate.getTime() / 1000);
+        return $(this).children().each(function() {
+          var difference, minutes, seconds;
+          if ($(this).attr('title') === 'timeElapsed') {
+            difference = currUnixTime - unixTime;
+            seconds = difference % 60;
+            if (seconds < 10) {
+              seconds = '0' + seconds;
+            }
+            difference -= seconds;
+            minutes = difference / 60;
+            return $(this).html(minutes + ':' + seconds);
+          }
+        });
+      }
+    });
+  };
 }).call(this);

@@ -16,7 +16,7 @@
         Time
       .grid_1.omega
     - @coll.find({"allFlag" => {"$in" => [true,""]},"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
-      %li.ui-widget-content.call{:id => "#{row['tn']}",:createdOn => "#{row['createdOn']}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
+      %li.ui-widget-content.call{:id => "#{row['tn']}",:createdOn => "#{DateTime.parse(row['createdOn'].to_s).to_s}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
         .grid_2.alpha
           = row['name'] || "-"
         .grid_2

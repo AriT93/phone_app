@@ -3,19 +3,19 @@ CallLive = ""
 
 validPhoneNum = (myNum) ->
     if myNum == undefined
-    	return false
+        return false
     myNum = myNum.replace /\D+/g, ""
 
     if myNum.length > 11 or myNum.length < 10
-    	return false
+        return false
 
     if myNum.length == 11
-    	if myNum.substr( 0,1) != '1'
+        if myNum.substr( 0,1) != '1'
             return false
         myNum = myNum.substr 1, 10
 
     if myNum.substr 0,1 == '1' || myNum.substr 0,1 == '0'
-    	ieturn false
+        ieturn false
 
     return myNum
 
@@ -97,67 +97,66 @@ buildCall = (obj,callList) ->
         li.attr 'id', obj.tn
         li.append d
 
-message = (obj) ->
+typeAndContent = (message) ->
+    [ignore, type, content] = message.match /(.*?):(.*)/
+    {type,content}
+
+message = (message) ->
     page = window.location.href
     list = ''
-    if 'message' in obj
-    else if 'announcement' in obj
-        $('<p>').html(obj.announcement).appendTo "#messages"
-    else if obj.result? && page.match(/agent$/)
-        for i in obj.result
-            if i != undefined
-                Call = JSON.parse(i)
-                buildCall(Call, true)
+    {type, content} = typeAndContent message
+    switch type
+        when 'result'
+            if page.match /agent$/
+                Call = JSON.parse(content)
+                buildCall Call, true
                 limitCalls()
-        if list != ""
-            $('<p>').html(list).appendTo $("#calls")
-    else if obj.crc_call? && page.match(/crc$/)
-        for i in obj.crc_call
-            if i != undefined
-                Call = i
+                if list != ""
+                    $('<p>').html(list).appendTo "#messages"
+        when 'crc_call'
+            if page.match /crc$/
+                Call = content
                 if Call.status == 'new' & Call.allFlag == true
                     buildCall Call, true
-        if list != ""
-            $('<p>').html(list).appendTo $("#calls")
-    else if obj.call?
-        for call in obj.call
-            p = call
+                if list != ""
+                    $('<p>').html(list).appendTo $("#calls")
+        when 'call'
+            p = content
             if call != undefined
                 $("#" + p.callAction.tn).fadeOut "slow", -> $(this).remove
-    else if obj.ab_call?
-        for call in obj.ab_call
-            ab = call
+        when 'ab_call'
+            ab = content
             if call != undefined
                 $("#"+ab.callAction.tn).fadeOut "slow", -> $(this).remove
-    else if obj.chart? && page.match(/charts$/)
-        for s in obj.chart
-            dataItem = s
-            status = ["new", "calling", "called", "abandoned"]
-            for item in status
-                count = 0
-                if dataItem[item] != undefined
-                    count = dataItem[item]
-                $("#status\\." + item).val(count)
-        drawChart()
-
+        when 'chart'
+            if page.match /charts$/
+                for s in content
+                    dataItem = s
+                    status = ["new", "calling", "called", "abandoned"]
+                    for item in status
+                        count = 0
+                        if dataItem[item] != undefined
+                            count = dataItem[item]
+                        $("#status\\." + item).val count
+                drawChart()
 
 drawChart = () ->
     status = ["new", "calling", "called", "abandoned"]
     data = new google.visualization.DataTable()
-    data.addColumn( 'string', 'Status')
-    data.addColumn( 'number', 'Count')
-    data.addRows(status.length)
+    data.addColumn 'string', 'Status'
+    data.addColumn 'number', 'Count'
+    data.addRows status.length
     x = 0
     for item in status
         data.setValue x, 0, item
         count = $('#status\\.' + item).val()
         if count is undefined
             count = 0
-        count = parseInt(count)
-        data.setValue(x, 1, count)
+        count = parseInt count
+        data.setValue x, 1, count
         x++
     if $('#piechart').length
-        chart = new google.visualization.PieChart(document.getElementById('piechart'))
+        chart = new google.visualization.PieChart document.getElementById('piechart')
     chart.draw( data, {is3D: true, width: 720, height: 400, title: 'Call Status'})
     true
 
@@ -249,14 +248,7 @@ updateButton = ->
 $(document).ready ->
     socket = new io.Socket null, {port: "8910", rememberTransport: "false", transports:["websocket","xhr-multipart","flashsocket"]}
     socket.connect()
-    socket.on 'message', (obj) ->
-        if obj != undefined
-            if 'buffer' in obj
-                for i in obj.buffer
-                    if i != undefined
-                        message i
-            else
-                message obj
+    socket.on 'message', message
 
     $('button[rel]').overlay {
         onClose: ->

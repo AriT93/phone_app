@@ -12,7 +12,7 @@ models.defineModels mongoose, ()->
 
 socketEvent = new event.EventEmitter()
 socketListener = socketEvent.addListener "new_call", (data)->
-    wSocket.broadcast {result: [data]}
+    wSocket.broadcast "result: #{data}"
 httpServer = http.createServer (req,res)->
 httpServer.listen "8910"
 wSocket = io.listen httpServer
@@ -20,11 +20,9 @@ buffer = []
 
 #socket.io codes...
 wSocket.on 'connection', (client)->
-    wSocket.broadcast {announcement: client.sessionID + " from " + client.connection.remoteAddress + " connected to call routing"}
+#    wSocket.broadcast {announcement: client.sessionID + " from " + client.connection.remoteAddress + " connected to call routing"}
 
     client.on 'message', (data)->
-        if buffer.length > 5
-            buffer.shift()
         console.log data
         p = data
         #p = JSON.parse data
@@ -33,11 +31,11 @@ wSocket.on 'connection', (client)->
             c = Call.find {'tn': p.callAction.tn}, (err,docs)->
                 for d in docs
                     if d.status != "new"
-                        client.send {announcement: "allready being called"}
+#                        client.send {announcement: "allready being called"}
                     else
                         d.status = "calling"
                         d.save()
-            wSocket.broadcast {call: [p]}
+            wSocket.broadcast "call: #{p}"
         else if p['callDelete']?
             console.log p
             c = Call.find {'tn': p.callDelete.tn}, (err,docs) ->
@@ -59,7 +57,7 @@ wSocket.on 'connection', (client)->
             c.longitude = p.longitude
             c.createdOn = new Date()
             c.save()
-            client.send {announcement: "message saved"}
+#            client.send {announcement: "message saved"}
             socketEvent.emit "new_call", JSON.stringify(c)
             console.log "saved"
 
@@ -80,7 +78,7 @@ handleOld = ->
                 console.log "setting allFlag=true for " + d.name
                 d.allFlag = true
                 d.save()
-                wSocket.broadcast {crc_call: [d]}
+                wSocket.broadcast "crc_call:#{JSON.stringify d}"
     timeToCheck = new Date(rightnow.getTime() - millisUntilAbandon)
     c = Call.find { 'status' : 'new', 'createdOn' : {"$lt": timeToCheck}},
         (err,docs) ->
@@ -93,7 +91,7 @@ handleOld = ->
                 ca.callAction = {}
                 ca.callAction.tn = p.tn
                 console.log ca
-                wSocket.broadcast {ab_call: [ca]}
+                wSocket.broadcast "ab_call: #{ca}"
 
     statusToCheck = ["new", "calling" , "called", "abandoned"]
     for x in statusToCheck
@@ -108,4 +106,4 @@ updateChart = (status)->
         if count isnt chartData[status]
             chartData[status] = count
             console.log  status + " = " + chartData[status]
-            wSocket.broadcast {chart: [chartData]}
+            wSocket.broadcast "chart: #{JSON.stringify chartData}"
