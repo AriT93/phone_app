@@ -1,4 +1,12 @@
-var CallLive, buildCall, drawChart, formatNum, limitCalls, lookupLocation, lookupPosition, message, socket, takeCall, toRad, typeAndContent, updateButton, updateLocation, updatePosition, updateTimeElapsed, validPhoneNum;
+var Call, CallLive, Div, Element, buildCall, drawChart, formatNum, limitCalls, lookupLocation, lookupPosition, message, root, socket, takeCall, toRad, typeAndContent, updateButton, updateLocation, updatePosition, updateTimeElapsed, validPhoneNum;
+var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
+  function ctor() { this.constructor = child; }
+  ctor.prototype = parent.prototype;
+  child.prototype = new ctor;
+  child.__super__ = parent.prototype;
+  return child;
+};
 socket = "";
 CallLive = "";
 validPhoneNum = function(myNum) {
@@ -25,9 +33,9 @@ formatNum = function(myNum) {
 };
 buildCall = function(obj, callList) {
   var b, createdOn, d, d2, d3, fieldText, grid, img, img2, key, keys, lat, li, li2, li3, lng, ovdiv, state, ulcall, _i, _len;
-  li = $('<li>');
-  li2 = $('<li>');
-  li3 = $('<li>');
+  li = new Call();
+  li2 = new Call();
+  li3 = new Call();
   li.addClass("ui-widget-content");
   lat = obj['latitude'];
   lng = obj['longitude'];
@@ -41,9 +49,9 @@ buildCall = function(obj, callList) {
   for (_i = 0, _len = keys.length; _i < _len; _i++) {
     key = keys[_i];
     if (obj.hasOwnProperty(key)) {
-      d = $('<div>');
-      d2 = $('<div>');
-      d3 = $('<div>');
+      d = new Div();
+      d2 = new Div();
+      d3 = new Div();
       d.addClass("grid_2");
       d2.addClass("grid_4");
       d3.addClass("grid_2");
@@ -65,12 +73,12 @@ buildCall = function(obj, callList) {
       d3.html(fieldText);
       d3.addClass('ov_bottom');
     }
-    li.append(d);
+    li.append(d.elem);
     if (d2 !== void 0) {
-      li2.append(d2);
+      li2.append(d2.elem);
     }
     if (d3 !== void 0) {
-      li3.append(d3);
+      li3.append(d3.elem);
     }
   }
   li.appendTo('#callList').hide().fadeIn("slow");
@@ -305,7 +313,7 @@ updatePosition = function(position) {
 };
 updateButton = function() {
   var agentPhone, disable;
-  agentPhone = $("#agentPhone").val;
+  agentPhone = $("#agentPhone").val();
   disable = agentPhone === null || agentPhone === "";
   return $('button').attr('disabled', disable);
 };
@@ -429,3 +437,49 @@ updateTimeElapsed = function() {
     }
   });
 };
+Element = (function() {
+  function Element(elem) {
+    this.elem = elem;
+  }
+  Element.prototype.addClass = function(cssClass) {
+    return this.elem.addClass(cssClass);
+  };
+  Element.prototype.attr = function(attr, val) {
+    return this.elem.attr(attr, val);
+  };
+  Element.prototype.appendTo = function(elem) {
+    return this.elem.appendTo(elem);
+  };
+  Element.prototype.append = function(elem) {
+    return this.elem.append(elem);
+  };
+  Element.prototype.html = function(elem) {
+    return this.elem.html(elem);
+  };
+  Element.prototype.elem = function() {
+    return this.elem;
+  };
+  return Element;
+})();
+root = typeof exports !== "undefined" && exports !== null ? exports : window;
+root.Element = Element;
+Call = (function() {
+  __extends(Call, Element);
+  function Call() {
+    this.li = $('<li>');
+    Call.__super__.constructor.call(this, this.li);
+  }
+  return Call;
+})();
+root = typeof exports !== "undefined" && exports !== null ? exports : window;
+root.Call = Call;
+Div = (function() {
+  __extends(Div, Element);
+  function Div() {
+    this.div = $('<div>');
+    Div.__super__.constructor.call(this, this.div);
+  }
+  return Div;
+})();
+root = typeof exports !== "undefined" && exports !== null ? exports : window;
+root.Div = Div;

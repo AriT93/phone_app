@@ -24,9 +24,9 @@ formatNum = (myNum) ->
 
 
 buildCall = (obj,callList) ->
-    li = $('<li>')
-    li2 = $('<li>')
-    li3 = $('<li>')
+    li = new Call()
+    li2 = new Call()
+    li3 = new Call()
     li.addClass "ui-widget-content"
     lat = obj['latitude']
     lng = obj['longitude']
@@ -39,9 +39,9 @@ buildCall = (obj,callList) ->
     keys = ['name', 'tn', 'city', 'state', 'zip', 'createdOn']
     for key in keys
         if obj.hasOwnProperty key
-            d = $('<div>')
-            d2 = $('<div>')
-            d3 = $('<div>')
+            d = new Div()
+            d2 = new Div()
+            d3 = new Div()
             d.addClass "grid_2"
             d2.addClass "grid_4"
             d3.addClass "grid_2"
@@ -60,11 +60,11 @@ buildCall = (obj,callList) ->
             d2 = undefined
             d3.html fieldText
             d3.addClass 'ov_bottom'
-        li.append d
+        li.append d.elem
         if d2 != undefined
-            li2.append d2
+            li2.append d2.elem
         if d3 != undefined
-            li3.append d3
+            li3.append d3.elem
     li.appendTo('#callList').hide().fadeIn("slow")
     ovdiv = $('<div id="' + obj.tn + '_ov">')
     ovdiv.addClass "simple_overlay"
@@ -177,10 +177,10 @@ limitCalls = () ->
 
 updateLocation = ->
     zip = $('#zip').val()
-    $('#latitude').val("")
-    $('#longitude').val("")
-    $('#city').val("")
-    $('#state').val("")
+    $('#latitude').val ""
+    $('#longitude').val ""
+    $('#city').val ""
+    $('#state').val ""
     if zip.length >= 5
         lookupLocation zip, (loc) ->
             city = ""
@@ -207,11 +207,11 @@ takeCall = (tn) ->
 
 
 updatePosition = (position) ->
-    $('#zip').val("")
-    $('#latitude').val("")
-    $('#longitude').val("")
-    $('#city').val("")
-    $('#state').val("")
+    $('#zip').val ""
+    $('#latitude').val ""
+    $('#longitude').val ""
+    $('#city').val ""
+    $('#state').val ""
     latlng = new google.maps.LatLng position.coords.latitude,  position.coords.longitude
     if latlng != null
         lookupPosition latlng, (loc)->
@@ -237,7 +237,7 @@ updatePosition = (position) ->
             limitCalls()
 
 updateButton = ->
-    agentPhone = $("#agentPhone").val
+    agentPhone = $("#agentPhone").val()
     disable = agentPhone == null || agentPhone == ""
     $('button').attr 'disabled', disable
 
