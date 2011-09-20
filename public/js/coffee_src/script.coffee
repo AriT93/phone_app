@@ -20,7 +20,7 @@ validPhoneNum = (myNum) ->
     return myNum
 
 formatNum = (myNum) ->
-    return '(' + myNum.substr(0, 3) + ')' + myNum.substr(3,3) + '-' + myNum.substr(6,4)
+    return '(' + myNum.substr(0, 3) + ')' + myNum.substr(3,3)  + '-' + myNum.substr(6,4)
 
 
 buildCall = (obj,callList) ->
@@ -116,7 +116,7 @@ message = (message) ->
                     $('<p>').html(list).appendTo "#messages"
         when 'crc_call'
             if page.match /crc$/
-                Call = content
+                Call = JSON.parse content
                 if Call.status == 'new' & Call.allFlag == true
                     buildCall Call, true
                 if list != ""
@@ -125,7 +125,7 @@ message = (message) ->
             p = JSON.parse content
             $("#" + p.callAction.tn).fadeOut "slow", -> $(this).remove()
         when 'ab_call'
-            ab = content
+            ab = JSON.parse content
             $("#"+ab.callAction.tn).fadeOut "slow", -> $(this).remove()
         when 'chart'
             if page.match /charts$/
@@ -154,22 +154,21 @@ drawChart = () ->
         data.setValue x, 1, count
         x++
     if $('#piechart').length
-        chart = new google.visualization.PieChart document.getElementById('piechart')
-    chart.draw( data, {is3D: true, width: 720, height: 400, title: 'Call Status'})
-    true
+        chart = new google.visualization.PieChart document.getElementById 'piechart'
+    chart.draw data, {is3D: true, width: 720, height: 400, title: 'Call Status'}
 
 
 limitCalls = () ->
-    agentLatLng = new google.maps.LatLng( $('#latitude').val(),    $('#longitude').val())
+    agentLatLng = new google.maps.LatLng $('#latitude').val(), $('#longitude').val()
     distance = $('#distance').val()
     agentState = $('#state').val()
     $('li').each (index, element) ->
-        latitude = $(this).attr('lat')
-        longitude = $(this).attr('long')
-        custState = $(this).attr('state')
+        latitude = $(this).attr 'lat'
+        longitude = $(this).attr 'long'
+        custState = $(this).attr 'state'
         if latitude && longitude && custState
-            custLatLng = new google.maps.LatLng(latitude, longitude)
-            if custState == agentState && agentLatLng.within( custLatLng, distance)
+            custLatLng = new google.maps.LatLng latitude, longitude
+            if custState == agentState && agentLatLng.within custLatLng, distance
                 $(this).show()
             else
                 $(this).hide()

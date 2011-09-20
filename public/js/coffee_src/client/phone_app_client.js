@@ -139,7 +139,7 @@ message = function(message) {
       break;
     case 'crc_call':
       if (page.match(/crc$/)) {
-        Call = content;
+        Call = JSON.parse(content);
         if (Call.status === 'new' & Call.allFlag === true) {
           buildCall(Call, true);
         }
@@ -154,7 +154,7 @@ message = function(message) {
         return $(this).remove();
       });
     case 'ab_call':
-      ab = content;
+      ab = JSON.parse(content);
       return $("#" + ab.callAction.tn).fadeOut("slow", function() {
         return $(this).remove();
       });
@@ -196,13 +196,12 @@ drawChart = function() {
   if ($('#piechart').length) {
     chart = new google.visualization.PieChart(document.getElementById('piechart'));
   }
-  chart.draw(data, {
+  return chart.draw(data, {
     is3D: true,
     width: 720,
     height: 400,
     title: 'Call Status'
   });
-  return true;
 };
 limitCalls = function() {
   var agentLatLng, agentState, distance;
