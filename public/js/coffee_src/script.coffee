@@ -23,10 +23,11 @@ formatNum = (myNum) ->
     return '(' + myNum.substr(0, 3) + ')' + myNum.substr(3,3)  + '-' + myNum.substr(6,4)
 
 
+populateCallLine = (callLine, obj)->
+
+
 buildCall = (obj,callList) ->
-    li = new Call()
-    li2 = new Call()
-    li3 = new Call()
+    li = new CallLine(obj)
     li.addClass "ui-widget-content"
     lat = obj['latitude']
     lng = obj['longitude']
@@ -36,67 +37,8 @@ buildCall = (obj,callList) ->
     li.attr "long", lng
     li.attr "state", state
     li.attr "createdOn", createdOn
-    keys = ['name', 'tn', 'city', 'state', 'zip', 'createdOn']
-    for key in keys
-        if obj.hasOwnProperty key
-            d = new Div()
-            d2 = new Div()
-            d3 = new Div()
-            d.addClass "grid_2"
-            d2.addClass "grid_4"
-            d3.addClass "grid_2"
-        fieldText = obj[key]
-        if key == 'tn'
-            fieldText = formatNum fieldText
-        else if key == 'createdOn'
-            fieldText = 0
-            d.attr 'title', 'timeElapsed'
-        d.html fieldText
-        if key == 'tn' || key == 'name'
-            d2.html fieldText
-            d2.addClass 'ov_top'
-            d3 = undefined
-        else
-            d2 = undefined
-            d3.html fieldText
-            d3.addClass 'ov_bottom'
-        li.append d.elem
-        if d2 != undefined
-            li2.append d2.elem
-        if d3 != undefined
-            li3.append d3.elem
-    li.appendTo('#callList').hide().fadeIn("slow")
-    ovdiv = $('<div id="' + obj.tn + '_ov">')
-    ovdiv.addClass "simple_overlay"
-    img2 = $('<img src="/img/phone.png"/>')
-    grid = $('<div>')
-    grid.addClass('grid_12')
-    grid.attr 'id', "calls"
-    ulcall = $('<ul>')
-    li2.appendTo ulcall
-    li3.appendTo ulcall
-    grid.append ulcall
-    ovdiv.append '<a class="close"></a>'
-    ovdiv.append img2
-    ovdiv.append grid
-    ovdiv.appendTo "#calls_ov"
-    if callList
-        d = $('<div>')
-        d.addClass "grid_1"
-        d.addClass "omega"
-        b = $('<button rel="#'+ obj.tn + '_ov" onclick=takeCall(' + obj.tn + ');>')
-        b.overlay {
-            onClose: () ->
-                s = {callDelete:{tn: CallLive}}
-                socket.send s
-                $("#" + CallLive + "_ov").remove()
-            }
-        img = $('<img class="phone_icon" src="/img/phone.png"/>')
-        d.append b
-        b.append img
-        li.addClass "call"
-        li.attr 'id', obj.tn
-        li.append d
+    li.getOV()
+    li.getLine().appendTo('#callList').hide().fadeIn("slow")
 
 typeAndContent = (message) ->
     [ignore, type, content] = message.match /(.*?):(.*)/

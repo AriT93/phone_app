@@ -1,4 +1,4 @@
-var Call, CallLive, Div, Element, buildCall, drawChart, formatNum, limitCalls, lookupLocation, lookupPosition, message, root, socket, takeCall, toRad, typeAndContent, updateButton, updateLocation, updatePosition, updateTimeElapsed, validPhoneNum;
+var CallLine, CallLive, Div, Element, PhoneButton, PhoneImage, buildCall, drawChart, formatNum, limitCalls, lookupLocation, lookupPosition, message, populateCallLine, root, socket, takeCall, toRad, typeAndContent, updateButton, updateLocation, updatePosition, updateTimeElapsed, validPhoneNum;
 var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
   for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
   function ctor() { this.constructor = child; }
@@ -31,11 +31,10 @@ validPhoneNum = function(myNum) {
 formatNum = function(myNum) {
   return '(' + myNum.substr(0, 3) + ')' + myNum.substr(3, 3) + '-' + myNum.substr(6, 4);
 };
+populateCallLine = function(callLine, obj) {};
 buildCall = function(obj, callList) {
-  var b, createdOn, d, d2, d3, fieldText, grid, img, img2, key, keys, lat, li, li2, li3, lng, ovdiv, state, ulcall, _i, _len;
-  li = new Call();
-  li2 = new Call();
-  li3 = new Call();
+  var createdOn, lat, li, lng, state;
+  li = new CallLine(obj);
   li.addClass("ui-widget-content");
   lat = obj['latitude'];
   lng = obj['longitude'];
@@ -45,81 +44,8 @@ buildCall = function(obj, callList) {
   li.attr("long", lng);
   li.attr("state", state);
   li.attr("createdOn", createdOn);
-  keys = ['name', 'tn', 'city', 'state', 'zip', 'createdOn'];
-  for (_i = 0, _len = keys.length; _i < _len; _i++) {
-    key = keys[_i];
-    if (obj.hasOwnProperty(key)) {
-      d = new Div();
-      d2 = new Div();
-      d3 = new Div();
-      d.addClass("grid_2");
-      d2.addClass("grid_4");
-      d3.addClass("grid_2");
-    }
-    fieldText = obj[key];
-    if (key === 'tn') {
-      fieldText = formatNum(fieldText);
-    } else if (key === 'createdOn') {
-      fieldText = 0;
-      d.attr('title', 'timeElapsed');
-    }
-    d.html(fieldText);
-    if (key === 'tn' || key === 'name') {
-      d2.html(fieldText);
-      d2.addClass('ov_top');
-      d3 = void 0;
-    } else {
-      d2 = void 0;
-      d3.html(fieldText);
-      d3.addClass('ov_bottom');
-    }
-    li.append(d.elem);
-    if (d2 !== void 0) {
-      li2.append(d2.elem);
-    }
-    if (d3 !== void 0) {
-      li3.append(d3.elem);
-    }
-  }
-  li.appendTo('#callList').hide().fadeIn("slow");
-  ovdiv = $('<div id="' + obj.tn + '_ov">');
-  ovdiv.addClass("simple_overlay");
-  img2 = $('<img src="/img/phone.png"/>');
-  grid = $('<div>');
-  grid.addClass('grid_12');
-  grid.attr('id', "calls");
-  ulcall = $('<ul>');
-  li2.appendTo(ulcall);
-  li3.appendTo(ulcall);
-  grid.append(ulcall);
-  ovdiv.append('<a class="close"></a>');
-  ovdiv.append(img2);
-  ovdiv.append(grid);
-  ovdiv.appendTo("#calls_ov");
-  if (callList) {
-    d = $('<div>');
-    d.addClass("grid_1");
-    d.addClass("omega");
-    b = $('<button rel="#' + obj.tn + '_ov" onclick=takeCall(' + obj.tn + ');>');
-    b.overlay({
-      onClose: function() {
-        var s;
-        s = {
-          callDelete: {
-            tn: CallLive
-          }
-        };
-        socket.send(s);
-        return $("#" + CallLive + "_ov").remove();
-      }
-    });
-    img = $('<img class="phone_icon" src="/img/phone.png"/>');
-    d.append(b);
-    b.append(img);
-    li.addClass("call");
-    li.attr('id', obj.tn);
-    return li.append(d);
-  }
+  li.getOV();
+  return li.getLine().appendTo('#callList').hide().fadeIn("slow");
 };
 typeAndContent = function(message) {
   var content, ignore, type, _ref;
@@ -158,6 +84,7 @@ message = function(message) {
       break;
     case 'call':
       p = JSON.parse(content);
+      alert(content);
       return $("#" + p.callAction.tn).fadeOut("slow", function() {
         return $(this).remove();
       });
@@ -463,16 +390,6 @@ Element = (function() {
 })();
 root = typeof exports !== "undefined" && exports !== null ? exports : window;
 root.Element = Element;
-Call = (function() {
-  __extends(Call, Element);
-  function Call() {
-    this.li = $('<li>');
-    Call.__super__.constructor.call(this, this.li);
-  }
-  return Call;
-})();
-root = typeof exports !== "undefined" && exports !== null ? exports : window;
-root.Call = Call;
 Div = (function() {
   __extends(Div, Element);
   function Div() {
@@ -483,3 +400,122 @@ Div = (function() {
 })();
 root = typeof exports !== "undefined" && exports !== null ? exports : window;
 root.Div = Div;
+CallLine = (function() {
+  __extends(CallLine, Element);
+  function CallLine(obj) {
+    this.li = $('<li>');
+    this.name = obj["name"];
+    this.tn = obj["tn"];
+    this.city = obj["city"];
+    this.state = obj["state"];
+    this.zip = obj["zip"];
+    this.createdOn = obj["createdOn"];
+    this.li.addClass("ui-widget-content");
+    CallLine.__super__.constructor.call(this, this.li);
+  }
+  CallLine.prototype.getLine = function() {
+    var d, fieldVal, phb, value, _i, _len, _ref;
+    _ref = ['name', 'tn', 'city', 'state', 'zip', 'createdOn'];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      value = _ref[_i];
+      d = new Div();
+      d.addClass("grid_2");
+      fieldVal = this[value];
+      switch (value) {
+        case 'tn':
+          d.addClass("alpha");
+          fieldVal = formatNum(fieldVal);
+          break;
+        case 'createdOn':
+          fieldVal = 0;
+          d.attr('title', 'timeElapsed');
+      }
+      d.html(fieldVal);
+      this.li.append(d.elem);
+    }
+    this.li.addClass("call");
+    this.li.attr('id', this.tn);
+    this.li.append(d.elem);
+    d = new Div();
+    d.addClass("grid_1 omega");
+    phb = new PhoneButton(this.tn);
+    d.append(phb.button);
+    this.li.append(d.elem);
+    return this.li;
+  };
+  CallLine.prototype.getOV = function() {
+    var d, grid, lilow, limain, ovdiv, ph, ulcall, value, _i, _j, _len, _len2, _ref, _ref2;
+    ulcall = $('<ul>');
+    limain = $('<li>');
+    lilow = $('<li>');
+    ovdiv = new Div();
+    ovdiv.attr('id', this.tn + "_ov");
+    ovdiv.addClass("simple_overlay");
+    _ref = ['name', 'tn'];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      value = _ref[_i];
+      d = new Div();
+      d.addClass("grid_4 ov_top");
+      switch (value) {
+        case 'tn':
+          d.html(formatNum(this.tn));
+          break;
+        case 'name':
+          d.html(this.name);
+      }
+      limain.append(d.elem);
+    }
+    _ref2 = ['city', 'state', 'zip'];
+    for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+      value = _ref2[_j];
+      d = new Div();
+      d.addClass("grid_2 ov_bottom");
+      d.html(this[value]);
+      lilow.append(d.elem);
+    }
+    grid = new Div();
+    grid.addClass("grid_12");
+    grid.attr('id', 'calls');
+    limain.appendTo(ulcall);
+    lilow.appendTo(ulcall);
+    grid.append(ulcall);
+    ovdiv.appendTo('<a class="close"></a>');
+    ph = new PhoneImage();
+    ovdiv.append(ph.img);
+    ovdiv.append(grid.elem);
+    return ovdiv.appendTo("#calls_ov");
+  };
+  return CallLine;
+})();
+root = typeof exports !== "undefined" && exports !== null ? exports : window;
+root.CallLine = CallLine;
+PhoneImage = (function() {
+  __extends(PhoneImage, Element);
+  function PhoneImage() {
+    this.img = $('<img class="phone_icon" src="/img/phone.png"/>');
+  }
+  return PhoneImage;
+})();
+PhoneButton = (function() {
+  __extends(PhoneButton, Element);
+  function PhoneButton(tn) {
+    var img;
+    this.button = $('<button rel="#' + tn + '_ov" onclick=takeCall(' + tn + ');>');
+    this.button.overlay({
+      onClose: function() {
+        var s;
+        s = {
+          callDelete: {
+            tn: CallLive
+          }
+        };
+        socket.send(s);
+        alert(CallLive);
+        return $("#" + CallLive + "_ov").remove();
+      }
+    });
+    img = new PhoneImage();
+    this.button.append(img.img);
+  }
+  return PhoneButton;
+})();

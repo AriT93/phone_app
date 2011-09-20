@@ -9,7 +9,7 @@ class Element
         @elem.appendTo elem
     append: (elem) ->
         @elem.append elem
-    html: (elem)->
+    html: (elem) ->
         @elem.html elem
     elem: ->
         @elem
