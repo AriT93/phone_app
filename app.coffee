@@ -26,16 +26,16 @@ wSocket.on 'connection', (client)->
         console.log data
         p = data
         #p = JSON.parse data
-        console.log " this is p: " + p
+        console.log " this is p: " + JSON.stringify p
         if p['callAction']?
             c = Call.find {'tn': p.callAction.tn}, (err,docs)->
                 for d in docs
                     if d.status != "new"
-#                        client.send {announcement: "allready being called"}
+                        console.log("already being called")
                     else
                         d.status = "calling"
                         d.save()
-            wSocket.broadcast "call: #{p}"
+                    wSocket.broadcast "call: #{JSON.stringify p}"
         else if p['callDelete']?
             console.log p
             c = Call.find {'tn': p.callDelete.tn}, (err,docs) ->
@@ -91,7 +91,7 @@ handleOld = ->
                 ca.callAction = {}
                 ca.callAction.tn = p.tn
                 console.log ca
-                wSocket.broadcast "ab_call: #{ca}"
+                wSocket.broadcast "ab_call: #{JSON.stringify ca}"
 
     statusToCheck = ["new", "calling" , "called", "abandoned"]
     for x in statusToCheck

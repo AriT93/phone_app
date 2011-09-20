@@ -89,7 +89,8 @@ buildCall = (obj,callList) ->
             onClose: () ->
                 s = {callDelete:{tn: CallLive}}
                 socket.send s
-                $("#" + CallLive + "_ov").remove}
+                $("#" + CallLive + "_ov").remove()
+            }
         img = $('<img class="phone_icon" src="/img/phone.png"/>')
         d.append b
         b.append img
@@ -121,23 +122,20 @@ message = (message) ->
                 if list != ""
                     $('<p>').html(list).appendTo $("#calls")
         when 'call'
-            p = content
-            if call != undefined
-                $("#" + p.callAction.tn).fadeOut "slow", -> $(this).remove
+            p = JSON.parse content
+            $("#" + p.callAction.tn).fadeOut "slow", -> $(this).remove()
         when 'ab_call'
             ab = content
-            if call != undefined
-                $("#"+ab.callAction.tn).fadeOut "slow", -> $(this).remove
+            $("#"+ab.callAction.tn).fadeOut "slow", -> $(this).remove()
         when 'chart'
             if page.match /charts$/
-                for s in content
-                    dataItem = s
-                    status = ["new", "calling", "called", "abandoned"]
-                    for item in status
-                        count = 0
-                        if dataItem[item] != undefined
-                            count = dataItem[item]
-                        $("#status\\." + item).val count
+                dataItem = JSON.parse content
+                status = ["new", "calling", "called", "abandoned"]
+                for item in status
+                    count = 0
+                    if dataItem[item] != undefined
+                        count = dataItem[item]
+                    $("#status\\." + item).val count
                 drawChart()
 
 drawChart = () ->
@@ -254,7 +252,8 @@ $(document).ready ->
         onClose: ->
             s = {callDelete: {tn: CallLive}}
             socket.send s
-            $('#' + CallLive + '_ov').remove}
+            $('#' + CallLive + '_ov').remove()
+        }
 
     $('#call').submit (e) ->
         if $("#name").val()
