@@ -105,7 +105,7 @@ pre {
 
 textarea { overflow: auto; } /* www.sitepoint.com/blogs/2010/08/20/ie-remove-textarea-scrollbars/ */
 
-.ie6 legend, .ie7 legend { margin-left: -7px; } 
+.ie6 legend, .ie7 legend { margin-left: -7px; }
 
 /* Align checkboxes, radios, text inputs with their label by: Thierry Koblentz tjkdesign.com/ez-css/css/base.css  */
 input[type="radio"] { vertical-align: text-bottom; }
@@ -165,7 +165,7 @@ a:hover { color: #036; }
 /**
  * Primary styles
  *
- * Author: 
+ * Author:
  */
 
 
@@ -259,3 +259,115 @@ a:hover { color: #036; }
   h2, h3{ page-break-after: avoid; }
 }
 
+#messages{
+}
+#calls{
+
+}
+.contact ul{
+           margin: 0;
+           padding: 0;
+           list-style: none;
+}
+.contact li{
+           margin-bottom: 10px;
+           overflow: hidden;
+}
+.contact label {display:block; margin-bottom:2px;}
+
+#calls ul{
+         list-style: none;
+         margin: 2px;
+}
+#calls li{
+        margin: 1px;
+        overflow: hidden;
+}
+.agent ul{
+         list-style: none;
+         margin: 2px;
+}
+.agent li{
+        margin: 1px;
+        overflow: hidden;
+}
+.callform ul{
+         list-style: none;
+         margin: 2px;
+}
+.callform li{
+        margin: 1px;
+        overflow: hidden;
+}
+li{
+  list-style: none;
+}
+.phone_icon{
+           width: 16px;
+           height: 16px;
+}
+/* the overlayed element */
+.simple_overlay {
+
+    /* must be initially hidden */
+    display:none;
+
+    color: #fff;
+    /* place overlay on top of other elements */
+    z-index:10000;
+
+    /* styling */
+    background-color: #666;
+
+    width:675px;
+    min-height:200px;
+    border: 5px solid white;
+
+    /* CSS3 styling for latest browsers */
+    -moz-box-shadow:0 0 90px 5px #000;
+    -webkit-box-shadow: 0 0 90px #000;
+}
+
+/* close button positioned on upper right corner */
+.simple_overlay .close {
+    background-image:url(/img/close.png);
+    position:absolute;
+    right:-15px;
+    top:-15px;
+    cursor:pointer;
+    height:35px;
+    width:35px;
+}
+#banner{
+       background-color: #000;
+       height: 30px;
+       padding-bottom: 5px;
+}
+#masthead{
+/*       background: url(/img/masthead.png) left center;*/
+       background-repeat: no-repeat;
+       background-color: #c0c0c0;
+       padding-top: 3px;
+       height: 100px;
+}
+#main{
+     padding-top: 10px;
+     margin-top: 5px;
+     min-height: 400px;
+}
+.toplink{
+        font-weight: 900;
+        color: white;
+        padding-top: 10px;
+        text-align: center;
+}
+.ov_top{
+       margin: 5px;
+       font-weight: 900;
+       font-size: 24pt;
+       color: #fff;
+}
+.ov_bottom{
+          margin: 3px;
+          color: #FFF;
+}

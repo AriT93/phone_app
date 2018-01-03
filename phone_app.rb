@@ -1,24 +1,42 @@
 require 'sinatra'
 require 'mongo'
 require 'haml'
+require 'net/http'
+require 'open-uri'
 
 before do
-
   @db = Mongo::Connection.new.db("test")
   @coll = @db["calls"]
 end
 get '/' do
-  s = "<h1>Calls</h1>"
-   s = s + "<ul>"
-  @coll.find().each {|row|
-    s = s + "<li> #{row['name']}  ::  #{row['tn']}</li>"
-  }
-  s = s + "</ul>"
-
   haml :index
 end
 post '/' do
-  call = { "name" => params['name'], "tn" => params['tn']}
+  call = {
+    "name" => params['name'],
+    "age"  => params['age'],
+    "tn" => params['tn'],
+    "city" => params['city'],
+    "state" => params['state'],
+    "zip" => params['zip'],
+    "latitude" => params['latitude'],
+    "longitude" => params['longitude']
+  }
   @coll.insert(call)
   redirect '/'
+end
+get '/agent' do
+  haml :agent
+end
+get '/charts' do
+  haml :charts
+end
+get '/crc' do
+  haml :crc
+end
+get '/call/:phoneNum' do
+  #url = "http://webservice/cgi-bin/makecall.cgi?"+params[:phoneNum]
+  #result = open(url)
+  #result.read
+  '{"success":"made phone call"}'
 end

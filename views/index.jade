@@ -1,0 +1,51 @@
+.container-fluid
+  .content
+    form.form-stacked.contact#call(method = "POST", action="", name = "call")
+      fieldset
+        legend Contact Form
+      .row
+        .span4
+          .clearfix
+            h2 Please let us know how to contact you
+         .span12
+            fieldset
+              .clearfix
+                 label(for = "name") Name
+                 .input
+                   input.xlarge#name(type = "text", name = "name", size = "40")
+              .clearfix
+                 label(for = "tn") Telephone Number
+                 .input
+                   input.xlarge#tn( type = "text", name = "tn", size = "15")
+       .row
+         .span4
+           .clearfix
+             h2 This information isn't essential but will allow us to be better prepared to help you
+         .span12
+           fieldset
+             .clearfix
+                label( for = "age") Age
+                .input
+                  input.xlarge#age( type= "text", name="age", size = "40")
+             .clearfix
+                label( for = "zip") Zip Code
+                .input
+                  input.xlarge#zip(type = "text", name = "zip", size = "40")
+             .clearfix
+                label(for = "city") City
+                .input
+                  input.xlarge#city(type = "text", name="city", readonly = "readonly")
+             .clearfix
+                label(for = "state") State
+                .input
+                  input.xlarge#state(type = "text", name = "state", readonly = "readonly")
+             .clearfix
+                .input
+                 input.xlarge#latitude(name = "latitude", type = "hidden")
+               .input
+                 input.xlarge#longitude(name = "longitude", type = "hidden")
+       .row
+           .span9
+             fieldset
+               .clearfix
+                 input.btn.primary.pull-right(type = "submit")

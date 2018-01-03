@@ -1,0 +1,59 @@
+.span15#calls
+  h1 Calls
+  ul#callList.ui-widget
+    li.ui-widget-header
+      .span2.alpha
+        = "Name"
+      .span2
+        = "Phone"
+      .span2
+        = "City"
+      .span2
+        = "State"
+      .span2
+        = "Zip Code"
+      .span2
+        Time
+      .span1.omega
+      - each call in calls
+        li.ui-widget-content.call(id = "#{call.tn}", createdOn = "#{call.createdOn}",lat = "#{call.latitude}", long = "#{call.longitude}", state = "#{call.state}")
+          .span2.alpha
+            != call.name
+          .span2
+            != call.tn
+          .span2
+            != call.city
+          .span2
+            != call.state
+          .span2
+            != call.zip
+          .span2(title = "timeElapsed")
+            = 0
+          .span1.omega
+            button( rel = "##{call.tn}_ov", onclick = "takeCall(#{call.tn});")
+              img.phone_icon(src = '/img/phone.png')
+#calls_ov
+  - each call in calls
+    .simple_overlay(id = "#{call.tn}_ov")
+      img(src = "/img/phone.png")
+      .span12#calls
+        ul
+          li
+            .span5.alpha.ov_top
+              = call.name
+            .span5.omega.ov_top
+              = call.tn
+          li
+            .span2.alpha
+              = call.city
+            .span2
+              = call.state
+            .span2.omega
+              = call.zip
+
+input(id = "zip", name = "zip", type = "hidden")
+input(id = "distance", name = "distance", value = "10000", type = "hidden")
+input(id = "city", name = "city", type = "hidden")
+input(id = "state", name = "state", type = "hidden")
+input(id = "latitude", name = "latitude", type = "hidden")
+input(id = "longitude", name = "longitude", type = "hidden")

@@ -1,0 +1,60 @@
+.span15#calls
+  %h1 Calls
+  %ul#callList.ui-widget
+    %li.ui-widget-header
+      .span4.alpha
+        = "Name"
+      .span4
+        = "Phone"
+      .span4
+        = "City"
+      .span4
+        = "State"
+      .span4
+        = "Zip Code"
+      .span4
+        Time
+      .span2.omega
+    - @coll.find({"allFlag" => {"$in" => [true,""]},"status" => {"$in" => ["new",""]}},{:sort => [:createdOn,:ascending]}).each do |row|
+      %li.ui-widget-content.call{:id => "#{row['tn']}",:createdOn => "#{DateTime.parse(row['createdOn'].to_s).to_s}",:lat => "#{row['latitude']}", :long => "#{row['longitude']}", :state => "#{row['state']}"}
+        .span2.alpha
+          = row['name'] || "-"
+        .span2
+          = "(" + row['tn'].slice(0..2) +") " + row['tn'].slice(3..5) + "-" + row['tn'].slice(6..9)|| "-"
+        .span2
+          = "#{row['city']}"
+        .span2
+          = "#{row['state']}"
+        .span2
+          = row['zip'] || "-"
+        .span2{:title => "timeElapsed"}
+          = 0
+        .span1.omega
+          %button{ :rel => "##{row['tn']}_ov", :onclick => "takeCall(#{row['tn']} );"}
+            %img.phone_icon{:src => '/img/phone.png'}
+#calls_ov
+  - @coll.find({"allFlag" => {"$in" => [true,""]}},{:sort => [:createdOn,:ascending]}).each do |row|
+    .simple_overlay{:id => "#{row['tn']}_ov"}
+      %img{:src => '/img/phone.png'}
+      .span12#calls
+        %ul
+          %li
+            .span4.alpha.ov_top
+              = "#{row['name']}"
+            .span4.omega.ov_top
+              = "#{row['tn']}"
+          %li
+            .span2.alpha
+              = "#{row['city']}"
+            .span2
+              = "#{row['state']}"
+            .span2.omega
+              = "#{row['zip']}"
+
+%input{:id => "agentPhone", :name => "agentPhone", :type => "hidden", :value => "(309) 123-4958" }
+%input{:id => "distance", :name => "distance", :type => "hidden", :value => "10000" }
+%input{:id => "zip", :name => "zip", :type => "hidden"}
+%input{:id => "city", :name => "city", :type => "hidden"}
+%input{:id => "state", :name => "state", :type => "hidden"}
+%input{:id => "latitude", :name => "latitude", :type => "hidden"}
+%input{:id => "longitude", :name => "longitude", :type => "hidden"}

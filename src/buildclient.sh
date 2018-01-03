@@ -1,0 +1,1 @@
+coffee -b --join phone_app_client -o ../public/js/ -c script.coffee location.coffee timeElapsed.coffee Element.coffee Div.coffee CallLine.coffee PhoneImage.coffee PhoneButton.coffee autopopulate.coffee

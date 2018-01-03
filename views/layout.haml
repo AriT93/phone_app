@@ -15,23 +15,37 @@
   %link{:rel => "shortcut icon" , :href => "/favicon.ico"}
   %link{:rel => "app-touch-icon", :href =>"/apple-touch-icon.png"}
 
-  %link{:rel => "stylesheet", :href => "css/style.css?v=2"}
+  %link{:rel => "stylesheet", :href => "/css/style.css?v=2"}
   %link{:rel => "stylesheet", :media => "handheld", :href => "css/handheld.css?v=2"}
+  %link{:rel => "stylesheet", :href => "/css/960.css"}
+  %link{:rel => "stylesheet", :href => "/css/cupertino/jquery-ui-1.8.14.custom.css"}
 
   %script{:src => "js/libs/modernizr-1.7.min.js"}
-
 %body
-  #container
-    %header
+  .heady
+    #banner
+      .container_16
+        .grid_2.push_14.toplink
+          Login
+        .grid_2.push_10.toplink
+          Get a Quote!
+        .grid_2.push_6.toplink
+          Home
+    #masthead
+      .grid_16
+        %img{:src => "/img/masthead.png"}
+  .container_16
     #main{:role => "main"}
       = yield
     %footer
+      #footer
 
-%script{ :src => "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"}
-
+%script{ :src => "https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"}
+%script{:src => "https://cdn.jquerytools.org/1.2.5/jquery.tools.min.js"}
+%script{:src => "https://maps.google.com/maps/api/js?sensor=false"}
+%script{:src => "https://localhost:8910/socket.io/socket.io.js"}
+%script{:src => "/js/libs/jquery-ui-1.8.14.custom.min.js"}
+%script{:src => "/js/phone_app_client.js"}
+%script{:src => "https://www.google.com/jsapi"}
 :javascript
-  window.jQuery || document.write("<script src='/js/libs/jquery-1.5.1.min.js'>\x3C/script>")
-
-%script{:src => "/js/plugins.js"}
-%script{:src => "/js/script.js"}
-%script{:src => "http://localhost:8910/socket.io/socket.io.js"}
+  google.load("visualization", "1", {packages:["corechart"]});
