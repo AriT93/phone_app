@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "engines": {
     "node": "6.2.2",
-    "npm": "1.2.3"
+    "npm": "3.9.5"
   },
   "dependencies": {
     "coffee-script": "1.12.7",
