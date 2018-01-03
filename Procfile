@@ -1,1 +1,1 @@
-web:  coffee src/app.coffee
+web:  coffee app.coffee

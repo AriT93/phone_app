@@ -1,4 +1,4 @@
-sys = require "sys"
+sys = require "util"
 http = require "http"
 event = require "events"
 io = require "socket.io"
@@ -11,8 +11,26 @@ jade = require "jade"
 
 
 Call=''
-#db = mongoose.connect "mongodb://localhost/test
-db = mongoose.connect "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_PW + "@dbh16.mongolab.com:27167/calls"
+#db = mongoose.connect "mongodb://localhost/test", (error)->
+#        if error
+#                console.log "failed to connect " + error
+#        else
+#            console.log "connected"
+                        
+#db = mongoose.connect "mongodb://" + process.env.MONGO_USER + ":" + process.env.MONGO_PW + "@dbh16.mlab.com:27167/calls",{useMongoClient: true, user: process.env.MONGO_USER, pass: process.env.MONGO_PW}
+#db = mongoose.connect "mongodb://dbh16.mlab.com:27167/calls",{useMongoClient: true, user: process.env.MONGO_USER, pass: process.env.MONGO_PW}
+uri = "mongodb://phone_app:phone_app@dbh16.mlab.com:27167/calls"
+db = mongoose.connect(uri, (err)->
+        if err
+                console.log "error connecting " + err
+        else
+                console.log "connected"
+        )
+mongoose.connection.on 'error', (error)->
+                console.log "failed to connect " + error
+
+#mongoose.Promise = global.Promise
+#db = mongoose.connect "mongodb://phone_app:phone_app@dbh16.mlab.com:27167/calls"
 #"mongodb://localhost/test"
 models.defineModels mongoose, ()->
     Call = Call = mongoose.model 'Call'
@@ -70,7 +88,13 @@ app.post '/', (req, res) ->
     c.latitude = req.param 'latitude'
     c.longitude = req.param 'longitude'
     c.createdOn = new Date()
-    c.save()
+    c.save( (err)->
+            if err
+                    console.log "there was a problem: " + err
+            else
+                    console.log "saved!"
+        )
+    console.log "Express server listening on port #{app.address().port}"
     socketEvent.emit "new_call", JSON.stringify(c)
     res.redirect('/')
 
@@ -114,7 +138,7 @@ wSocket = io.listen app
 wSocket.configure ()->
     wSocket.enable 'browser client minification'
     wSocket.set 'transports', ['xhr-polling', 'jsonp-polling','htmlfile','flashsocket']
-    wSocket.set 'log level',1
+    wSocket.set 'log level',2
     wSocket.set 'polling duration', 10
 
 #socket.io codes...
@@ -149,7 +173,12 @@ wSocket.sockets.on 'connection', (client)->
             c.latitude = p.latitude
             c.longitude = p.longitude
             c.createdOn = new Date()
-            c.save()
+            c.save( (err) ->
+                    if err
+                            console.log "there was an error: " + err
+                    else
+                            console.log "saved a call"
+                )
             socketEvent.emit "new_call", JSON.stringify(c)
 
 millisForUpdates = (1000 * 10)

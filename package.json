@@ -1,19 +1,24 @@
 {
-"name": "phone_app",
-"version": "0.2.0",
-"engines":{
-  "node": "0.10.x",
-  "npm": "1.3.x"
-},
-"dependencies": {
-    "express": "2.3.11",
-    "socket.io": "0.8.0",
-    "mongoose": "1.3.7",
-    "express-mongoose": "0.0.4",
-    "jade": "0.12.1",
+  "name": "phone_app",
+  "version": "0.2.0",
+  "engines": {
+    "node": "6.2.2",
+    "npm": "1.2.3"
+  },
+  "dependencies": {
+    "coffee-script": "1.12.7",
     "connect": "1.4.2",
+    "express": "2.3.11",
+    "express-mongoose": "0.0.4",
     "hooks": "0.1.6",
-    "coffee-script": "1.1.2",
-    "mongodb":">=0.9.4-5"
-      }
+    "jade": "0.12.1",
+    "mime": "1.2.4",
+    "mongodb": "3.0.x",
+    "mongoose": "4.4.12",
+    "qs": "0.3.1",
+    "redis": "0.6.6",
+    "socket.io": "0.8.0",
+    "socket.io-client": "0.8.0",
+    "xmlhttprequest": "1.2.2"
+  }
 }
